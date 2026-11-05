@@ -269,18 +269,19 @@ def _combine_harmonics(ridges, valids, sigmas):
     (a neighbouring line, not the same tone) are dropped for that frame.
     """
     ridges, valids, sigmas = map(np.asarray, (ridges, valids, sigmas))
-    precision = np.where(valids, 1 / np.maximum(np.nan_to_num(sigmas, nan=np.inf), 1e-6) ** 2, 0.0)
+    valids = valids & np.isfinite(ridges) & np.isfinite(sigmas)
+    ridges, sigmas = np.where(valids, ridges, 0.0), np.where(valids, sigmas, np.inf)
+    precision = np.where(valids, 1 / np.maximum(sigmas, 1e-6) ** 2, 0.0)
     rows = np.arange(ridges.shape[1])
     best = np.argmax(precision, axis=0)
     reference, reference_sigma = ridges[best, rows], sigmas[best, rows]
-    tolerance = 3 * np.sqrt(np.nan_to_num(sigmas, nan=np.inf) ** 2 + reference_sigma**2) + 0.2
-    precision = np.where(np.abs(np.nan_to_num(ridges - reference, nan=np.inf)) <= tolerance, precision, 0.0)
+    tolerance = 3 * np.hypot(sigmas, reference_sigma) + 0.2
+    precision = np.where(np.abs(ridges - reference) <= tolerance, precision, 0.0)
     total = precision.sum(axis=0)
     valid = total > 0
-    ridge = np.where(
-        valid, (precision * np.nan_to_num(ridges)).sum(axis=0) / np.maximum(total, 1e-300), reference
-    )
-    return ridge, valid, np.where(valid, 1 / np.sqrt(np.maximum(total, 1e-300)), np.inf)
+    safe = np.where(valid, total, 1.0)
+    ridge = np.where(valid, (precision * ridges).sum(axis=0) / safe, reference)
+    return ridge, valid, np.where(valid, 1 / np.sqrt(safe), np.inf)
 
 
 def _scatter(ridge, valid):
