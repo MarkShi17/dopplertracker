@@ -225,9 +225,17 @@ def run_discovery_benchmark(
     options=DiscoveryOptions(),
     workers=1,
     progress=None,
+    final_evaluation=False,
 ):
-    """Development benchmark; refuses reserved evaluation seeds (>= 100)."""
-    if any(int(s) >= 100 for s in seeds):
+    """Development benchmark; refuses reserved evaluation seeds (>= 100).
+
+    ``final_evaluation=True`` is the explicit opt-in for the one-time held-out
+    run (scripts/final_heldout_evaluation.py); it then requires seeds >= 100.
+    """
+    if final_evaluation:
+        if any(int(s) < 100 for s in seeds):
+            raise ValueError("final evaluation uses the reserved seeds >= 100 only")
+    elif any(int(s) >= 100 for s in seeds):
         raise ValueError("seeds >= 100 are reserved for final evaluation")
     if not 1 <= workers <= 3:
         raise ValueError("use one to three workers")
@@ -251,7 +259,9 @@ def run_discovery_benchmark(
                     progress(len(rows), len(jobs), rows[-1])
     rows.sort(key=lambda r: (list(scenarios).index(r["scenario"]), r["seed"]))
     report = {
-        "validation": "synthetic development scenes; events 1-2 supplied, four true tracks plus silent decoys",
+        "validation": ("synthetic final-evaluation" if final_evaluation else "synthetic development")
+        + " scenes; events 1-2 supplied, four true tracks plus silent decoys",
+        "final_evaluation": bool(final_evaluation),
         "seeds": [int(s) for s in seeds],
         "scenarios": list(scenarios),
         "distractors": distractors,

@@ -146,6 +146,8 @@ def test_cli_discover_writes_events_and_confirmation(scene, tmp_path):
 def test_benchmark_guards_reserved_seeds_and_summarises():
     with pytest.raises(ValueError):
         run_discovery_benchmark(seeds=[100])
+    with pytest.raises(ValueError):
+        run_discovery_benchmark(seeds=[0], final_evaluation=True)
     row = {
         "scenario": "clean",
         "seed": 0,
