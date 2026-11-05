@@ -13,6 +13,7 @@ after every fit has finished; nothing is selected by error.
 """
 
 import argparse
+import gc
 import hashlib
 import json
 import sys
@@ -106,6 +107,8 @@ def main():
     events = load_events([str(directory / "events.json")])
     tracks, frame = load_tracks(directory / "traces.npz")
     published, coarse, initial_clock, chosen = select_tracks(directory, events, tracks)
+    del tracks  # only the two chosen segments are used; the full set is ~2 GB in memory
+    gc.collect()
     weather = WeatherSeries.load(args.weather)
     # Per-event profiles at the initial (pre-calibration) heard CPAs; the +/-4 s clock
     # calibration moves them by a negligible fraction of the hourly interpolation.
