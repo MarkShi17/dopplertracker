@@ -133,6 +133,13 @@ def parser():
                 help="Weather file from fetch-weather: layered sound speed and wind, interpolated to each "
                 "event; replaces --sound-speed/--wind, and --fit-sound-speed/--fit-wind become offsets",
             )
+            p.add_argument(
+                "--uncertainty",
+                action="store_true",
+                help="Add a linearised 50%%/90%% error ellipse with a variance breakdown by cause "
+                "(measurement, atmosphere, ADS-B timing, altitude, observer height, velocity); "
+                "requires --method projected",
+            )
         else:
             p.add_argument("--bbox", nargs=4, type=float, metavar=("S", "N", "W", "E"))
             p.add_argument("--point", nargs=2, type=float, metavar=("LAT", "LON"))
@@ -393,6 +400,8 @@ def execute(args):
             )
         if args.weather and (args.sound_speed != 343.0 or any(args.wind)):
             raise ValueError("--weather replaces --sound-speed and --wind; do not combine them")
+        if args.uncertainty and args.method != "projected":
+            raise ValueError("--uncertainty requires --method projected")
         if args.weather and args.fit_sound_speed and args.method == "robust-ridge":
             raise ValueError(
                 "--fit-sound-speed with --weather requires --method projected, auto or consensus"
@@ -662,6 +671,7 @@ def execute(args):
                             medium,
                             frame=frame,
                             elevation=elevation,
+                            uncertainty=args.uncertainty,
                         )
                 elif args.method == "robust-ridge":
                     result = refine_candidate(
@@ -691,6 +701,9 @@ def execute(args):
                 if weather is not None:
                     result.setdefault("atmosphere", medium.to_record())
                 result["evidence"] = assess_candidate(spec, active_events, chosen, result, medium)
+                if "uncertainty" in result:
+                    region = result["uncertainty"]
+                    note(f"Candidate {len(results) + 1}: {region.get('summary') or region.get('error')}")
                 results.append(result)
             except (ValueError, KeyError) as exc:
                 note(f"Candidate could not be refined: {exc}")

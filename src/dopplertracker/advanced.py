@@ -677,10 +677,13 @@ def fit_projected(
     elevation=None,
     audio=None,
     keep_observations=False,
+    uncertainty=False,
 ):
     """Projected least squares; ``audio`` (``demod.Audio``) is required for ``ridge="demod"``.
 
     ``keep_observations`` adds the final measured ridges to the result for diagnostics.
+    ``uncertainty`` (True or ``uncertainty.InputPriors``) adds a linearised error
+    region under ``result["uncertainty"]``; the fit itself is unchanged.
     """
     if len(events) != len(tracks) or len(events) != len(candidate["f0"]) or not events:
         raise ValueError("events, flights and source frequencies must match")
@@ -974,6 +977,21 @@ def fit_projected(
             }
             for (times, ridge, valid, weights), prediction in zip(observations, predictions, strict=True)
         ]
+    if uncertainty:
+        from .uncertainty import InputPriors, position_uncertainty
+
+        try:
+            result["uncertainty"] = position_uncertainty(
+                result,
+                events,
+                tracks,
+                frame,
+                elevation,
+                uncertainty if isinstance(uncertainty, InputPriors) else None,
+                [(t, r, m, w) for (t, r, _, w), m in zip(observations, train, strict=True)],
+            )
+        except (ValueError, np.linalg.LinAlgError) as exc:  # keep the fit; report why there is no region
+            result["uncertainty"] = {"error": f"{type(exc).__name__}: {exc}"}
     return result
 
 
