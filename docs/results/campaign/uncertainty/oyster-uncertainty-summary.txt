@@ -1,0 +1,18 @@
+cell                                  err m  a90 m  b90 m  brg  in50  in90     d d_meas  variance fractions (measu, atmos, adsb_, altit, obser, veloc)
+constant/spline/ridge                  39.6  265.7  128.6  128  True  True  0.55   1.54  0.19 0.65 0.12 0.00 0.00 0.03
+constant/spline/demod                  92.7  455.6  129.4  132 False  True  1.50   5.16  0.04 0.83 0.05 0.01 0.00 0.06
+constant/fused/ridge                   30.3  230.0  125.6  126  True  True  0.45   1.98  0.07 0.75 0.15 0.00 0.00 0.02
+constant/fused/demod                   56.9  320.7  120.9  128  True  True  0.63   2.63  0.04 0.84 0.08 0.01 0.00 0.02
+layered/spline/ridge                   74.5  140.7  111.4  134 False  True  1.43   4.66  0.43 0.16 0.31 0.01 0.00 0.08
+layered/spline/demod                  220.1  182.8  107.3  126 False False  3.03  10.50  0.17 0.30 0.23 0.04 0.01 0.24
+layered/fused/ridge                    64.4  108.6   97.1   37 False  True  1.27   5.94  0.23 0.21 0.47 0.01 0.00 0.07
+layered/fused/demod                    78.8  133.1  105.0  118 False  True  1.43   5.70  0.23 0.32 0.34 0.03 0.00 0.07
+layered/fused/demod+fit-c-wind         72.7  249.7  123.1  127 False  True  1.25   3.41  0.43 0.45 0.11 0.00 0.00 0.02
+layered/fused/demod+h4-all-frames      11.2  112.2   99.1   37  True  True  0.24   0.46  0.30 0.20 0.42 0.01 0.00 0.07
+
+Pairwise consistency (lenient: C_a + C_b); inconsistent pairs:
+  layered/spline/demod vs layered/fused/demod+h4-all-frames: 209.0 m, d 2.32
+  1 of 45 pairs inconsistent at 90 %
+
+Bootstrap constant/spline/ridge (100 resamples, 10 s blocks): 90 % 242.2 x 60.0 m at 131 deg; linearised measurement part 124.5 x 37.3 m at 139 deg
+What-if helper, same design (constant/spline/ridge): 90 % 328.1 x 127.5 m at 129 deg; fitted region 265.7 x 128.6 m at 128 deg

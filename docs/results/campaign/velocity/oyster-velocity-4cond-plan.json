@@ -1,0 +1,150 @@
+{
+  "validation": "Real recording, conditional refinement with published flight identities and coarse candidate; not a blind search.",
+  "protocol": "scripts/compare_oyster_bay.py, with traces-velocity.npz and reported-velocity methods",
+  "traces": "data/oyster-bay/traces-velocity.npz",
+  "methods": [
+    "brightness",
+    "contrast",
+    "legacy-ridge",
+    "legacy-drift",
+    "projected-constant",
+    "projected-linear",
+    "spline-linear",
+    "kalman-linear",
+    "spline-cv",
+    "hermite-velocity-linear",
+    "spline-velocity-linear",
+    "kalman-velocity-linear",
+    "spline-offsets-linear",
+    "kalman-velocity-offsets-linear"
+  ],
+  "heights_ellipsoid_m": [
+    -30.0,
+    0.0
+  ],
+  "sound_speeds_m_s": [
+    343.0,
+    340.0
+  ],
+  "initial_latlon": [
+    40.876104922746144,
+    -73.52356936754546
+  ],
+  "initial_clock": 1788898648.7235358,
+  "flights": [
+    "a1dfeb:1788899524.900",
+    "ace391:1788901235.390"
+  ],
+  "velocity_diagnostics": [
+    {
+      "id": "a1dfeb:1788899524.900",
+      "track_slice": {
+        "reports": 18,
+        "interval_s": {
+          "min": 19.40000009536743,
+          "median": 19.859999895095825,
+          "max": 19.990000009536743
+        },
+        "horizontal_reported_minus_differenced_m_s": {
+          "rms": 0.445147208177747,
+          "max": 0.8102238564251387
+        },
+        "vertical_reported_minus_differenced_m_s": {
+          "rms": 0.07724617221230368,
+          "max": 0.3252137157586076
+        },
+        "reported_ground_speed_m_s_median": 136.97048114345017
+      },
+      "event_window": {
+        "reports": 6,
+        "interval_s": {
+          "min": 19.66000008583069,
+          "median": 19.829999923706055,
+          "max": 19.980000019073486
+        },
+        "horizontal_reported_minus_differenced_m_s": {
+          "rms": 0.4205306214918752,
+          "max": 0.5579906945429656
+        },
+        "vertical_reported_minus_differenced_m_s": {
+          "rms": 0.13276801796957216,
+          "max": 0.3252137157586076
+        },
+        "reported_ground_speed_m_s_median": 136.8421945256356
+      },
+      "vertical_rate_source_runs": [
+        [
+          "baro",
+          18
+        ]
+      ]
+    },
+    {
+      "id": "ace391:1788901235.390",
+      "track_slice": {
+        "reports": 55,
+        "interval_s": {
+          "min": 1.6399998664855957,
+          "median": 4.649999976158142,
+          "max": 19.94000005722046
+        },
+        "horizontal_reported_minus_differenced_m_s": {
+          "rms": 1.8201055053081894,
+          "max": 6.266270554626331
+        },
+        "vertical_reported_minus_differenced_m_s": {
+          "rms": 0.91951898609765,
+          "max": 3.0962633069832544
+        },
+        "reported_ground_speed_m_s_median": 102.7315950714994
+      },
+      "event_window": {
+        "reports": 20,
+        "interval_s": {
+          "min": 2.990000009536743,
+          "median": 4.5,
+          "max": 19.77999997138977
+        },
+        "horizontal_reported_minus_differenced_m_s": {
+          "rms": 1.1318142532297328,
+          "max": 2.370636949786428
+        },
+        "vertical_reported_minus_differenced_m_s": {
+          "rms": 0.664271884876788,
+          "max": 1.9135610452048886
+        },
+        "reported_ground_speed_m_s_median": 103.65824724838816
+      },
+      "vertical_rate_source_runs": [
+        [
+          "baro",
+          55
+        ]
+      ]
+    }
+  ],
+  "source_hashes": {
+    "geo.py": "eb34c3bd77db460e422793330fbb74dd704351e0b93b47855a71174a3acdc6c7",
+    "advanced.py": "0d1ed1f7101a51d850bbc898c4d0b49615ae752a8cb360829a002afb22bfdd4b",
+    "detection.py": "15faf6744059246b6cef859f110d83297020ba9726417013468c51546990bae8",
+    "signal.py": "e5058a832b40daac44cafb36dc440af0b01c0a3f95209d02addfd45a332d553b",
+    "benchmark.py": "a03ec844d67b20f051877db7065a541f4a41d3174fe9bf113c24e3b56716e79b",
+    "stress_benchmark.py": "d4dc48e1631fc228a4f6925b23ea26ff1fc19f4c32458a5b0bc4d1e299569157",
+    "audio_benchmark.py": "5cd0bd1ac006ddd4f0a0f0d82b7d5d9a854cd467acc439a8f9f909043d8e2ac9",
+    "scoring.py": "53d676639efa30762309146725b83aa2f7f6d342d856cd7ab907a6f2d6ca70fc",
+    "download.py": "4c014b33ea98721318d370d235fbbd7014cb6c4e88b578ad0e5b633bb5dfb91e",
+    "terrain.py": "93130d81e03ac7d5649a5fbc0081663f4f8762c8b8783640ae8950d325ea9c20",
+    "refine.py": "5dec596ef23dd182a0144fbdf7fa71539111d1d7574fe12361da3f54c6c2cbab",
+    "__init__.py": "3daa9057b0628eb5915aa00a80e975258472096a170b0eed441638227c84ecb0",
+    "evidence_controls.py": "ec021baf7daa049cdbbe71ebf9e53f3e36a2747e2bf475b5e3a9dd248e193ea2",
+    "physics.py": "59693ea7a90a9b350f93544a585cec86e161a49f9a17e37d613a0f1db3e45032",
+    "cli.py": "69fa09422c964af2e6e5c6b2f70946711e09298ae3ecaf6e8cd335a437d7678a",
+    "stress_scenes.py": "7676314c756268a3b8f98a6d64abecd03f45e2c7e441186fceac7de3b87b0f51",
+    "search.py": "1f5b11eefcb1d267907f4f07d83f333c2da0ccce147325dcaa099141d42c4e95",
+    "detection_benchmark.py": "86791d2ea16032f8bcc72ae5fba8f848149c42b3f4ba99c49f479cac31c405be",
+    "identification.py": "72f27f947df247013b92e5063ffc9c9fcbb6f6a1ef8eeefa2421f79eea8939c7",
+    "evidence.py": "56fbaaa917b789f23ebcc34328fb1016a81e16ca3896e8cd8e40ad3fe1d012ae",
+    "__main__.py": "307299fda7b77d22c64cb51430ec75e5f59d78e9c948786afb3b2544fe45e4b7",
+    "data.py": "e3afed8f4c78fd311ddcf1bef0cd0b9798eda532325812445a8d30600ce28544"
+  }
+}

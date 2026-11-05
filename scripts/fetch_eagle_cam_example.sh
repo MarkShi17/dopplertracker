@@ -6,8 +6,7 @@ set -euo pipefail
 project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$project_dir"
 
-# Read-only clone of github.com/mjshiggins/dopplertrack at the pinned commit.
-ref_repo="${DOPPLERTRACK_REF:-/private/tmp/claude-501/-Users-markshi-berkeley-dopplertracker/21596e3b-0472-406e-8c20-a44c53ac346e/scratchpad/ref-dopplertrack}"
+# Published reference files are downloaded from github.com/mjshiggins/dopplertrack at this pinned commit.
 ref_commit=a16b7006dfe38b4880919ca2652f402342686289
 video_id=zs2o5Rhlp5w
 
@@ -100,20 +99,18 @@ fi
 echo '3/6 Copying published reference files from the original project.'
 mkdir -p data/eagle-cam/published
 if [[ ! -s data/eagle-cam/published/provenance.json ]]; then
-  [[ -d "$ref_repo/docs/results" ]] || { echo "Reference clone not found: $ref_repo" >&2; exit 2; }
-  [[ "$(git -C "$ref_repo" rev-parse HEAD)" == "$ref_commit" ]] || { echo "Reference clone is not at $ref_commit" >&2; exit 2; }
-  files=()
-  for f in "$ref_repo"/docs/results/swfl_*; do
-    cp "$f" data/eagle-cam/published/
-    files+=("$(basename "$f")")
+  ref_base="https://raw.githubusercontent.com/mjshiggins/dopplertrack/$ref_commit/docs/results"
+  files=(swfl_detected.json swfl_known_point.png swfl_refined_50m.csv swfl_search_best_per_pair.csv swfl_search.png)
+  for f in "${files[@]}"; do
+    curl -fsS --retry 3 "$ref_base/$f" -o "data/eagle-cam/published/$f"
   done
-  .venv/bin/python - "$ref_repo" "$ref_commit" "${files[@]}" <<'PY'
+  .venv/bin/python - "$ref_commit" "${files[@]}" <<'PY'
 import json
 import subprocess
 import sys
 from pathlib import Path
-ref, commit, names = sys.argv[1], sys.argv[2], sys.argv[3:]
-blobs = {n: subprocess.run(['git', '-C', ref, 'rev-parse', f'{commit}:docs/results/{n}'],
+commit, names = sys.argv[1], sys.argv[2:]
+blobs = {n: subprocess.run(['git', 'hash-object', f'data/eagle-cam/published/{n}'],
                            check=True, capture_output=True, text=True).stdout.strip() for n in names}
 Path('data/eagle-cam/published/provenance.json').write_text(json.dumps({
     'source_repository': 'https://github.com/mjshiggins/dopplertrack',

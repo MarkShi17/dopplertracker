@@ -1,0 +1,1150 @@
+{
+  "evaluation_truth": [
+    26.702359,
+    -81.847766
+  ],
+  "start_candidate_error_m": 915.0312677980783,
+  "table": [
+    {
+      "set": "published",
+      "cell": "constant/spline/ridge",
+      "role": "F1",
+      "error": null,
+      "error_m": 801.9355678883385,
+      "error_en_m": [
+        508.18614728902537,
+        620.3607778929362
+      ],
+      "residual_median_abs_hz": [
+        2.891724532200385,
+        1.873351748222376
+      ],
+      "residual_rms_hz": [
+        3.465952160778767,
+        3.1183472405102552
+      ],
+      "valid_frames": [
+        117,
+        113
+      ],
+      "frames": [
+        120,
+        120
+      ],
+      "evidence_accepted": false,
+      "success": true,
+      "at_bounds": false,
+      "clock_shift_from_start_s": -6.296565771102905,
+      "region_90_semi_axes_m": [
+        4083.8221954065625,
+        773.3212228107335
+      ],
+      "region_90_bearing_deg": 95.24689868214908,
+      "inside_50": false,
+      "inside_90": true,
+      "normalised_error": 1.8583095316429483,
+      "measurement_only": {
+        "normalised_error": 1.9544758036331824,
+        "inside_50": false,
+        "inside_90": true
+      },
+      "lat_lon": [
+        26.707957824390906,
+        -81.84265899037722
+      ]
+    },
+    {
+      "set": "published",
+      "cell": "constant/spline/demod",
+      "role": "F3",
+      "error": null,
+      "error_m": 890.6677126441907,
+      "error_en_m": [
+        784.12481278403,
+        422.41833805274666
+      ],
+      "residual_median_abs_hz": [
+        2.286824518747949,
+        0.8880061200518128
+      ],
+      "residual_rms_hz": [
+        3.1299382943450107,
+        2.29469644008462
+      ],
+      "valid_frames": [
+        64,
+        49
+      ],
+      "frames": [
+        120,
+        120
+      ],
+      "evidence_accepted": false,
+      "success": true,
+      "at_bounds": false,
+      "clock_shift_from_start_s": -10.34048318862915,
+      "region_90_semi_axes_m": [
+        3284.1248276411643,
+        573.1674205103852
+      ],
+      "region_90_bearing_deg": 90.24771770093722,
+      "inside_50": false,
+      "inside_90": true,
+      "normalised_error": 1.674180158872495,
+      "measurement_only": {
+        "normalised_error": 1.7324742658524515,
+        "inside_50": false,
+        "inside_90": true
+      },
+      "lat_lon": [
+        26.70617114713894,
+        -81.83988616570782
+      ]
+    },
+    {
+      "set": "published",
+      "cell": "constant/fused/ridge",
+      "role": "F3",
+      "error": null,
+      "error_m": 825.8808999949939,
+      "error_en_m": [
+        500.82586948729784,
+        656.6983397488021
+      ],
+      "residual_median_abs_hz": [
+        2.8723679878247026,
+        1.971610347973808
+      ],
+      "residual_rms_hz": [
+        3.502460930464856,
+        3.2738495133144205
+      ],
+      "valid_frames": [
+        117,
+        115
+      ],
+      "frames": [
+        120,
+        120
+      ],
+      "evidence_accepted": false,
+      "success": true,
+      "at_bounds": false,
+      "clock_shift_from_start_s": -6.586677312850952,
+      "region_90_semi_axes_m": [
+        4435.32687968154,
+        900.7368669773317
+      ],
+      "region_90_bearing_deg": 94.35732489286606,
+      "inside_50": false,
+      "inside_90": true,
+      "normalised_error": 1.66495199199964,
+      "measurement_only": {
+        "normalised_error": 1.7158402069321859,
+        "inside_50": false,
+        "inside_90": true
+      },
+      "lat_lon": [
+        26.708285788647483,
+        -81.84273293498835
+      ]
+    },
+    {
+      "set": "published",
+      "cell": "constant/fused/demod",
+      "role": "F3",
+      "error": null,
+      "error_m": 827.5141460876689,
+      "error_en_m": [
+        628.2380598875262,
+        538.6061660285378
+      ],
+      "residual_median_abs_hz": [
+        2.2205741500553557,
+        0.9713760887977259
+      ],
+      "residual_rms_hz": [
+        3.036404242903666,
+        2.4317534557056923
+      ],
+      "valid_frames": [
+        66,
+        50
+      ],
+      "frames": [
+        120,
+        120
+      ],
+      "evidence_accepted": false,
+      "success": true,
+      "at_bounds": false,
+      "clock_shift_from_start_s": -9.180157661437988,
+      "region_90_semi_axes_m": [
+        3168.695951411767,
+        548.0777713721061
+      ],
+      "region_90_bearing_deg": 91.14359461299573,
+      "inside_50": false,
+      "inside_90": false,
+      "normalised_error": 2.1976919304039177,
+      "measurement_only": {
+        "normalised_error": 2.321900163585603,
+        "inside_50": false,
+        "inside_90": false
+      },
+      "lat_lon": [
+        26.70721989006377,
+        -81.84145261123768
+      ]
+    },
+    {
+      "set": "published",
+      "cell": "layered/spline/ridge",
+      "role": "F3",
+      "error": null,
+      "error_m": 784.4279022953372,
+      "error_en_m": [
+        514.9399256466455,
+        591.7465731835633
+      ],
+      "residual_median_abs_hz": [
+        3.0278996995956433,
+        2.318204368692861
+      ],
+      "residual_rms_hz": [
+        3.5198706311699093,
+        3.360350234171015
+      ],
+      "valid_frames": [
+        116,
+        116
+      ],
+      "frames": [
+        120,
+        120
+      ],
+      "evidence_accepted": false,
+      "success": true,
+      "at_bounds": false,
+      "clock_shift_from_start_s": -6.992083787918091,
+      "region_90_semi_axes_m": [
+        3556.9264520009906,
+        584.8734195088408
+      ],
+      "region_90_bearing_deg": 95.40143580113757,
+      "inside_50": false,
+      "inside_90": false,
+      "normalised_error": 2.355584509210133,
+      "measurement_only": {
+        "normalised_error": 2.43732205731837,
+        "inside_50": false,
+        "inside_90": false
+      },
+      "lat_lon": [
+        26.70769956666798,
+        -81.84259113653874
+      ]
+    },
+    {
+      "set": "published",
+      "cell": "layered/spline/demod",
+      "role": "F3",
+      "error": null,
+      "error_m": 884.3219437005382,
+      "error_en_m": [
+        765.07021484904,
+        443.5006949951055
+      ],
+      "residual_median_abs_hz": [
+        2.212168323913673,
+        0.9711470039422778
+      ],
+      "residual_rms_hz": [
+        2.957586470852669,
+        2.3041535647503624
+      ],
+      "valid_frames": [
+        62,
+        51
+      ],
+      "frames": [
+        120,
+        120
+      ],
+      "evidence_accepted": false,
+      "success": true,
+      "at_bounds": false,
+      "clock_shift_from_start_s": -10.191612243652344,
+      "region_90_semi_axes_m": [
+        3032.746569663351,
+        536.3311626365436
+      ],
+      "region_90_bearing_deg": 91.34180827705308,
+      "inside_50": false,
+      "inside_90": true,
+      "normalised_error": 1.9213879001018939,
+      "measurement_only": {
+        "normalised_error": 1.9842970293128748,
+        "inside_50": false,
+        "inside_90": true
+      },
+      "lat_lon": [
+        26.70636143706682,
+        -81.84007763105335
+      ]
+    },
+    {
+      "set": "published",
+      "cell": "layered/fused/ridge",
+      "role": "F2",
+      "error": null,
+      "error_m": 890.7663547679628,
+      "error_en_m": [
+        545.4659846010642,
+        704.2240825403486
+      ],
+      "residual_median_abs_hz": [
+        2.9104003293198275,
+        2.2583686104666327
+      ],
+      "residual_rms_hz": [
+        3.516526776908673,
+        3.3896659282689106
+      ],
+      "valid_frames": [
+        117,
+        117
+      ],
+      "frames": [
+        120,
+        120
+      ],
+      "evidence_accepted": false,
+      "success": true,
+      "at_bounds": false,
+      "clock_shift_from_start_s": -5.749770641326904,
+      "region_90_semi_axes_m": [
+        2641.111699903093,
+        479.5806307247839
+      ],
+      "region_90_bearing_deg": 94.0551215521727,
+      "inside_50": false,
+      "inside_90": false,
+      "normalised_error": 3.3401202827833547,
+      "measurement_only": {
+        "normalised_error": 3.4751297608597818,
+        "inside_50": false,
+        "inside_90": false
+      },
+      "lat_lon": [
+        26.708714703037163,
+        -81.84228430417507
+      ]
+    },
+    {
+      "set": "published",
+      "cell": "layered/fused/demod",
+      "role": "F3",
+      "error": null,
+      "error_m": 869.4070319576488,
+      "error_en_m": [
+        611.0965339894063,
+        618.4089370016757
+      ],
+      "residual_median_abs_hz": [
+        2.4645052068494238,
+        1.0633823971155465
+      ],
+      "residual_rms_hz": [
+        3.1742367116698733,
+        2.496542906555464
+      ],
+      "valid_frames": [
+        67,
+        54
+      ],
+      "frames": [
+        120,
+        120
+      ],
+      "evidence_accepted": false,
+      "success": true,
+      "at_bounds": false,
+      "clock_shift_from_start_s": -8.756387948989868,
+      "region_90_semi_axes_m": [
+        3257.231616277223,
+        566.4842892313952
+      ],
+      "region_90_bearing_deg": 91.5287064709281,
+      "inside_50": false,
+      "inside_90": false,
+      "normalised_error": 2.435283207483183,
+      "measurement_only": {
+        "normalised_error": 2.4873969089294525,
+        "inside_50": false,
+        "inside_90": false
+      },
+      "lat_lon": [
+        26.70794015104014,
+        -81.84162481728418
+      ]
+    },
+    {
+      "set": "automatic",
+      "cell": "constant/spline/ridge",
+      "role": "F1",
+      "error": null,
+      "error_m": 771.0848236011547,
+      "error_en_m": [
+        514.8757164172796,
+        573.9989562985431
+      ],
+      "residual_median_abs_hz": [
+        1.6846930991206435,
+        1.115559923601296
+      ],
+      "residual_rms_hz": [
+        2.7961020086408084,
+        2.1883615872761197
+      ],
+      "valid_frames": [
+        120,
+        117
+      ],
+      "frames": [
+        120,
+        120
+      ],
+      "evidence_accepted": false,
+      "success": true,
+      "at_bounds": false,
+      "clock_shift_from_start_s": -0.6477644443511963,
+      "region_90_semi_axes_m": [
+        4606.831360974122,
+        520.7563341714623
+      ],
+      "region_90_bearing_deg": 89.96977318405123,
+      "inside_50": false,
+      "inside_90": false,
+      "normalised_error": 2.37640034501636,
+      "measurement_only": {
+        "normalised_error": 2.4559258849180416,
+        "inside_50": false,
+        "inside_90": false
+      },
+      "lat_lon": [
+        26.707539387631964,
+        -81.84259179215739
+      ]
+    },
+    {
+      "set": "automatic",
+      "cell": "constant/spline/demod",
+      "role": "F3",
+      "error": null,
+      "error_m": 1093.9176162664962,
+      "error_en_m": [
+        868.5586663559358,
+        665.0275139241772
+      ],
+      "residual_median_abs_hz": [
+        2.6648734456238685,
+        0.4725932485045803
+      ],
+      "residual_rms_hz": [
+        3.2509137932535594,
+        1.3349898294909284
+      ],
+      "valid_frames": [
+        95,
+        60
+      ],
+      "frames": [
+        120,
+        120
+      ],
+      "evidence_accepted": false,
+      "success": true,
+      "at_bounds": false,
+      "clock_shift_from_start_s": -0.6839826107025146,
+      "region_90_semi_axes_m": [
+        2202.6178631580483,
+        392.5524221280874
+      ],
+      "region_90_bearing_deg": 87.85973010477963,
+      "inside_50": false,
+      "inside_90": false,
+      "normalised_error": 3.5634360922464015,
+      "measurement_only": {
+        "normalised_error": 3.7596513350775362,
+        "inside_50": false,
+        "inside_90": false
+      },
+      "lat_lon": [
+        26.70836072540702,
+        -81.83903747060788
+      ]
+    },
+    {
+      "set": "automatic",
+      "cell": "constant/fused/ridge",
+      "role": "F3",
+      "error": null,
+      "error_m": 1017.046979175179,
+      "error_en_m": [
+        533.4785611193657,
+        865.901370062069
+      ],
+      "residual_median_abs_hz": [
+        1.621124133458224,
+        0.955578394839236
+      ],
+      "residual_rms_hz": [
+        2.7040005232052633,
+        2.26529450503829
+      ],
+      "valid_frames": [
+        120,
+        116
+      ],
+      "frames": [
+        120,
+        120
+      ],
+      "evidence_accepted": false,
+      "success": true,
+      "at_bounds": false,
+      "clock_shift_from_start_s": 2.0226738452911377,
+      "region_90_semi_axes_m": [
+        3962.2579519696246,
+        496.8192315378513
+      ],
+      "region_90_bearing_deg": 89.99132963126087,
+      "inside_50": false,
+      "inside_90": false,
+      "normalised_error": 3.7509844956015566,
+      "measurement_only": {
+        "normalised_error": 3.903263744916982,
+        "inside_50": false,
+        "inside_90": false
+      },
+      "lat_lon": [
+        26.710173908879213,
+        -81.84240467303344
+      ]
+    },
+    {
+      "set": "automatic",
+      "cell": "constant/fused/demod",
+      "role": "F3",
+      "error": null,
+      "error_m": 1106.5969268783876,
+      "error_en_m": [
+        754.4819539097217,
+        809.5145087033709
+      ],
+      "residual_median_abs_hz": [
+        2.772880938329614,
+        0.4786173451907558
+      ],
+      "residual_rms_hz": [
+        3.2022020187279545,
+        1.3091552893948764
+      ],
+      "valid_frames": [
+        96,
+        62
+      ],
+      "frames": [
+        120,
+        120
+      ],
+      "evidence_accepted": false,
+      "success": true,
+      "at_bounds": false,
+      "clock_shift_from_start_s": 1.362701654434204,
+      "region_90_semi_axes_m": [
+        2354.975190675996,
+        361.5468916700858
+      ],
+      "region_90_bearing_deg": 88.23797416736106,
+      "inside_50": false,
+      "inside_90": false,
+      "normalised_error": 4.718616369864523,
+      "measurement_only": {
+        "normalised_error": 5.086472851180641,
+        "inside_50": false,
+        "inside_90": false
+      },
+      "lat_lon": [
+        26.709664859748898,
+        -81.84018375065516
+      ]
+    },
+    {
+      "set": "automatic",
+      "cell": "layered/spline/ridge",
+      "role": "F3",
+      "error": null,
+      "error_m": 781.2598083324522,
+      "error_en_m": [
+        523.3203763312109,
+        580.0885034477235
+      ],
+      "residual_median_abs_hz": [
+        1.7903624111538505,
+        1.1031920314810364
+      ],
+      "residual_rms_hz": [
+        2.7127814746833705,
+        2.3515665090235567
+      ],
+      "valid_frames": [
+        119,
+        118
+      ],
+      "frames": [
+        120,
+        120
+      ],
+      "evidence_accepted": false,
+      "success": true,
+      "at_bounds": false,
+      "clock_shift_from_start_s": -0.5238444805145264,
+      "region_90_semi_axes_m": [
+        4603.696927336562,
+        438.79861773188037
+      ],
+      "region_90_bearing_deg": 89.83379205475964,
+      "inside_50": false,
+      "inside_90": false,
+      "normalised_error": 2.840078213247041,
+      "measurement_only": {
+        "normalised_error": 2.886585304179269,
+        "inside_50": false,
+        "inside_90": false
+      },
+      "lat_lon": [
+        26.707594343684747,
+        -81.84250692619334
+      ]
+    },
+    {
+      "set": "automatic",
+      "cell": "layered/spline/demod",
+      "role": "F3",
+      "error": null,
+      "error_m": 966.6876907233774,
+      "error_en_m": [
+        770.2648446132462,
+        584.1037241355579
+      ],
+      "residual_median_abs_hz": [
+        2.8611209027728535,
+        0.533559536743212
+      ],
+      "residual_rms_hz": [
+        3.228709050618307,
+        1.4741452728139943
+      ],
+      "valid_frames": [
+        96,
+        63
+      ],
+      "frames": [
+        120,
+        120
+      ],
+      "evidence_accepted": false,
+      "success": true,
+      "at_bounds": false,
+      "clock_shift_from_start_s": -0.9875521659851074,
+      "region_90_semi_axes_m": [
+        2541.913279007081,
+        334.7045667586788
+      ],
+      "region_90_bearing_deg": 87.80191890534574,
+      "inside_50": false,
+      "inside_90": false,
+      "normalised_error": 3.6152090119175035,
+      "measurement_only": {
+        "normalised_error": 3.729960594255009,
+        "inside_50": false,
+        "inside_90": false
+      },
+      "lat_lon": [
+        26.707630429943457,
+        -81.84002531898761
+      ]
+    },
+    {
+      "set": "automatic",
+      "cell": "layered/fused/ridge",
+      "role": "F2",
+      "error": null,
+      "error_m": 916.800209626564,
+      "error_en_m": [
+        527.5041197385684,
+        749.8413352370951
+      ],
+      "residual_median_abs_hz": [
+        1.791114761963513,
+        1.1436449241978721
+      ],
+      "residual_rms_hz": [
+        2.6456689575338315,
+        2.3325498423857085
+      ],
+      "valid_frames": [
+        119,
+        116
+      ],
+      "frames": [
+        120,
+        120
+      ],
+      "evidence_accepted": false,
+      "success": true,
+      "at_bounds": false,
+      "clock_shift_from_start_s": 1.1039307117462158,
+      "region_90_semi_axes_m": [
+        4572.502780524684,
+        525.5281952443169
+      ],
+      "region_90_bearing_deg": 89.93496028582538,
+      "inside_50": false,
+      "inside_90": false,
+      "normalised_error": 3.069521751615618,
+      "measurement_only": {
+        "normalised_error": 3.1245681506080043,
+        "inside_50": false,
+        "inside_90": false
+      },
+      "lat_lon": [
+        26.709126425911258,
+        -81.84246478192149
+      ]
+    },
+    {
+      "set": "automatic",
+      "cell": "layered/fused/demod",
+      "role": "F3",
+      "error": null,
+      "error_m": 1035.3486575772363,
+      "error_en_m": [
+        742.8401847795956,
+        721.2040644807829
+      ],
+      "residual_median_abs_hz": [
+        2.836077217013269,
+        0.4737513319707176
+      ],
+      "residual_rms_hz": [
+        3.2212203706943505,
+        1.410263025249701
+      ],
+      "valid_frames": [
+        96,
+        62
+      ],
+      "frames": [
+        120,
+        120
+      ],
+      "evidence_accepted": false,
+      "success": true,
+      "at_bounds": false,
+      "clock_shift_from_start_s": 0.3937067985534668,
+      "region_90_semi_axes_m": [
+        2550.4730070304104,
+        315.8339622670869
+      ],
+      "region_90_bearing_deg": 88.0475189961831,
+      "inside_50": false,
+      "inside_90": false,
+      "normalised_error": 4.769346460258533,
+      "measurement_only": {
+        "normalised_error": 4.998616771892945,
+        "inside_50": false,
+        "inside_90": false
+      },
+      "lat_lon": [
+        26.708867832240557,
+        -81.84030081121907
+      ]
+    },
+    {
+      "set": "published",
+      "cell": "F4 layered/fused/ridge + discovery default",
+      "role": "F4",
+      "error": null,
+      "independent": [],
+      "joint_flights": null,
+      "dropped": null,
+      "refit": "no confirmed independent passes; no refit"
+    },
+    {
+      "set": "published",
+      "cell": "F4 layered/fused/ridge + discovery relaxed-12km",
+      "role": "F4",
+      "error": null,
+      "independent": [],
+      "joint_flights": null,
+      "dropped": null,
+      "refit": "no confirmed independent passes; no refit"
+    },
+    {
+      "set": "automatic",
+      "cell": "F4 layered/fused/ridge + discovery default",
+      "role": "F4",
+      "error": null,
+      "independent": [
+        "a7f398"
+      ],
+      "joint_flights": [
+        "a2baea:1735415246.820",
+        "a7f398:1735412747.050",
+        "a336e4:1735415705.220"
+      ],
+      "dropped": [],
+      "refit": null,
+      "error_m": 873.4673705249434,
+      "error_en_m": [
+        443.79787518180353,
+        752.3222004938276
+      ],
+      "residual_median_abs_hz": [
+        1.703508931947752,
+        2.1365620810528867,
+        0.9510273983255715
+      ],
+      "residual_rms_hz": [
+        2.5552352356820625,
+        3.1797938384139526,
+        2.2056328141862314
+      ],
+      "valid_frames": [
+        117,
+        116,
+        116
+      ],
+      "frames": [
+        120,
+        120,
+        120
+      ],
+      "evidence_accepted": false,
+      "success": true,
+      "at_bounds": false,
+      "clock_shift_from_start_s": null,
+      "region_90_semi_axes_m": [
+        396.4246395742859,
+        165.22701294514977
+      ],
+      "region_90_bearing_deg": 95.4881192262135,
+      "inside_50": false,
+      "inside_90": false,
+      "normalised_error": 10.47078131119101,
+      "measurement_only": {
+        "normalised_error": 11.991172099335076,
+        "inside_50": false,
+        "inside_90": false
+      },
+      "lat_lon": [
+        26.709148858820814,
+        -81.84330597594763
+      ]
+    },
+    {
+      "set": "automatic",
+      "cell": "F4 layered/fused/ridge + discovery relaxed-12km",
+      "role": "F4",
+      "error": null,
+      "independent": [
+        "a7f398"
+      ],
+      "joint_flights": [
+        "a2baea:1735415246.820",
+        "a7f398:1735412747.050",
+        "a336e4:1735415705.220"
+      ],
+      "dropped": [],
+      "refit": null,
+      "error_m": 873.4673705249434,
+      "error_en_m": [
+        443.79787518180353,
+        752.3222004938276
+      ],
+      "residual_median_abs_hz": [
+        1.703508931947752,
+        2.1365620810528867,
+        0.9510273983255715
+      ],
+      "residual_rms_hz": [
+        2.5552352356820625,
+        3.1797938384139526,
+        2.2056328141862314
+      ],
+      "valid_frames": [
+        117,
+        116,
+        116
+      ],
+      "frames": [
+        120,
+        120,
+        120
+      ],
+      "evidence_accepted": false,
+      "success": true,
+      "at_bounds": false,
+      "clock_shift_from_start_s": null,
+      "region_90_semi_axes_m": [
+        396.4246395742859,
+        165.22701294514977
+      ],
+      "region_90_bearing_deg": 95.4881192262135,
+      "inside_50": false,
+      "inside_90": false,
+      "normalised_error": 10.47078131119101,
+      "measurement_only": {
+        "normalised_error": 11.991172099335076,
+        "inside_50": false,
+        "inside_90": false
+      },
+      "lat_lon": [
+        26.709148858820814,
+        -81.84330597594763
+      ]
+    }
+  ],
+  "contrast_F1_F2": {
+    "published": {
+      "F1": 801.9355678883385,
+      "F2": 890.7663547679628
+    },
+    "automatic": {
+      "F1": 771.0848236011547,
+      "F2": 916.800209626564
+    }
+  },
+  "factorial": {
+    "atmosphere": {
+      "change": "constant -> layered",
+      "pairs": [
+        {
+          "set": "published",
+          "from": "constant/spline/ridge",
+          "to": "layered/spline/ridge",
+          "from_m": 801.9355678883385,
+          "to_m": 784.4279022953372
+        },
+        {
+          "set": "published",
+          "from": "constant/spline/demod",
+          "to": "layered/spline/demod",
+          "from_m": 890.6677126441907,
+          "to_m": 884.3219437005382
+        },
+        {
+          "set": "published",
+          "from": "constant/fused/ridge",
+          "to": "layered/fused/ridge",
+          "from_m": 825.8808999949939,
+          "to_m": 890.7663547679628
+        },
+        {
+          "set": "published",
+          "from": "constant/fused/demod",
+          "to": "layered/fused/demod",
+          "from_m": 827.5141460876689,
+          "to_m": 869.4070319576488
+        },
+        {
+          "set": "automatic",
+          "from": "constant/spline/ridge",
+          "to": "layered/spline/ridge",
+          "from_m": 771.0848236011547,
+          "to_m": 781.2598083324522
+        },
+        {
+          "set": "automatic",
+          "from": "constant/spline/demod",
+          "to": "layered/spline/demod",
+          "from_m": 1093.9176162664962,
+          "to_m": 966.6876907233774
+        },
+        {
+          "set": "automatic",
+          "from": "constant/fused/ridge",
+          "to": "layered/fused/ridge",
+          "from_m": 1017.046979175179,
+          "to_m": 916.800209626564
+        },
+        {
+          "set": "automatic",
+          "from": "constant/fused/demod",
+          "to": "layered/fused/demod",
+          "from_m": 1106.5969268783876,
+          "to_m": 1035.3486575772363
+        }
+      ],
+      "improved": 5,
+      "valid_pairs": 8,
+      "median_change_m": -11.926717268326911
+    },
+    "trajectory": {
+      "change": "spline -> fused",
+      "pairs": [
+        {
+          "set": "published",
+          "from": "constant/spline/ridge",
+          "to": "constant/fused/ridge",
+          "from_m": 801.9355678883385,
+          "to_m": 825.8808999949939
+        },
+        {
+          "set": "published",
+          "from": "constant/spline/demod",
+          "to": "constant/fused/demod",
+          "from_m": 890.6677126441907,
+          "to_m": 827.5141460876689
+        },
+        {
+          "set": "published",
+          "from": "layered/spline/ridge",
+          "to": "layered/fused/ridge",
+          "from_m": 784.4279022953372,
+          "to_m": 890.7663547679628
+        },
+        {
+          "set": "published",
+          "from": "layered/spline/demod",
+          "to": "layered/fused/demod",
+          "from_m": 884.3219437005382,
+          "to_m": 869.4070319576488
+        },
+        {
+          "set": "automatic",
+          "from": "constant/spline/ridge",
+          "to": "constant/fused/ridge",
+          "from_m": 771.0848236011547,
+          "to_m": 1017.046979175179
+        },
+        {
+          "set": "automatic",
+          "from": "constant/spline/demod",
+          "to": "constant/fused/demod",
+          "from_m": 1093.9176162664962,
+          "to_m": 1106.5969268783876
+        },
+        {
+          "set": "automatic",
+          "from": "layered/spline/ridge",
+          "to": "layered/fused/ridge",
+          "from_m": 781.2598083324522,
+          "to_m": 916.800209626564
+        },
+        {
+          "set": "automatic",
+          "from": "layered/spline/demod",
+          "to": "layered/fused/demod",
+          "from_m": 966.6876907233774,
+          "to_m": 1035.3486575772363
+        }
+      ],
+      "improved": 2,
+      "valid_pairs": 8,
+      "median_change_m": 46.30314948025716
+    },
+    "measurement": {
+      "change": "ridge -> demod",
+      "pairs": [
+        {
+          "set": "published",
+          "from": "constant/spline/ridge",
+          "to": "constant/spline/demod",
+          "from_m": 801.9355678883385,
+          "to_m": 890.6677126441907
+        },
+        {
+          "set": "published",
+          "from": "constant/fused/ridge",
+          "to": "constant/fused/demod",
+          "from_m": 825.8808999949939,
+          "to_m": 827.5141460876689
+        },
+        {
+          "set": "published",
+          "from": "layered/spline/ridge",
+          "to": "layered/spline/demod",
+          "from_m": 784.4279022953372,
+          "to_m": 884.3219437005382
+        },
+        {
+          "set": "published",
+          "from": "layered/fused/ridge",
+          "to": "layered/fused/demod",
+          "from_m": 890.7663547679628,
+          "to_m": 869.4070319576488
+        },
+        {
+          "set": "automatic",
+          "from": "constant/spline/ridge",
+          "to": "constant/spline/demod",
+          "from_m": 771.0848236011547,
+          "to_m": 1093.9176162664962
+        },
+        {
+          "set": "automatic",
+          "from": "constant/fused/ridge",
+          "to": "constant/fused/demod",
+          "from_m": 1017.046979175179,
+          "to_m": 1106.5969268783876
+        },
+        {
+          "set": "automatic",
+          "from": "layered/spline/ridge",
+          "to": "layered/spline/demod",
+          "from_m": 781.2598083324522,
+          "to_m": 966.6876907233774
+        },
+        {
+          "set": "automatic",
+          "from": "layered/fused/ridge",
+          "to": "layered/fused/demod",
+          "from_m": 916.800209626564,
+          "to_m": 1035.3486575772363
+        }
+      ],
+      "improved": 1,
+      "valid_pairs": 8,
+      "median_change_m": 94.72199455420485
+    }
+  },
+  "published": {
+    "top_grid_candidate": {
+      "latlon": [
+        26.709054976643866,
+        -81.84238378783921
+      ],
+      "dist_m_column": 916.6244598041119,
+      "error_m_our_frame": 915.0312677980783
+    },
+    "refined_50m_highest_score": {
+      "row": {
+        "lat": "26.70007186489396",
+        "lon": "-81.84238378783911",
+        "score": "22.044524522073047",
+        "s1": "5.996322001381165",
+        "s2": "2.9879893232164894",
+        "s3": "6.430660597017197",
+        "s4": "3.807102795666809",
+        "s5": "2.822449804791389",
+        "shift": "0.5",
+        "dist_m": "592.0582251770361"
+      },
+      "error_m_our_frame": 592.5364404219604
+    }
+  }
+}

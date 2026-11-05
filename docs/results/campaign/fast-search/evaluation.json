@@ -1,0 +1,403 @@
+{
+ "truth": [
+  40.876466,
+  -73.524951
+ ],
+ "correct_flights": [
+  "a1dfeb",
+  "ace391"
+ ],
+ "report": {
+  "baseline-12km": {
+   "seconds": 2010.0220540830014,
+   "peak_rss_gb": 1.120452608,
+   "candidates": null,
+   "scored": 2643,
+   "combinations": 18,
+   "top_flights": [
+    "a1dfeb",
+    "ace391"
+   ],
+   "true_pair_rank": 1,
+   "margin_to_runner_up": 0.39064537731399485,
+   "top_error_m": 841.0737245345679,
+   "true_pair_error_m": 841.0737245345679,
+   "true_pair_score": 1.5254455373690408
+  },
+  "baseline-6km": {
+   "seconds": 442.6704623330006,
+   "peak_rss_gb": 1.128677376,
+   "candidates": null,
+   "scored": 1182,
+   "combinations": 7,
+   "top_flights": [
+    "a1dfeb",
+    "ace391"
+   ],
+   "true_pair_rank": 1,
+   "margin_to_runner_up": 0.6702521773086844,
+   "top_error_m": 841.0737245321488,
+   "true_pair_error_m": 841.0737245321488,
+   "true_pair_score": 1.5254455373555738
+  },
+  "fast-12-published": {
+   "seconds": 5.272089042002335,
+   "peak_rss_gb": 1.243693056,
+   "candidates": 2991,
+   "scored": 765,
+   "combinations": 18,
+   "top_flights": [
+    "a1dfeb",
+    "ace391"
+   ],
+   "true_pair_rank": 1,
+   "margin_to_runner_up": 0.3906456106806193,
+   "top_error_m": 841.0737245345679,
+   "true_pair_error_m": 841.0737245345679,
+   "true_pair_score": 1.5254455373690408
+  },
+  "fast-6-published": {
+   "seconds": 2.3205911250006466,
+   "peak_rss_gb": 1.173405696,
+   "candidates": 1244,
+   "scored": 395,
+   "combinations": 7,
+   "top_flights": [
+    "a1dfeb",
+    "ace391"
+   ],
+   "true_pair_rank": 1,
+   "margin_to_runner_up": 0.6702521773086844,
+   "top_error_m": 841.0737245321488,
+   "true_pair_error_m": 841.0737245321488,
+   "true_pair_score": 1.5254455373555738
+  },
+  "fast-full-auto-0-1-2": {
+   "seconds": 403.7602433329994,
+   "peak_rss_gb": 1.862877184,
+   "candidates": 1911,
+   "scored": 1054,
+   "combinations": 51,
+   "top_flights": [
+    "a63e21",
+    "a1dfeb",
+    "ace391"
+   ],
+   "true_pair_rank": 1,
+   "margin_to_runner_up": 0.2598382420271981,
+   "top_error_m": 569.7187330298195,
+   "true_pair_error_m": 569.7187330298195,
+   "true_pair_score": 1.4642312434397098
+  },
+  "fast-full-auto-0-1": {
+   "seconds": 1229.1349195830007,
+   "peak_rss_gb": 1.978089472,
+   "candidates": 346402,
+   "scored": 51651,
+   "combinations": 2346,
+   "top_flights": [
+    "a63e21",
+    "a1dfeb"
+   ],
+   "true_pair_rank": null,
+   "margin_to_runner_up": 0.03960479212080026,
+   "top_error_m": 644.1155320778176,
+   "true_pair_error_m": null,
+   "true_pair_score": null
+  },
+  "fast-full-auto-0-2": {
+   "seconds": 50.103262165997876,
+   "peak_rss_gb": 1.572388864,
+   "candidates": 22893,
+   "scored": 5275,
+   "combinations": 209,
+   "top_flights": [
+    "aba17b",
+    "a83d1a"
+   ],
+   "true_pair_rank": 4,
+   "margin_to_runner_up": 0.0032910849256326813,
+   "top_error_m": 52954.746097175215,
+   "true_pair_error_m": 569.7187330298195,
+   "true_pair_score": 1.4607682734684868
+  },
+  "fast-full-auto-1-2": {
+   "seconds": 538.6461666670002,
+   "peak_rss_gb": 1.925709824,
+   "candidates": 314513,
+   "scored": 54628,
+   "combinations": 2619,
+   "top_flights": [
+    "a96ef5",
+    "abb40e"
+   ],
+   "true_pair_rank": null,
+   "margin_to_runner_up": 0.008468125073591182,
+   "top_error_m": 61421.76120780366,
+   "true_pair_error_m": null,
+   "true_pair_score": null
+  },
+  "fast-full-detected": {
+   "seconds": 211.32085816700055,
+   "peak_rss_gb": 1.475739648,
+   "candidates": 22893,
+   "scored": 5275,
+   "combinations": 209,
+   "top_flights": [
+    "aba17b",
+    "a83d1a"
+   ],
+   "true_pair_rank": 4,
+   "margin_to_runner_up": 0.0032910849256326813,
+   "top_error_m": 52954.746097175215,
+   "true_pair_error_m": 569.7187330298195,
+   "true_pair_score": 1.4607682734684868
+  },
+  "fast-full-published": {
+   "seconds": 318.4976575419969,
+   "peak_rss_gb": 1.487618048,
+   "candidates": 457857,
+   "scored": 42820,
+   "combinations": 1747,
+   "top_flights": [
+    "aba17b",
+    "a83d1a"
+   ],
+   "true_pair_rank": 4,
+   "margin_to_runner_up": 0.014043255757211215,
+   "top_error_m": 52776.81662377394,
+   "true_pair_error_m": 840.8717812443701,
+   "true_pair_score": 1.5251262710665738
+  },
+  "rank-auto-full": [
+   {
+    "label": "auto-0-1-2",
+    "common_score": 1.4642312434397098,
+    "flights": [
+     "a1dfeb",
+     "a63e21",
+     "ace391"
+    ],
+    "correct": true,
+    "error_m": 569.7187330298195
+   },
+   {
+    "label": "auto-0-2",
+    "common_score": 1.4273760652404652,
+    "flights": [
+     "a1dfeb",
+     "a63e21",
+     "ace391"
+    ],
+    "correct": true,
+    "error_m": 569.7187330298195
+   },
+   {
+    "label": "auto-0-1",
+    "common_score": 1.2603748909540142,
+    "flights": [
+     "a1dfeb",
+     "a63e21",
+     null
+    ],
+    "correct": false,
+    "error_m": 644.1155320778176
+   },
+   {
+    "label": "auto-0-1",
+    "common_score": 1.2339716962068141,
+    "flights": [
+     "a26f86",
+     "a22a0b",
+     null
+    ],
+    "correct": false,
+    "error_m": 74869.61238893204
+   },
+   {
+    "label": "auto-0-1",
+    "common_score": 1.2129980243863703,
+    "flights": [
+     "a1dfeb",
+     "a4c6d0",
+     null
+    ],
+    "correct": false,
+    "error_m": 86344.3750282254
+   },
+   {
+    "label": "auto-0-1-2",
+    "common_score": 1.2043930014125117,
+    "flights": [
+     "a3025d",
+     "a6acf7",
+     "a8d3af"
+    ],
+    "correct": false,
+    "error_m": 80103.52936827137
+   },
+   {
+    "label": "auto-0-2",
+    "common_score": 1.2042248894740275,
+    "flights": [
+     "ab050a",
+     "ab3633",
+     "abb40e"
+    ],
+    "correct": false,
+    "error_m": 49509.56949146365
+   },
+   {
+    "label": "auto-0-1",
+    "common_score": 1.1972565859984536,
+    "flights": [
+     "a2733d",
+     "a34fbb",
+     null
+    ],
+    "correct": false,
+    "error_m": 65823.1178678432
+   },
+   {
+    "label": "auto-0-1",
+    "common_score": 1.1906596137675391,
+    "flights": [
+     "ad0d9d",
+     "a8d3af",
+     null
+    ],
+    "correct": false,
+    "error_m": 19193.626618673123
+   },
+   {
+    "label": "auto-0-1",
+    "common_score": 1.1541836002777537,
+    "flights": [
+     "ae0630",
+     "ab3633",
+     null
+    ],
+    "correct": false,
+    "error_m": 56301.024008747896
+   }
+  ],
+  "refine-full": {
+   "spline-linear": [
+    {
+     "label": "auto-0-1",
+     "flights": [
+      "a63e21",
+      "a1dfeb"
+     ],
+     "score": 1.65025782970983,
+     "correct": false,
+     "error_m": 441.8924880277793,
+     "evidence_accepted": true
+    },
+    {
+     "label": "auto-0-1",
+     "flights": [
+      "a22a0b",
+      "a26f86"
+     ],
+     "score": 1.627529698711319,
+     "correct": false,
+     "error_m": 75080.3848375774,
+     "evidence_accepted": true
+    },
+    {
+     "label": "auto-0-1",
+     "flights": [
+      "a4c6d0",
+      "a1dfeb"
+     ],
+     "score": 1.6173668526711233,
+     "correct": false,
+     "error_m": 85205.5278643637,
+     "evidence_accepted": true
+    },
+    {
+     "label": "auto-0-2",
+     "flights": [
+      "a1dfeb",
+      "ace391"
+     ],
+     "score": 1.4685006686539899,
+     "correct": true,
+     "error_m": 21.34778255239145,
+     "evidence_accepted": true
+    },
+    {
+     "label": "auto-0-1-2",
+     "flights": [
+      "a63e21",
+      "a1dfeb",
+      "ace391"
+     ],
+     "score": 1.3944834788206473,
+     "correct": true,
+     "error_m": 21.58030280483361,
+     "evidence_accepted": true
+    }
+   ],
+   "fused-velocity": [
+    {
+     "label": "auto-0-1",
+     "flights": [
+      "a63e21",
+      "a1dfeb"
+     ],
+     "score": 1.657680220573757,
+     "correct": false,
+     "error_m": 446.19063828684165,
+     "evidence_accepted": true
+    },
+    {
+     "label": "auto-0-1",
+     "flights": [
+      "a22a0b",
+      "a26f86"
+     ],
+     "score": 1.636888170730386,
+     "correct": false,
+     "error_m": 75120.1195146582,
+     "evidence_accepted": true
+    },
+    {
+     "label": "auto-0-1",
+     "flights": [
+      "a4c6d0",
+      "a1dfeb"
+     ],
+     "score": 1.5342807008633792,
+     "correct": false,
+     "error_m": 85224.81577197276,
+     "evidence_accepted": true
+    },
+    {
+     "label": "auto-0-2",
+     "flights": [
+      "a1dfeb",
+      "ace391"
+     ],
+     "score": 1.4833018457385336,
+     "correct": true,
+     "error_m": 29.67691411651116,
+     "evidence_accepted": true
+    },
+    {
+     "label": "auto-0-1-2",
+     "flights": [
+      "a63e21",
+      "a1dfeb",
+      "ace391"
+     ],
+     "score": 1.4204285414544253,
+     "correct": true,
+     "error_m": 16.30328147263956,
+     "evidence_accepted": true
+    }
+   ]
+  }
+ }
+}

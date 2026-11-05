@@ -129,6 +129,13 @@ def parser():
             p.add_argument("--fit-clock-rate", action="store_true")
             p.add_argument("--loss", choices=["linear", "soft_l1", "huber", "cauchy"], default="soft_l1")
             p.add_argument(
+                "--velocity",
+                choices=["differenced", "reported", "fused"],
+                default="differenced",
+                help="Aircraft velocity source: differenced positions (default), the reported ADS-B velocity, "
+                "or both fused by a Kalman smoother; needs traces that carry reported velocities",
+            )
+            p.add_argument(
                 "--weather",
                 help="Weather file from fetch-weather: layered sound speed and wind, interpolated to each "
                 "event; replaces --sound-speed/--wind, and --fit-sound-speed/--fit-wind become offsets",
@@ -404,6 +411,7 @@ def execute(args):
             or args.fit_altitude
             or args.fit_clock_rate
             or args.loss != "soft_l1"
+            or args.velocity != "differenced"
         )
         if advanced and args.method not in ("projected", "auto", "consensus"):
             raise ValueError(
@@ -686,6 +694,7 @@ def execute(args):
                         fit_clock_rate=args.fit_clock_rate,
                         loss=args.loss,
                         radius=args.radius,
+                        velocity=args.velocity,
                     )
                     if args.method == "auto":
                         from dataclasses import replace

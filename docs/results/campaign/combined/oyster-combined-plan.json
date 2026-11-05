@@ -1,0 +1,276 @@
+{
+  "validation": "Real recording, conditional refinement with published flight identities and coarse candidate; not a blind search. Truth enters only after every fit.",
+  "protocol": "scripts/compare_oyster_bay.py shared start, calibrated once per atmosphere",
+  "traces": "data/oyster-bay/traces-velocity.npz",
+  "weather_file": "data/oyster-bay/weather/open-meteo-2026-09-08.json",
+  "atmospheres": {
+    "constant": {
+      "height_m": -30.0
+    },
+    "layered": {
+      "height_m": -28.854
+    }
+  },
+  "layered_profiles": {
+    "type": "per_flight",
+    "flights": {
+      "a1dfeb:1788899524.900": {
+        "type": "layered",
+        "heights_m": [
+          64.146,
+          163.2558105023967,
+          384.2558105023967,
+          608.2558105023966,
+          836.2558105023966,
+          1069.2558105023968,
+          1552.0361894976031,
+          2059.0361894976036,
+          3162.0361894976036,
+          4405.9263789952065,
+          5834.81656849281,
+          7522.65230417724,
+          9594.971551505201
+        ],
+        "sound_speed_m_s": [
+          347.3839374139946,
+          346.0197843625268,
+          344.7603380441921,
+          343.5709321486827,
+          342.3951446332546,
+          341.27566588698255,
+          339.6829384468949,
+          338.3307216026499,
+          335.0653916002256,
+          330.7337661066862,
+          325.429482163615,
+          319.3205122172307,
+          309.35702586810686
+        ],
+        "wind_east_m_s": [
+          0.6221790457561223,
+          0.7415160340710141,
+          1.3062850723321036,
+          1.9979384320003208,
+          2.5710955195437784,
+          3.0381853973525317,
+          3.2853407236767973,
+          0.9743935596510614,
+          7.730268505862671,
+          9.159857993107234,
+          11.617122640892845,
+          9.99262942710345,
+          17.272887729052044
+        ],
+        "wind_north_m_s": [
+          -1.3735184715450908,
+          -1.0323421963659083,
+          -1.1488926421857644,
+          -1.268402475612342,
+          -1.133786842192284,
+          -1.1286871810440586,
+          -2.9468902973791558,
+          -7.46883528425315,
+          -7.9189583413951,
+          -10.457300312918242,
+          -12.360513106330849,
+          -15.66914950365964,
+          -21.49350304702044
+        ],
+        "sound_speed_offset_m_s": 0.0,
+        "wind_offset_en_m_s": [
+          0.0,
+          0.0
+        ],
+        "height_reference": "ellipsoid",
+        "description": "open-meteo historical forecast interpolated to 2026-09-08T20:53:24.682191+00:00"
+      },
+      "ace391:1788901235.390": {
+        "type": "layered",
+        "heights_m": [
+          64.146,
+          163.4363667415513,
+          384.5815501123269,
+          608.5815501123268,
+          836.7267334831024,
+          1069.7267334831024,
+          1552.7267334831024,
+          2059.7267334831026,
+          3163.017100224654,
+          4407.017100224653,
+          5835.871916853877,
+          7524.361781397684,
+          9597.268687514555
+        ],
+        "sound_speed_m_s": [
+          347.25101938206257,
+          346.05802187353066,
+          344.8199388095814,
+          343.62548351074196,
+          342.44971125996153,
+          341.33534075233575,
+          339.70225588316225,
+          338.3271261353304,
+          335.1311335215419,
+          330.7551458870228,
+          325.435706223455,
+          319.362141208141,
+          309.3956761071015
+        ],
+        "wind_east_m_s": [
+          0.49322934364682885,
+          0.6468335651569995,
+          1.226111180304373,
+          1.927476786230985,
+          2.5477456606338396,
+          3.02613817041071,
+          3.153072022974423,
+          0.6967982349154426,
+          8.086112862620427,
+          9.24780053780416,
+          11.396635662324266,
+          9.971529398197564,
+          17.46196448203458
+        ],
+        "wind_north_m_s": [
+          -1.3115881007658245,
+          -1.0971337481713133,
+          -1.2193004868286001,
+          -1.2977522431814967,
+          -1.0849268445068612,
+          -1.0120991536203847,
+          -2.807751723269905,
+          -7.433389388538894,
+          -7.997689668934639,
+          -10.526392247411941,
+          -12.340934245619247,
+          -15.274557372356798,
+          -21.050003768147626
+        ],
+        "sound_speed_offset_m_s": 0.0,
+        "wind_offset_en_m_s": [
+          0.0,
+          0.0
+        ],
+        "height_reference": "ellipsoid",
+        "description": "open-meteo historical forecast interpolated to 2026-09-08T21:08:42.660135+00:00"
+      }
+    },
+    "default": {
+      "type": "layered",
+      "heights_m": [
+        64.146,
+        163.18137286837896,
+        384.19905930256846,
+        608.1990593025685,
+        836.2167457367578,
+        1069.2167457367577,
+        1552.2167457367577,
+        2059.216745736758,
+        3162.2521186051367,
+        4406.252118605137,
+        5835.234432170947,
+        7523.5751252989485,
+        9596.651602341479
+      ],
+      "sound_speed_m_s": [
+        347.33707191048217,
+        346.01468991102143,
+        344.7781933071978,
+        343.5930423746117,
+        342.42100121554347,
+        341.3110127740414,
+        339.7172034245243,
+        338.33247247712865,
+        335.09000613715153,
+        330.7507697174688,
+        325.47016455479235,
+        319.362141208141,
+        309.394109600687
+      ],
+      "wind_east_m_s": [
+        0.5535431332503096,
+        0.739509126124464,
+        1.3064515840823814,
+        2.00376097815744,
+        2.5983647304811077,
+        3.0755378148592194,
+        3.2686650151162087,
+        0.7834423004951592,
+        7.946090925214749,
+        9.152168407339838,
+        11.52201901535878,
+        10.020070930716978,
+        17.419224175499
+      ],
+      "wind_north_m_s": [
+        -1.3811290316567295,
+        -1.043044972810012,
+        -1.1194464824683061,
+        -1.2209882173175555,
+        -1.056577202929777,
+        -1.0553521129473094,
+        -2.9393077649719643,
+        -7.551875214947233,
+        -7.935319092410534,
+        -10.514723189614227,
+        -12.370415041689295,
+        -15.41977982928149,
+        -21.44836754551563
+      ],
+      "sound_speed_offset_m_s": 0.0,
+      "wind_offset_en_m_s": [
+        0.0,
+        0.0
+      ],
+      "height_reference": "ellipsoid",
+      "description": "open-meteo historical forecast interpolated to 2026-09-08T21:01:03.671163+00:00"
+    }
+  },
+  "cells": {
+    "constant/spline/ridge": "ModelOptions(degree=1, ridge='peak', loss='soft_l1', smoothing='spline', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=1200.0, max_nfev=130, velocity='differenced', fit_track_offsets=False, max_frames=140, reextract=0, noise='fixed', harmonic_mode='sum', max_harmonic=0, demod_window=2.0)",
+    "constant/spline/demod": "ModelOptions(degree=1, ridge='demod', loss='soft_l1', smoothing='spline', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=1200.0, max_nfev=130, velocity='differenced', fit_track_offsets=False, max_frames=140, reextract=2, noise='snr', harmonic_mode='sum', max_harmonic=0, demod_window=2.0)",
+    "constant/fused/ridge": "ModelOptions(degree=1, ridge='peak', loss='soft_l1', smoothing='none', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=1200.0, max_nfev=130, velocity='fused', fit_track_offsets=False, max_frames=140, reextract=0, noise='fixed', harmonic_mode='sum', max_harmonic=0, demod_window=2.0)",
+    "constant/fused/demod": "ModelOptions(degree=1, ridge='demod', loss='soft_l1', smoothing='none', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=1200.0, max_nfev=130, velocity='fused', fit_track_offsets=False, max_frames=140, reextract=2, noise='snr', harmonic_mode='sum', max_harmonic=0, demod_window=2.0)",
+    "layered/spline/ridge": "ModelOptions(degree=1, ridge='peak', loss='soft_l1', smoothing='spline', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=1200.0, max_nfev=130, velocity='differenced', fit_track_offsets=False, max_frames=140, reextract=0, noise='fixed', harmonic_mode='sum', max_harmonic=0, demod_window=2.0)",
+    "layered/spline/demod": "ModelOptions(degree=1, ridge='demod', loss='soft_l1', smoothing='spline', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=1200.0, max_nfev=130, velocity='differenced', fit_track_offsets=False, max_frames=140, reextract=2, noise='snr', harmonic_mode='sum', max_harmonic=0, demod_window=2.0)",
+    "layered/fused/ridge": "ModelOptions(degree=1, ridge='peak', loss='soft_l1', smoothing='none', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=1200.0, max_nfev=130, velocity='fused', fit_track_offsets=False, max_frames=140, reextract=0, noise='fixed', harmonic_mode='sum', max_harmonic=0, demod_window=2.0)",
+    "layered/fused/demod": "ModelOptions(degree=1, ridge='demod', loss='soft_l1', smoothing='none', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=1200.0, max_nfev=130, velocity='fused', fit_track_offsets=False, max_frames=140, reextract=2, noise='snr', harmonic_mode='sum', max_harmonic=0, demod_window=2.0)",
+    "layered/fused/demod+fit-c-wind": "ModelOptions(degree=1, ridge='demod', loss='soft_l1', smoothing='none', fit_sound_speed=True, fit_wind=True, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=1200.0, max_nfev=130, velocity='fused', fit_track_offsets=False, max_frames=140, reextract=2, noise='snr', harmonic_mode='sum', max_harmonic=0, demod_window=2.0)",
+    "layered/fused/demod+h4-all-frames": "ModelOptions(degree=1, ridge='demod', loss='soft_l1', smoothing='none', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=1200.0, max_nfev=130, velocity='fused', fit_track_offsets=False, max_frames=None, reextract=2, noise='snr', harmonic_mode='sum', max_harmonic=4, demod_window=2.0)"
+  },
+  "initial_latlon": [
+    40.876104922746144,
+    -73.52356936754546
+  ],
+  "initial_clock": 1788898648.7235358,
+  "flights": [
+    "a1dfeb:1788899524.900",
+    "ace391:1788901235.390"
+  ],
+  "source_hashes": {
+    "geo.py": "eb34c3bd77db460e422793330fbb74dd704351e0b93b47855a71174a3acdc6c7",
+    "advanced.py": "f45ab013d5f2494f500fd407b5a395ee9d8f360e498b5eaf007884e74b125fed",
+    "detection.py": "15faf6744059246b6cef859f110d83297020ba9726417013468c51546990bae8",
+    "signal.py": "99cdd632aa09752540a3d454475cd77c8de63a036a30ef03825794efca4256b2",
+    "benchmark.py": "a03ec844d67b20f051877db7065a541f4a41d3174fe9bf113c24e3b56716e79b",
+    "stress_benchmark.py": "e5d322b9f9ff4a12aea2afa95f275c7695fd16ecc91ce4d7ea24d16eaee36e65",
+    "audio_benchmark.py": "09b7ed328f37500ed7f47fd1b046858e3ae462c4c0b20f8f94529ed1d9bd25d6",
+    "scoring.py": "53d676639efa30762309146725b83aa2f7f6d342d856cd7ab907a6f2d6ca70fc",
+    "download.py": "4c014b33ea98721318d370d235fbbd7014cb6c4e88b578ad0e5b633bb5dfb91e",
+    "demod.py": "96fa0b04292e30899eb1da9cbf98978ea916a579ab34901c527b2ab92aa6cd23",
+    "terrain.py": "93130d81e03ac7d5649a5fbc0081663f4f8762c8b8783640ae8950d325ea9c20",
+    "refine.py": "5dec596ef23dd182a0144fbdf7fa71539111d1d7574fe12361da3f54c6c2cbab",
+    "__init__.py": "3daa9057b0628eb5915aa00a80e975258472096a170b0eed441638227c84ecb0",
+    "evidence_controls.py": "ec021baf7daa049cdbbe71ebf9e53f3e36a2747e2bf475b5e3a9dd248e193ea2",
+    "physics.py": "d8cd9c7b51056c9477f7345580f5fe37c547daec1223737138ea2248976b73b0",
+    "cli.py": "e12d336906ad4cddb9036a293df8b9d8e7e0598f979714a6b63ef533e8b2047a",
+    "stress_scenes.py": "a256b11ed2949b7f08bb9aa3aa7744de1102c2cfc83e088b0329a496be0ef284",
+    "search.py": "1f5b11eefcb1d267907f4f07d83f333c2da0ccce147325dcaa099141d42c4e95",
+    "detection_benchmark.py": "86791d2ea16032f8bcc72ae5fba8f848149c42b3f4ba99c49f479cac31c405be",
+    "identification.py": "72f27f947df247013b92e5063ffc9c9fcbb6f6a1ef8eeefa2421f79eea8939c7",
+    "atmosphere.py": "2b1985cdf2ebe5249b021620e91bfe278895a72ef3b75bcda1ed81e5c3851e3d",
+    "evidence.py": "c311c13fe4f02ecdf875f3ae552044a455b8613f4beb0d854d4f53ab790493bd",
+    "__main__.py": "307299fda7b77d22c64cb51430ec75e5f59d78e9c948786afb3b2544fe45e4b7",
+    "data.py": "e3afed8f4c78fd311ddcf1bef0cd0b9798eda532325812445a8d30600ce28544"
+  }
+}

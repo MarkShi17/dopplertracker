@@ -1,0 +1,256 @@
+{
+  "protocol": {
+    "validation": "Held-out real recording. Conditional refinement from the original project's top grid candidate and flight pair; not a blind search. Nothing is tuned on this recording. Truth (published/provenance.json evaluation_truth) is read only by the evaluate stage, after fits.json is complete.",
+    "P1": "Reported velocities re-extracted from the raw archive into data/eagle-cam/traces-velocity.npz (scripts/extract_eagle_cam_velocity.py; inputs.json frame and bbox, archive SHA-256 checked).",
+    "P2": "Layered weather: WeatherSeries.from_open_meteo(weather-open-meteo.json, geoid -24.231 m), saved as data/eagle-cam/weather-profile-geoid18.json; per-flight profiles at each event's heard CPA (WeatherSeries.for_events at the set's initial clock).",
+    "P3": "Observer ellipsoid height for every fit -19.231 m (= -24.231 m geoid + 5.0 m above MSL).",
+    "P4": "Start candidate: highest-score row of published/swfl_search_best_per_pair.csv (lat, lon, icao1, icao2, t_heard1, shift); dist_m is not read before evaluation.",
+    "P5": "Published events: the ordered pair (i, j) of published/swfl_detected.json entries that satisfies the original search's pair filters for the winning row: v_k within +/-35 % of the row's v_k, row d_k within [0.4, 2.5] x event d_k, and (t_cpa_j - t_cpa_i) within 6 s of the row's heard-time difference (t_heard2 - t_heard1, t_heard2 = icao2's acoustic CPA at the row position, 343 m/s, P3 height), and the implied recording start t_heard1 - t_cpa_i within 120 s of the live stream's release_timestamp (recording.info.json). Expected unique; if several, the smallest timing mismatch. Section clock = recording - 17000 s. Event window = [t_start, t_end], cpa = t_cpa, f0, speed = v, distance = d, harmonics 2.",
+    "P6": "Automatic events: detect_flyovers(whitened section, FlyoverOptions(), top=15). For each flight, its predicted heard CPA at the start candidate (the acoustic CPA nearest the flight's published event, 343 m/s, published-set initial clock); the detection nearest in heard time within 20 s. (The Oyster Bay scripts pick the highest z within 20 s; the brief says nearest; nearest is used and the highest-z choice is recorded.) A flight without a detection within 20 s is recorded and the automatic set has only what exists (one event: initial clock of the published set; none: no automatic fits).",
+    "start_and_calibration": "As scripts/compare_oyster_bay.py: initial clock = t_heard1 - event1.cpa + shift; tracks = the covering segment of each ICAO trimmed to event window +/-120 s (velocity file); joint_score sweep at the fixed start (shared +/-4 s shift, 17 steps; per-event +/-12 Hz, 121 steps), once per atmosphere and event set.",
+    "F1": "BASELINE constant/spline/ridge: ModelOptions(degree=1, smoothing='spline'), constant 343 m/s.",
+    "F2": "PRIMARY layered/fused/ridge: ModelOptions(degree=1, velocity='fused'), layered atmosphere, spectrogram ridge, uncertainty=True.",
+    "F3": "Full factorial atmosphere {constant 343 m/s, layered} x trajectory {spline, fused} x measurement {ridge, demod (reextract=2, noise='snr', hum='subtract')}; every cell uncertainty=True, keep_observations, evidence via assess_candidate.",
+    "F4": "At each set's F2 solution: discover() over traces-velocity.npz (TraceIndex) with DiscoveryOptions() and, separately, max_distance = ground_range = 12 km; discovery scan atmosphere constant 343 m/s (as both Oyster Bay discovery scripts). Joint refit (F2 options, layered profiles for every event, uncertainty=True) of the F2 events + confirmed independent passes, start = F2 position/clock, f0 = F2 f0 + discovered f0; the discovered segment is taken from the velocity file and trimmed to its window +/-240 s (as discovery.trim_track). If the refit raises ValueError the weakest discovery is dropped and the refit retried (as discovery.joint_refit). No confirmations: no refit (recorded).",
+    "E1": "Horizontal error of every fit; inside 50 % / 90 % region; normalised error sqrt(e^T C^-1 e).",
+    "E2": "F1 vs F2 per event set; for each factor the paired cells (other factors fixed) it improved.",
+    "E3": "Only then: the original project's top grid candidate, two-flyover and five-flyover refinements.",
+    "failures": "A failing fit is an outcome and is reported; bugs are fixed and the whole plan rerun."
+  },
+  "cells": {
+    "constant/spline/ridge": "ModelOptions(degree=1, ridge='peak', loss='soft_l1', smoothing='spline', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=1200.0, max_nfev=130, velocity='differenced', fit_track_offsets=False, max_frames=140, reextract=0, noise='fixed', harmonic_mode='sum', max_harmonic=0, demod_window=2.0, hum='mask')",
+    "constant/spline/demod": "ModelOptions(degree=1, ridge='demod', loss='soft_l1', smoothing='spline', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=1200.0, max_nfev=130, velocity='differenced', fit_track_offsets=False, max_frames=140, reextract=2, noise='snr', harmonic_mode='sum', max_harmonic=0, demod_window=2.0, hum='subtract')",
+    "constant/fused/ridge": "ModelOptions(degree=1, ridge='peak', loss='soft_l1', smoothing='none', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=1200.0, max_nfev=130, velocity='fused', fit_track_offsets=False, max_frames=140, reextract=0, noise='fixed', harmonic_mode='sum', max_harmonic=0, demod_window=2.0, hum='mask')",
+    "constant/fused/demod": "ModelOptions(degree=1, ridge='demod', loss='soft_l1', smoothing='none', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=1200.0, max_nfev=130, velocity='fused', fit_track_offsets=False, max_frames=140, reextract=2, noise='snr', harmonic_mode='sum', max_harmonic=0, demod_window=2.0, hum='subtract')",
+    "layered/spline/ridge": "ModelOptions(degree=1, ridge='peak', loss='soft_l1', smoothing='spline', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=1200.0, max_nfev=130, velocity='differenced', fit_track_offsets=False, max_frames=140, reextract=0, noise='fixed', harmonic_mode='sum', max_harmonic=0, demod_window=2.0, hum='mask')",
+    "layered/spline/demod": "ModelOptions(degree=1, ridge='demod', loss='soft_l1', smoothing='spline', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=1200.0, max_nfev=130, velocity='differenced', fit_track_offsets=False, max_frames=140, reextract=2, noise='snr', harmonic_mode='sum', max_harmonic=0, demod_window=2.0, hum='subtract')",
+    "layered/fused/ridge": "ModelOptions(degree=1, ridge='peak', loss='soft_l1', smoothing='none', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=1200.0, max_nfev=130, velocity='fused', fit_track_offsets=False, max_frames=140, reextract=0, noise='fixed', harmonic_mode='sum', max_harmonic=0, demod_window=2.0, hum='mask')",
+    "layered/fused/demod": "ModelOptions(degree=1, ridge='demod', loss='soft_l1', smoothing='none', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=1200.0, max_nfev=130, velocity='fused', fit_track_offsets=False, max_frames=140, reextract=2, noise='snr', harmonic_mode='sum', max_harmonic=0, demod_window=2.0, hum='subtract')"
+  },
+  "discovery_options": {
+    "default": {
+      "band": [
+        60.0,
+        300.0
+      ],
+      "harmonics": 2,
+      "max_distance": 10000.0,
+      "ground_range": 6000.0,
+      "half_window": null,
+      "window_factor": 1.5,
+      "min_half_window": 30.0,
+      "max_half_window": 75.0,
+      "min_sweep": 0.03,
+      "min_coverage": 0.5,
+      "f0_step": 0.1,
+      "drift_radius": 0.0,
+      "drift_steps": 1,
+      "background_hz": 3.0,
+      "null_shifts": [
+        -120.0,
+        -110.0,
+        -100.0,
+        -90.0,
+        -80.0,
+        -70.0,
+        -60.0,
+        -50.0,
+        -40.0,
+        -30.0,
+        -20.0,
+        20.0,
+        30.0,
+        40.0,
+        50.0,
+        60.0,
+        70.0,
+        80.0,
+        90.0,
+        100.0,
+        110.0,
+        120.0
+      ],
+      "mirror_shifts": [
+        0.0,
+        -60.0,
+        -30.0,
+        30.0,
+        60.0
+      ],
+      "min_nulls": 8,
+      "threshold": 8.0,
+      "shadow_hz": 1.0,
+      "smoothing": "spline"
+    },
+    "relaxed-12km": {
+      "band": [
+        60.0,
+        300.0
+      ],
+      "harmonics": 2,
+      "max_distance": 12000.0,
+      "ground_range": 12000.0,
+      "half_window": null,
+      "window_factor": 1.5,
+      "min_half_window": 30.0,
+      "max_half_window": 75.0,
+      "min_sweep": 0.03,
+      "min_coverage": 0.5,
+      "f0_step": 0.1,
+      "drift_radius": 0.0,
+      "drift_steps": 1,
+      "background_hz": 3.0,
+      "null_shifts": [
+        -120.0,
+        -110.0,
+        -100.0,
+        -90.0,
+        -80.0,
+        -70.0,
+        -60.0,
+        -50.0,
+        -40.0,
+        -30.0,
+        -20.0,
+        20.0,
+        30.0,
+        40.0,
+        50.0,
+        60.0,
+        70.0,
+        80.0,
+        90.0,
+        100.0,
+        110.0,
+        120.0
+      ],
+      "mirror_shifts": [
+        0.0,
+        -60.0,
+        -30.0,
+        30.0,
+        60.0
+      ],
+      "min_nulls": 8,
+      "threshold": 8.0,
+      "shadow_hz": 1.0,
+      "smoothing": "spline"
+    }
+  },
+  "detector_options": {
+    "band": [
+      60.0,
+      300.0
+    ],
+    "harmonics": 2,
+    "span": 120.0,
+    "sidebands": [
+      0.03,
+      0.06
+    ],
+    "clip": [
+      -1.0,
+      4.0
+    ],
+    "slope_scale": 0.002,
+    "min_sweep": 0.08,
+    "tone_seconds": 60.0,
+    "speeds": [
+      45.0,
+      60.0,
+      75.0,
+      90.0,
+      105.0,
+      120.0,
+      140.0,
+      160.0
+    ],
+    "time_scales": [
+      5.0,
+      7.0,
+      10.0,
+      14.0,
+      20.0,
+      28.0,
+      40.0,
+      56.0,
+      80.0
+    ],
+    "speed_bounds": [
+      30.0,
+      180.0
+    ],
+    "distance_bounds": [
+      300.0,
+      12000.0
+    ],
+    "log_step": 0.002,
+    "time_step": 1.0,
+    "candidates": 24,
+    "starts": 3,
+    "patience": 8,
+    "overlap": 0.5,
+    "shared": 0.5,
+    "min_z": 12.0,
+    "max_fragment": 0.7,
+    "range_sigma": 2.0,
+    "speed_margin": 0.15,
+    "distance_margin": 0.3
+  },
+  "observer_height_m": -19.231,
+  "deviations": [
+    "P5 event windows: this recording has no published measured windows (Oyster Bay used oyster_bay_ev1/ev2.json, 110 s); the published detection windows [t_start, t_end] (240 s) of swfl_detected.json are used as they are. Harmonics 2, as data/oyster-bay/events.json and the detector's events.",
+    "P5 pairing rule: the winning row stores only t_heard1, so the event pair is identified with the original search's own pair filters (speed +/-35 %, distance 0.4-2.5x, heard-time difference within 6 s) plus the implied recording start within 120 s of the stream's release time; see protocol P5.",
+    "P6: the brief says 'the detection nearest in heard time (within 20 s)' while the Oyster Bay scripts take the highest z within 20 s; the brief's nearest rule is used and the highest-z rank is recorded. top=15 detections as in both Oyster Bay detector scripts (function default is 10).",
+    "F1/F3 heights: every fit, constant and layered, uses the P3 height -19.231 m (Oyster Bay constant cells used -30 m); per the brief.",
+    "F4: one discovery round (no second confirmation scan at the refit); discovery scan atmosphere constant 343 m/s as in both Oyster Bay discovery scripts (the layered model has per-flight profiles only for fitted flights); TraceIndex over traces-velocity.npz (same 8190 segments as traces.npz) so discovered segments carry reported velocity for the fused refit."
+  ],
+  "notes": [
+    "Truth exposure: before this plan was written, while reading the eagle-cam input preparation script in git history (commit 08b2b45, scripts/fetch_eagle_cam_example.sh) to learn the input conventions, the agent saw the evaluation_truth coordinates written into that script. No dist_m column and no README error was read, and no location error was computed. Every choice in this plan is the brief's frozen protocol or an Oyster Bay script precedent; the few the agent made (listed under deviations) were fixed without computing any error. The script itself reads the truth only in the evaluate stage.",
+    "The start candidate's coordinates (P4) are read by design."
+  ],
+  "source_hashes": {
+    "__init__.py": "3daa9057b0628eb5915aa00a80e975258472096a170b0eed441638227c84ecb0",
+    "__main__.py": "307299fda7b77d22c64cb51430ec75e5f59d78e9c948786afb3b2544fe45e4b7",
+    "advanced.py": "4d07cc34e56dfa2e2ac26d46cf446b1e7636dad6cecb88e150d69b098c72d701",
+    "atmosphere.py": "2b1985cdf2ebe5249b021620e91bfe278895a72ef3b75bcda1ed81e5c3851e3d",
+    "audio_benchmark.py": "58146d6e9ad3907e0e88920919844e8926329fe14d6b4d3af551ae07ea31ba41",
+    "benchmark.py": "a03ec844d67b20f051877db7065a541f4a41d3174fe9bf113c24e3b56716e79b",
+    "cli.py": "42a2e5b2cafb6169619d0f72bd6df8be0546cd35db9dd18ccadfc2b9b4d2f63b",
+    "data.py": "e3afed8f4c78fd311ddcf1bef0cd0b9798eda532325812445a8d30600ce28544",
+    "demod.py": "50a464b7f53c99b1e98650c025ea106b13d6a7043d0145716f1a0bd411d96f10",
+    "detection.py": "6f417e5829305a1d9e830698b4a4d46ee5bc3d83bc8ab9bb7f543da6022aaa38",
+    "detection_benchmark.py": "b88a64f25d577c518fdffff5e88fa11b08cc9043820a731000acf086a71cc95e",
+    "discovery.py": "ad273b4e175e6f8f0fe6c48d2bd7ca7b12857c5c31b9c06c031402ea97168321",
+    "discovery_benchmark.py": "4b48a0caf87da8c3d907ebcb9bc3ce271990f4689f34835f81f947e5197c4fd7",
+    "download.py": "4c014b33ea98721318d370d235fbbd7014cb6c4e88b578ad0e5b633bb5dfb91e",
+    "evidence.py": "c311c13fe4f02ecdf875f3ae552044a455b8613f4beb0d854d4f53ab790493bd",
+    "evidence_controls.py": "ec021baf7daa049cdbbe71ebf9e53f3e36a2747e2bf475b5e3a9dd248e193ea2",
+    "geo.py": "eb34c3bd77db460e422793330fbb74dd704351e0b93b47855a71174a3acdc6c7",
+    "identification.py": "72f27f947df247013b92e5063ffc9c9fcbb6f6a1ef8eeefa2421f79eea8939c7",
+    "physics.py": "d8cd9c7b51056c9477f7345580f5fe37c547daec1223737138ea2248976b73b0",
+    "refine.py": "5dec596ef23dd182a0144fbdf7fa71539111d1d7574fe12361da3f54c6c2cbab",
+    "scoring.py": "defa3d7830951706458229b8bf890a84e56f6aaed40d468068fce11660e40a20",
+    "search.py": "1f5b11eefcb1d267907f4f07d83f333c2da0ccce147325dcaa099141d42c4e95",
+    "signal.py": "99cdd632aa09752540a3d454475cd77c8de63a036a30ef03825794efca4256b2",
+    "stress_benchmark.py": "e5d322b9f9ff4a12aea2afa95f275c7695fd16ecc91ce4d7ea24d16eaee36e65",
+    "stress_scenes.py": "a256b11ed2949b7f08bb9aa3aa7744de1102c2cfc83e088b0329a496be0ef284",
+    "terrain.py": "93130d81e03ac7d5649a5fbc0081663f4f8762c8b8783640ae8950d325ea9c20",
+    "uncertainty.py": "251598c0b5221e921dd7826645337b3a3bc62f2eee3bd67a152f620121cd0dea"
+  },
+  "script_hashes": {
+    "eagle_cam_heldout.py": "89f134753ee26f9c9eeccc7cfe68558e7e22a61a1ff0418437ea6af07dbcdbe2",
+    "compare_oyster_bay_velocity.py": "63e8dd0052245099f10ed4f977aec9b6df20ccad1b19ee264aa9ae7b2f2a34c8",
+    "extract_eagle_cam_velocity.py": "2fea55df5d4b1cdb37b719353898f159f3d27aa65d1338c1ccdbc90b77c4d437"
+  },
+  "input_hashes": {
+    "data/eagle-cam/traces-velocity.npz": "a6f8926b55a16251f5afbe91657e65491dc7998a33b6365a0c0cb463082f5ff8",
+    "data/eagle-cam/traces.npz": "beb2d6b4495ed1933b2906b54f94655c3c3e6f6c2a489e71f83c79d789cab890",
+    "data/eagle-cam/spectrogram-17000-24000.npz": "9b1016d224c17140612db8fe7da0e51543c2595ad713ed58cb27845a98d892c7",
+    "data/eagle-cam/recording-17000-24000.webm": "39e927d48eb2a50fb3444a7e63141f509e5d8478c5fe99c03afe67285bd9feae",
+    "data/eagle-cam/weather-open-meteo.json": "4a9defc10293e95d7c8fb7695e6e9ca25193bc300760ccc6a7d0f126ad662cbc",
+    "data/eagle-cam/published/swfl_search_best_per_pair.csv": "32c898282c65a446382d0bec3b77d52ceb1ac3e6919cf788546b68be779e94f9",
+    "data/eagle-cam/published/swfl_detected.json": "709fef03643ba7528022d08db0f7b5f78a04c01c993cb160a894cc2762aebcf4"
+  },
+  "written_utc": "2026-11-05T09:23:45Z"
+}

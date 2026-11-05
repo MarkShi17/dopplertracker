@@ -1,0 +1,2347 @@
+{
+  "validation": "synthetic waveform measurement benchmark; development seeds only",
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "window_seconds": 4.0,
+  "methods": {
+    "demod-snr-mask": "ModelOptions(degree=1, ridge='demod', loss='soft_l1', smoothing='none', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=900.0, max_nfev=130, velocity='differenced', fit_track_offsets=False, max_frames=140, reextract=2, noise='snr', harmonic_mode='sum', max_harmonic=0, demod_window=2.0, hum='mask')",
+    "demod-snr-subtract": "ModelOptions(degree=1, ridge='demod', loss='soft_l1', smoothing='none', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=900.0, max_nfev=130, velocity='differenced', fit_track_offsets=False, max_frames=140, reextract=2, noise='snr', harmonic_mode='sum', max_harmonic=0, demod_window=2.0, hum='subtract')",
+    "demod-snr-notch": "ModelOptions(degree=1, ridge='demod', loss='soft_l1', smoothing='none', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=900.0, max_nfev=130, velocity='differenced', fit_track_offsets=False, max_frames=140, reextract=2, noise='snr', harmonic_mode='sum', max_harmonic=0, demod_window=2.0, hum='notch')"
+  },
+  "summary_median_over_seeds": {
+    "hum_crossing/demod-snr-mask": {
+      "failures": 0,
+      "location_error_m": 0.07219814561985602,
+      "track_rms_hz": 0.005068875626912744,
+      "track_cpa_rms_hz": 0.005383414951375839,
+      "track_median_abs_hz": 0.003090834668615372
+    },
+    "hum_crossing/demod-snr-subtract": {
+      "failures": 0,
+      "location_error_m": 0.04703647440367757,
+      "track_rms_hz": 0.00388009688696336,
+      "track_cpa_rms_hz": 0.0034024771458906547,
+      "track_median_abs_hz": 0.002611354793625509
+    },
+    "hum_crossing/demod-snr-notch": {
+      "failures": 0,
+      "location_error_m": 0.0849783135681542,
+      "track_rms_hz": 0.01040442373491764,
+      "track_cpa_rms_hz": 0.013345830643218908,
+      "track_median_abs_hz": 0.003558003553361999
+    },
+    "fast_chirp/demod-snr-mask": {
+      "failures": 0,
+      "location_error_m": 0.036349937732242904,
+      "track_rms_hz": 0.00392705129751026,
+      "track_cpa_rms_hz": 0.0036727757749283494,
+      "track_median_abs_hz": 0.0026038456874815097
+    },
+    "fast_chirp/demod-snr-subtract": {
+      "failures": 0,
+      "location_error_m": 0.030686509202106374,
+      "track_rms_hz": 0.0036950476906099394,
+      "track_cpa_rms_hz": 0.0033453775470643774,
+      "track_median_abs_hz": 0.0024845293206894326
+    },
+    "fast_chirp/demod-snr-notch": {
+      "failures": 0,
+      "location_error_m": 0.02706423960466576,
+      "track_rms_hz": 0.004263792314751012,
+      "track_cpa_rms_hz": 0.004846322636390895,
+      "track_median_abs_hz": 0.002522165621300587
+    }
+  },
+  "trials": [
+    {
+      "scenario": "hum_crossing",
+      "seed": 0,
+      "method": "demod-snr-mask",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.08659091699763266,
+      "event_residual_rms_hz": [
+        0.004542651298441793,
+        0.005585063308123941,
+        0.005104008419589153
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.005109272744531352,
+      "track_median_abs_hz": 0.003176021331611878,
+      "track_cpa_rms_hz": 0.004939958115061956,
+      "valid_fraction": [
+        0.9181818181818182,
+        0.9272727272727272,
+        0.9090909090909091
+      ],
+      "valid_frames": [
+        101,
+        102,
+        100
+      ],
+      "cpa_valid_frames": [
+        22,
+        26,
+        23
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.3202679589994659
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 0,
+      "method": "demod-snr-subtract",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.08970777654081458,
+      "event_residual_rms_hz": [
+        0.00402662602154269,
+        0.004362564873796852,
+        0.003851397484453021
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.0040895599605803535,
+      "track_median_abs_hz": 0.0028221385336308913,
+      "track_cpa_rms_hz": 0.003777079201981815,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.5930016249985783
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 0,
+      "method": "demod-snr-notch",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.20951244040985167,
+      "event_residual_rms_hz": [
+        0.009535045628904365,
+        0.014793393543314213,
+        0.01035801901608715
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.011788494838233231,
+      "track_median_abs_hz": 0.003936687080297929,
+      "track_cpa_rms_hz": 0.014086951181094261,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.45644104100210825
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 1,
+      "method": "demod-snr-mask",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.11828810369197884,
+      "event_residual_rms_hz": [
+        0.005340781860270838,
+        0.005092215558929216,
+        0.004647010602731827
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.0050284785092941375,
+      "track_median_abs_hz": 0.0029560938238262224,
+      "track_cpa_rms_hz": 0.0054314023065491586,
+      "valid_fraction": [
+        0.9181818181818182,
+        0.9272727272727272,
+        0.9090909090909091
+      ],
+      "valid_frames": [
+        101,
+        102,
+        100
+      ],
+      "cpa_valid_frames": [
+        22,
+        27,
+        23
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.39044316700164927
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 1,
+      "method": "demod-snr-subtract",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.04459754528875105,
+      "event_residual_rms_hz": [
+        0.004232947162515392,
+        0.0038676492664786537,
+        0.0036565088574279704
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.003930804982791899,
+      "track_median_abs_hz": 0.00276830357521618,
+      "track_cpa_rms_hz": 0.0040240997583231445,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.6915797500005283
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 1,
+      "method": "demod-snr-notch",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.13091764654134236,
+      "event_residual_rms_hz": [
+        0.014116949563296621,
+        0.011871402851330292,
+        0.008591351659797507
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.011752541626387425,
+      "track_median_abs_hz": 0.0032630566017886053,
+      "track_cpa_rms_hz": 0.015294501586573276,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.47183604200108675
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 2,
+      "method": "demod-snr-mask",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.06916385433102995,
+      "event_residual_rms_hz": [
+        0.005051917359194334,
+        0.0048551595591385804,
+        0.004937015688922613
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.004956495292526862,
+      "track_median_abs_hz": 0.0030717823196013683,
+      "track_cpa_rms_hz": 0.005244112666297882,
+      "valid_fraction": [
+        0.9090909090909091,
+        0.9090909090909091,
+        0.9090909090909091
+      ],
+      "valid_frames": [
+        100,
+        100,
+        100
+      ],
+      "cpa_valid_frames": [
+        21,
+        26,
+        23
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.3677970409989939
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 2,
+      "method": "demod-snr-subtract",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.029280551880447633,
+      "event_residual_rms_hz": [
+        0.0036168160417768135,
+        0.0039456344185247105,
+        0.003964412388741326
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.0038453247203657213,
+      "track_median_abs_hz": 0.0025787477253729207,
+      "track_cpa_rms_hz": 0.003383343460123044,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.6449579590007488
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 2,
+      "method": "demod-snr-notch",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.06255485831149592,
+      "event_residual_rms_hz": [
+        0.012288637857364221,
+        0.013974958881092027,
+        0.01027429179402319
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.012277385085420077,
+      "track_median_abs_hz": 0.0035574413179020326,
+      "track_cpa_rms_hz": 0.014800963045117408,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.46498783299830393
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 3,
+      "method": "demod-snr-mask",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.08989344711736759,
+      "event_residual_rms_hz": [
+        0.004465160633204666,
+        0.0047703459354737415,
+        0.005072342754268824
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.004765260332533264,
+      "track_median_abs_hz": 0.0029479382946320243,
+      "track_cpa_rms_hz": 0.005104817482437962,
+      "valid_fraction": [
+        0.9090909090909091,
+        0.9272727272727272,
+        0.9090909090909091
+      ],
+      "valid_frames": [
+        100,
+        102,
+        100
+      ],
+      "cpa_valid_frames": [
+        21,
+        27,
+        23
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.35895841700039455
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 3,
+      "method": "demod-snr-subtract",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.0494754035186041,
+      "event_residual_rms_hz": [
+        0.0035553036021627317,
+        0.0033946328116315743,
+        0.0034780566158969265
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.003480658471320633,
+      "track_median_abs_hz": 0.0024432946260262156,
+      "track_cpa_rms_hz": 0.0031504336957710816,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.607185707998724
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 3,
+      "method": "demod-snr-notch",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.06775412309997754,
+      "event_residual_rms_hz": [
+        0.012504142171980419,
+        0.00789643021563321,
+        0.009338566418275527
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.01010658576781336,
+      "track_median_abs_hz": 0.0031546380075155867,
+      "track_cpa_rms_hz": 0.012858694477251464,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.4340688330012199
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 4,
+      "method": "demod-snr-mask",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.04111606449618678,
+      "event_residual_rms_hz": [
+        0.004992248328455866,
+        0.16832938753906657,
+        0.004996935608860163
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.09818880862888466,
+      "track_median_abs_hz": 0.003190665916463331,
+      "track_cpa_rms_hz": 0.20123092140853907,
+      "valid_fraction": [
+        0.9090909090909091,
+        0.9363636363636364,
+        0.9090909090909091
+      ],
+      "valid_frames": [
+        100,
+        103,
+        100
+      ],
+      "cpa_valid_frames": [
+        21,
+        28,
+        23
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.3503032920016267
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 4,
+      "method": "demod-snr-subtract",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.021398445794864336,
+      "event_residual_rms_hz": [
+        0.0038319656435593513,
+        0.0037422918834418483,
+        0.0038078372756569444
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.0037949431867199137,
+      "track_median_abs_hz": 0.002643961861878097,
+      "track_cpa_rms_hz": 0.0032689666453017308,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.6292005420000351
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 4,
+      "method": "demod-snr-notch",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.04522585890887016,
+      "event_residual_rms_hz": [
+        0.013264082451907763,
+        0.010533188699113323,
+        0.009772772246740547
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.011320421280831725,
+      "track_median_abs_hz": 0.003293633527704287,
+      "track_cpa_rms_hz": 0.015428910714861377,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.42908745800014003
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 5,
+      "method": "demod-snr-mask",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.05964181507179393,
+      "event_residual_rms_hz": [
+        0.11781566974675989,
+        0.004513272868269202,
+        0.005197565237830287
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.06833585371853634,
+      "track_median_abs_hz": 0.003109887017629376,
+      "track_cpa_rms_hz": 0.14110487947166483,
+      "valid_fraction": [
+        0.9272727272727272,
+        0.9363636363636364,
+        0.9
+      ],
+      "valid_frames": [
+        102,
+        103,
+        99
+      ],
+      "cpa_valid_frames": [
+        23,
+        27,
+        21
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.36433829099769355
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 5,
+      "method": "demod-snr-subtract",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.07477610725730109,
+      "event_residual_rms_hz": [
+        0.004208753705416992,
+        0.0034834550876890963,
+        0.004010073157501889
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.003914869053560999,
+      "track_median_abs_hz": 0.002753394850195434,
+      "track_cpa_rms_hz": 0.0034216108316582655,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.6465006250000442
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 5,
+      "method": "demod-snr-notch",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.08862425102921573,
+      "event_residual_rms_hz": [
+        0.010813437756049218,
+        0.009263922926820297,
+        0.0093277069648426
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.009825767826059435,
+      "track_median_abs_hz": 0.0038448951175809043,
+      "track_cpa_rms_hz": 0.013036968072518798,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.46318712499851245
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 6,
+      "method": "demod-snr-mask",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.0752324369086821,
+      "event_residual_rms_hz": [
+        0.004476020234328442,
+        0.004830907119664571,
+        0.005593235265601348
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.004997734925458438,
+      "track_median_abs_hz": 0.003118475020315259,
+      "track_cpa_rms_hz": 0.005335427596202519,
+      "valid_fraction": [
+        0.9090909090909091,
+        0.9363636363636364,
+        0.8909090909090909
+      ],
+      "valid_frames": [
+        100,
+        103,
+        98
+      ],
+      "cpa_valid_frames": [
+        21,
+        27,
+        21
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.365696000000753
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 6,
+      "method": "demod-snr-subtract",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.08882250173725116,
+      "event_residual_rms_hz": [
+        0.0033776485578072184,
+        0.003995115673662449,
+        0.0043554479515241044
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.003936931341595471,
+      "track_median_abs_hz": 0.002488410371711325,
+      "track_cpa_rms_hz": 0.002908527243485977,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.6366797080008837
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 6,
+      "method": "demod-snr-notch",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.08383649617514023,
+      "event_residual_rms_hz": [
+        0.010948733323333449,
+        0.01011182394068069,
+        0.008457006005892654
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.009893359455330488,
+      "track_median_abs_hz": 0.0036094404161630678,
+      "track_cpa_rms_hz": 0.013462136105533713,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.45193358399774297
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 7,
+      "method": "demod-snr-mask",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.05213907583430189,
+      "event_residual_rms_hz": [
+        0.12471622156234645,
+        0.0046807260571402965,
+        0.004323018198008421
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.07232022380854185,
+      "track_median_abs_hz": 0.0030589500084019505,
+      "track_cpa_rms_hz": 0.14836557475459963,
+      "valid_fraction": [
+        0.9272727272727272,
+        0.9272727272727272,
+        0.9090909090909091
+      ],
+      "valid_frames": [
+        102,
+        102,
+        100
+      ],
+      "cpa_valid_frames": [
+        23,
+        27,
+        22
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.3584770000015851
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 7,
+      "method": "demod-snr-subtract",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.05232965930001083,
+      "event_residual_rms_hz": [
+        0.003438237879302634,
+        0.0037644666610929865,
+        0.00375741411487638
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.003658212545987917,
+      "track_median_abs_hz": 0.002428648757010876,
+      "track_cpa_rms_hz": 0.0036100703006065934,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.643106749997969
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 7,
+      "method": "demod-snr-notch",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.041605441475251435,
+      "event_residual_rms_hz": [
+        0.01079470299044489,
+        0.011328599197838797,
+        0.007009851207729824
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.009907950543481153,
+      "track_median_abs_hz": 0.0035944639707210513,
+      "track_cpa_rms_hz": 0.012162541182414164,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.45028329100023257
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 8,
+      "method": "demod-snr-mask",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.09331517831387041,
+      "event_residual_rms_hz": [
+        0.005140267721763888,
+        0.1653255018530663,
+        0.004237849861706716
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.09662558847052417,
+      "track_median_abs_hz": 0.003120804474995964,
+      "track_cpa_rms_hz": 0.19909972481672505,
+      "valid_fraction": [
+        0.9,
+        0.9363636363636364,
+        0.9090909090909091
+      ],
+      "valid_frames": [
+        99,
+        103,
+        100
+      ],
+      "cpa_valid_frames": [
+        20,
+        28,
+        23
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.3628335829998832
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 8,
+      "method": "demod-snr-subtract",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.005610608531612884,
+      "event_residual_rms_hz": [
+        0.004240870924622302,
+        0.004246646924852974,
+        0.003359420948210871
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.0039705364961820835,
+      "track_median_abs_hz": 0.0025333027132603547,
+      "track_cpa_rms_hz": 0.003601806499877537,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.6389554170018528
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 8,
+      "method": "demod-snr-notch",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.09234475191076048,
+      "event_residual_rms_hz": [
+        0.013497901747036058,
+        0.008882630072292426,
+        0.008924776834900413
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.010659900693904715,
+      "track_median_abs_hz": 0.0035358580514213145,
+      "track_cpa_rms_hz": 0.013229525180904105,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.4445296669982781
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 9,
+      "method": "demod-snr-mask",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.023033962987125678,
+      "event_residual_rms_hz": [
+        0.005302763956504991,
+        0.004004329578275234,
+        0.004558007340270593
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.004649245711076454,
+      "track_median_abs_hz": 0.002992767023556553,
+      "track_cpa_rms_hz": 0.0043966160118270176,
+      "valid_fraction": [
+        0.9090909090909091,
+        0.9272727272727272,
+        0.9181818181818182
+      ],
+      "valid_frames": [
+        100,
+        102,
+        101
+      ],
+      "cpa_valid_frames": [
+        21,
+        27,
+        23
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.35621741700015264
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 9,
+      "method": "demod-snr-subtract",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.030374883076387693,
+      "event_residual_rms_hz": [
+        0.004072613738286455,
+        0.003347501297600115,
+        0.0038940616934783592
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.0037879268917368515,
+      "track_median_abs_hz": 0.0027358483098254283,
+      "track_cpa_rms_hz": 0.0032753336796300134,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.6350302920000104
+    },
+    {
+      "scenario": "hum_crossing",
+      "seed": 9,
+      "method": "demod-snr-notch",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.08612013096116818,
+      "event_residual_rms_hz": [
+        0.01025097789466667,
+        0.01181868521544737,
+        0.008037532054713985
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.010148946775930567,
+      "track_median_abs_hz": 0.0035585657888219657,
+      "track_cpa_rms_hz": 0.012825044759966873,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.4490604579987121
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 0,
+      "method": "demod-snr-mask",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.03105899293840708,
+      "event_residual_rms_hz": [
+        0.00392116069394713,
+        0.0037520732574149464,
+        0.0035606213143162336
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.003753709426839069,
+      "track_median_abs_hz": 0.0024868323732718522,
+      "track_cpa_rms_hz": 0.00309671444483993,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.36352529199939454
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 0,
+      "method": "demod-snr-subtract",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.04325848071895868,
+      "event_residual_rms_hz": [
+        0.0037185212015757255,
+        0.003734873873790162,
+        0.0035036188192219867
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.0036602131297606044,
+      "track_median_abs_hz": 0.0024146797759101446,
+      "track_cpa_rms_hz": 0.0030989935021169175,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.42569716700018034
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 0,
+      "method": "demod-snr-notch",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.03872950876124965,
+      "event_residual_rms_hz": [
+        0.003932570581686572,
+        0.003762021145061729,
+        0.0036933000544139604
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.003800618156212941,
+      "track_median_abs_hz": 0.0024751425318711995,
+      "track_cpa_rms_hz": 0.0034063803545679974,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.3635433750023367
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 1,
+      "method": "demod-snr-mask",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.025216315760066586,
+      "event_residual_rms_hz": [
+        0.004098461439063168,
+        0.004479765851987775,
+        0.00391779239257105
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.00417825631191142,
+      "track_median_abs_hz": 0.002678210932572256,
+      "track_cpa_rms_hz": 0.00363732142248016,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.3473420000009355
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 1,
+      "method": "demod-snr-subtract",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.03072884082079935,
+      "event_residual_rms_hz": [
+        0.003954153683132492,
+        0.004457837616995841,
+        0.003760228987239499
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.004069275901770937,
+      "track_median_abs_hz": 0.002654495183364247,
+      "track_cpa_rms_hz": 0.0033366034296949953,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.4095371250004973
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 1,
+      "method": "demod-snr-notch",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.026989536449249122,
+      "event_residual_rms_hz": [
+        0.004151950553536532,
+        0.004432403941877934,
+        0.0038400142536171838
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.004150491124622895,
+      "track_median_abs_hz": 0.0027479595795156797,
+      "track_cpa_rms_hz": 0.003297159767760027,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.3668067090002296
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 2,
+      "method": "demod-snr-mask",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.02699083884317177,
+      "event_residual_rms_hz": [
+        0.004673645105559367,
+        0.003984215235759075,
+        0.00390102520727198
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.0042079086567060235,
+      "track_median_abs_hz": 0.0028319639378935335,
+      "track_cpa_rms_hz": 0.0037721685496819725,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.3238389170001028
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 2,
+      "method": "demod-snr-subtract",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.02001085494327541,
+      "event_residual_rms_hz": [
+        0.004093125783098953,
+        0.0038818377954589326,
+        0.003790595236472962
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.003929850805638778,
+      "track_median_abs_hz": 0.0027007738493267652,
+      "track_cpa_rms_hz": 0.003435591649324465,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.39886879199912073
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 2,
+      "method": "demod-snr-notch",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.025210844503960543,
+      "event_residual_rms_hz": [
+        0.004461397949266194,
+        0.003871829050137033,
+        0.005458803494479082
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.0046502912737745854,
+      "track_median_abs_hz": 0.0027432309242811925,
+      "track_cpa_rms_hz": 0.0056786686411438815,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.35312112500105286
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 3,
+      "method": "demod-snr-mask",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.08698272126922264,
+      "event_residual_rms_hz": [
+        0.004166103710747755,
+        0.0035002557886981284,
+        0.003438133295346863
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.0037219678568015074,
+      "track_median_abs_hz": 0.002532753422656242,
+      "track_cpa_rms_hz": 0.0038240843030784193,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.32501741699888953
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 3,
+      "method": "demod-snr-subtract",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.0586358573490565,
+      "event_residual_rms_hz": [
+        0.004102293612213949,
+        0.003437067087976867,
+        0.0031698019628574976
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.003593996213633466,
+      "track_median_abs_hz": 0.0024843617642389404,
+      "track_cpa_rms_hz": 0.0034660119929860035,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.3895485409993853
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 3,
+      "method": "demod-snr-notch",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.08370435101373992,
+      "event_residual_rms_hz": [
+        0.004631197466566074,
+        0.0035070970589697373,
+        0.004372251365829106
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.004206021986894069,
+      "track_median_abs_hz": 0.0025423153883963323,
+      "track_cpa_rms_hz": 0.004697684314224349,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.3426128749997588
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 4,
+      "method": "demod-snr-mask",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.03924830779883993,
+      "event_residual_rms_hz": [
+        0.004095882371047138,
+        0.003943393453065903,
+        0.0035815772444702312
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.003888172372528849,
+      "track_median_abs_hz": 0.002643827513182373,
+      "track_cpa_rms_hz": 0.003478040333819079,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.330664875000366
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 4,
+      "method": "demod-snr-subtract",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.030644177583413396,
+      "event_residual_rms_hz": [
+        0.0037724957523832814,
+        0.0038487342007430753,
+        0.00354507705394559
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.0037298822514592743,
+      "track_median_abs_hz": 0.002633645620385039,
+      "track_cpa_rms_hz": 0.003228223546561068,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.40450820899786777
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 4,
+      "method": "demod-snr-notch",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.037860615150230544,
+      "event_residual_rms_hz": [
+        0.004075176650080372,
+        0.003848362010268037,
+        0.004967938108417131
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.004324508906998283,
+      "track_median_abs_hz": 0.002652358569179114,
+      "track_cpa_rms_hz": 0.00505212350024694,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.37857174999953713
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 5,
+      "method": "demod-snr-mask",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.034270458749994334,
+      "event_residual_rms_hz": [
+        0.00454346132646542,
+        0.003885319590299538,
+        0.003893635815484852
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.004117951768774062,
+      "track_median_abs_hz": 0.0025521191416544298,
+      "track_cpa_rms_hz": 0.004211626813773594,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.34544412499963073
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 5,
+      "method": "demod-snr-subtract",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.038402550026347605,
+      "event_residual_rms_hz": [
+        0.00391508898035698,
+        0.0036923999439157948,
+        0.003354251929998173
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.003657601935764541,
+      "track_median_abs_hz": 0.0022727691507071768,
+      "track_cpa_rms_hz": 0.00335415166443376,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.418918916999246
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 5,
+      "method": "demod-snr-notch",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.02509914860041892,
+      "event_residual_rms_hz": [
+        0.004171971161287488,
+        0.0036900736788765447,
+        0.0040557515436656375
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.003973992487711806,
+      "track_median_abs_hz": 0.0023609051639397194,
+      "track_cpa_rms_hz": 0.0042328137234709075,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.3696437500002503
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 6,
+      "method": "demod-snr-mask",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.0416521968556915,
+      "event_residual_rms_hz": [
+        0.004009215924755996,
+        0.0036544016254927945,
+        0.0041887187336501226
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.003965930222491672,
+      "track_median_abs_hz": 0.002680906884911849,
+      "track_cpa_rms_hz": 0.0036028966636630503,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.3325498750018596
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 6,
+      "method": "demod-snr-subtract",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.04014403526606551,
+      "event_residual_rms_hz": [
+        0.003475309057611486,
+        0.0036758457520454243,
+        0.004061353600409258
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.0037538130854585824,
+      "track_median_abs_hz": 0.0024846968771399247,
+      "track_cpa_rms_hz": 0.003420226637670094,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.405992708998383
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 6,
+      "method": "demod-snr-notch",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.0271389427600824,
+      "event_residual_rms_hz": [
+        0.0037314917533179137,
+        0.0038160604778976954,
+        0.005236509720535902
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.004321562642607957,
+      "track_median_abs_hz": 0.002502015854204842,
+      "track_cpa_rms_hz": 0.004963079320551957,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.35479591700277524
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 7,
+      "method": "demod-snr-mask",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.03842941671449147,
+      "event_residual_rms_hz": [
+        0.004396017004114714,
+        0.003632135365985718,
+        0.004386384632441153
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.004160094660602609,
+      "track_median_abs_hz": 0.0026269136653098712,
+      "track_cpa_rms_hz": 0.0038757431729437093,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.33592508299989277
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 7,
+      "method": "demod-snr-subtract",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.017193620510591784,
+      "event_residual_rms_hz": [
+        0.003803526638752899,
+        0.0034633311172669787,
+        0.004140308616474964
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.003820276063339938,
+      "track_median_abs_hz": 0.002584575034504155,
+      "track_cpa_rms_hz": 0.0032420280622313447,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.4032319580001058
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 7,
+      "method": "demod-snr-notch",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.021924755813110347,
+      "event_residual_rms_hz": [
+        0.004145027629003787,
+        0.003560600849089344,
+        0.0052556124209998546
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.004386892092601374,
+      "track_median_abs_hz": 0.0027148823240850106,
+      "track_cpa_rms_hz": 0.004965628043486934,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.3520945420023054
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 8,
+      "method": "demod-snr-mask",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.051301128325159304,
+      "event_residual_rms_hz": [
+        0.0038060786759455925,
+        0.003342630906094265,
+        0.0035599499605469074
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.0035744748732538154,
+      "track_median_abs_hz": 0.0024207894048160483,
+      "track_cpa_rms_hz": 0.0037082301273765393,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.33159729199905996
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 8,
+      "method": "demod-snr-subtract",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.02708212422133338,
+      "event_residual_rms_hz": [
+        0.0037043265593465708,
+        0.0032794959365912467,
+        0.003474557591700872
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.0034938489881311853,
+      "track_median_abs_hz": 0.002342451693884584,
+      "track_cpa_rms_hz": 0.0036225911024353897,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.40474758300115354
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 8,
+      "method": "demod-snr-notch",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.03407880329519092,
+      "event_residual_rms_hz": [
+        0.0037917697502129694,
+        0.0033556816423822924,
+        0.004287114157145369
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.0038302298928362287,
+      "track_median_abs_hz": 0.002416876098138232,
+      "track_cpa_rms_hz": 0.004729565952229833,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.3623914580020937
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 9,
+      "method": "demod-snr-mask",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.031696598069882675,
+      "event_residual_rms_hz": [
+        0.004085836349014298,
+        0.0034754526574530364,
+        0.0037733050142065372
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.0037922107650958732,
+      "track_median_abs_hz": 0.002580777709653148,
+      "track_cpa_rms_hz": 0.003568708140235895,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.33044412499657483
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 9,
+      "method": "demod-snr-subtract",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.023533190662146725,
+      "event_residual_rms_hz": [
+        0.0037327618413557956,
+        0.003426446854454761,
+        0.0036828788610610125
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.0036216005435613903,
+      "track_median_abs_hz": 0.002421982636256814,
+      "track_cpa_rms_hz": 0.0032904650677611945,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.4152006670010451
+    },
+    {
+      "scenario": "fast_chirp",
+      "seed": 9,
+      "method": "demod-snr-notch",
+      "error": null,
+      "success": true,
+      "location_error_m": 0.025994588491858144,
+      "event_residual_rms_hz": [
+        0.003847393496316481,
+        0.0036137681134605863,
+        0.0052901558767530325
+      ],
+      "passes": 2,
+      "track_rms_hz": 0.004322095024935452,
+      "track_median_abs_hz": 0.0024626247559211834,
+      "track_cpa_rms_hz": 0.005529971350665407,
+      "valid_fraction": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "valid_frames": [
+        110,
+        110,
+        110
+      ],
+      "cpa_valid_frames": [
+        30,
+        30,
+        30
+      ],
+      "cpa_frames": [
+        30,
+        30,
+        30
+      ],
+      "seconds": 0.365470708002249
+    }
+  ]
+}
