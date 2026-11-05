@@ -6,7 +6,7 @@ Development seeds only by default.  Not part of the default stress benchmark.
 import argparse
 import json
 
-from dopplertracker.stress_benchmark import LAYERED_METHODS, run_layered_benchmark
+from dopplertracker.stress_benchmark import ATMOSPHERE_METHODS, LAYERED_METHODS, run_layered_benchmark
 from dopplertracker.stress_scenes import EXTENDED_SCENARIOS, LAYERED_SCENARIOS
 
 
@@ -15,7 +15,9 @@ def main():
     parser.add_argument("--out", default="outputs/layered-benchmark")
     parser.add_argument("--seeds", nargs="+", type=int, default=[0, 1, 2, 3, 4])
     parser.add_argument("--scenarios", nargs="+", choices=EXTENDED_SCENARIOS, default=list(LAYERED_SCENARIOS))
-    parser.add_argument("--methods", nargs="+", choices=list(LAYERED_METHODS), default=list(LAYERED_METHODS))
+    parser.add_argument(
+        "--methods", nargs="+", choices=list(ATMOSPHERE_METHODS), default=list(LAYERED_METHODS)
+    )
     parser.add_argument("--split", choices=["development", "held-out"], default="development")
     parser.add_argument("--workers", type=int, default=1)
     args = parser.parse_args()

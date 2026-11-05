@@ -356,6 +356,18 @@ LAYERED_METHODS = {
     "spline-linear-forecast-fit-c": (_SPLINE_C, "atmosphere_forecast"),
     "spline-linear-forecast-fit-c-wind": (_SPLINE_C_WIND, "atmosphere_forecast"),
 }
+# Atmosphere and reported-velocity models together (for ``realistic_combined``).
+# Not in the default LAYERED_METHODS run; run_layered_benchmark accepts both.
+_FUSED = ModelOptions(degree=1, velocity="fused")
+COMBINED_METHODS = {
+    "kalman-velocity-linear": (_FUSED, None),
+    "kalman-velocity-forecast-profile": (_FUSED, "atmosphere_forecast"),
+    "kalman-velocity-forecast-fit-c-wind": (
+        ModelOptions(degree=1, velocity="fused", fit_sound_speed=True, fit_wind=True),
+        "atmosphere_forecast",
+    ),
+}
+ATMOSPHERE_METHODS = {**LAYERED_METHODS, **COMBINED_METHODS}
 
 
 def _run_layered_scene(job):
@@ -363,7 +375,7 @@ def _run_layered_scene(job):
     scene = stress_scene(scenario, seed)
     rows = []
     for method in methods:
-        options, key = LAYERED_METHODS[method]
+        options, key = ATMOSPHERE_METHODS[method]
         start = time.perf_counter()
         row = {
             "scenario": scenario,
@@ -413,7 +425,9 @@ def run_layered_benchmark(
     """Spline-linear with a constant, fitted, true or forecast-like layered atmosphere."""
     if not seeds or not scenarios or not methods or workers < 1:
         raise ValueError("seeds, scenarios, methods and a positive worker count are required")
-    if any(m not in LAYERED_METHODS for m in methods) or any(s not in EXTENDED_SCENARIOS for s in scenarios):
+    if any(m not in ATMOSPHERE_METHODS for m in methods) or any(
+        s not in EXTENDED_SCENARIOS for s in scenarios
+    ):
         raise ValueError("unknown layered benchmark method or scenario")
     if split not in ("development", "held-out"):
         raise ValueError("split must be development or held-out")
@@ -448,8 +462,8 @@ def run_layered_benchmark(
         "seeds": list(seeds),
         "scenarios": list(scenarios),
         "methods": list(methods),
-        "method_options": {name: vars(LAYERED_METHODS[name][0]) for name in methods},
-        "method_atmosphere": {name: LAYERED_METHODS[name][1] or "homogeneous 343 m/s" for name in methods},
+        "method_options": {name: vars(ATMOSPHERE_METHODS[name][0]) for name in methods},
+        "method_atmosphere": {name: ATMOSPHERE_METHODS[name][1] or "homogeneous 343 m/s" for name in methods},
         "seconds": time.perf_counter() - started,
         "workers": workers,
         "summary": summarize_trials(rows),

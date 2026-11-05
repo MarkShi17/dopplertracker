@@ -91,7 +91,7 @@ def _parameters(name):
     }
     if name not in STRESS_SCENARIOS + EXTENDED_SCENARIOS:
         raise ValueError(f"unknown stress scenario {name!r}")
-    p.update(changes.get(name, _LAYERED_PARAMETERS.get(name, {})))
+    p.update(changes.get(name, _LAYERED_PARAMETERS.get(name, _COMBINED_PARAMETERS.get(name, {}))))
     return p
 
 
@@ -152,6 +152,8 @@ def stress_scene(scenario="clean", seed=0):
         local = np.arange(-105.0, 106.0, 0.10)
         distance = 900.0 + 230.0 * i
         altitude = p.get("altitude_base", 1150.0) + p.get("altitude_step", 260.0) * i
+        if p.get("altitudes"):
+            altitude = p["altitudes"][i]
         if p["overhead"]:
             altitude = 4500.0 + 260.0 * i
         speed, climb = 105.0 + 9 * i, (-2.0 + i * 1.4)
@@ -277,7 +279,7 @@ def stress_scene(scenario="clean", seed=0):
         # The truth profile is an oracle input; the forecast imitates reanalysis error.
         extra = dict(atmosphere_profile=profiles[0], atmosphere_forecast=profiles[1])
         metadata["atmosphere_profile"] = profiles[0].to_record()
-    return dict(
+    scene = dict(
         truth=truth,
         clock=clock,
         tracks=tracks,
@@ -290,6 +292,9 @@ def stress_scene(scenario="clean", seed=0):
         metadata=metadata,
         **extra,
     )
+    if scenario in COMBINED_SCENARIOS:
+        return _combined_scene(scene)
+    return scene
 
 
 # ----- Extended scenarios: horizontally stratified atmospheres -----------------------------------
@@ -468,7 +473,9 @@ def _flight(i, p):
     return dict(
         angle=_ANGLES[i],
         distance=900.0 + 230.0 * i,
-        altitude=(4500.0 if p["overhead"] else 1150.0) + 260.0 * i,
+        altitude=p["altitudes"][i]
+        if p.get("altitudes")
+        else (4500.0 if p["overhead"] else 1150.0) + 260.0 * i,
         speed=105.0 + 9 * i,
         climb=-2.0 + i * 1.4,
     )
@@ -669,8 +676,42 @@ def _extended_scene(scenario, seed):
     return scene
 
 
+# ----- Combined realism: layered atmosphere, sparse noisy ADS-B with velocity, drifting source -----
+
+COMBINED_SCENARIOS = ("realistic_combined",)
+_COMBINED_PARAMETERS = {
+    # Flights 1-4 at 1.0, 3.8, 2.3 and 5.5 km; 0.025 Hz/s linear source drift.
+    "realistic_combined": dict(layered=True, rpm_drift=0.025, altitudes=(1000.0, 3800.0, 2300.0, 5500.0)),
+}
+
+
+def _combined_scene(scene):
+    """``realistic_combined``: replace the 4 s tracks of the layered acoustic scene.
+
+    Acoustics (``stress_scene``): ray-traced arrival times through the true
+    layered profile (``atmosphere_profile``; ``atmosphere_forecast`` is the
+    biased one), linear source drift, mixed altitudes.  Tracks: reports 1-20 s
+    apart with 8 m position noise per axis and ADS-B-quantised true velocity,
+    drawn from their own RNG stream.
+    """
+    p = scene["metadata"]["parameters"]
+    rng = np.random.default_rng([scene["seed"], 0xC0B1])
+    tracks = []
+    for i in range(len(_CENTERS)):
+        g = _flight(i, p)
+        relative = _irregular_times(rng, 1.0, 20.0)
+        shape = (g["angle"], g["distance"], g["altitude"], g["speed"], g["climb"], 0.0, 0.0, False)
+        positions = _path(relative, scene["truth"], *shape) + rng.normal(0, 8.0, (len(relative), 3))
+        velocity = _path_velocity(relative, g["angle"], g["speed"], g["climb"], 0.0, 0.0)
+        times = scene["clock"] + _CENTERS[i] + relative
+        tracks.append(_reported_track(i, times, positions, velocity, 30.0))
+    scene["tracks"] = tracks
+    scene["candidate"] = {**scene["candidate"], "flights": [t.id for t in tracks]}
+    return scene
+
+
 # ----- One registry of extended (opt-in) scenarios -------------------------------------------------
 #
 # Every extended scene draws its additional randomness from its own RNG stream,
 # so the default STRESS_SCENARIOS stay bit-identical.
-EXTENDED_SCENARIOS = LAYERED_SCENARIOS + VELOCITY_SCENARIOS
+EXTENDED_SCENARIOS = LAYERED_SCENARIOS + VELOCITY_SCENARIOS + COMBINED_SCENARIOS
