@@ -11,6 +11,7 @@ import numpy as np
 from scipy.interpolate import UnivariateSpline
 from scipy.optimize import least_squares, lsq_linear
 
+from .demod import demodulate, stationary_lines
 from .physics import Atmosphere, Trajectory, predict
 from .refine import extract_ridge
 from .scoring import score_curve
@@ -29,10 +30,38 @@ class ModelOptions:
     robust_source: bool = True
     radius: float = 1200.0
     max_nfev: int = 130
+    # Measurement options.  The defaults reproduce one extraction around the start.
+    # max_frames: frames per event (None keeps every spectrogram frame).
+    # reextract: re-measure around the fitted model and refit up to this many times.
+    # noise: "fixed" 0.3 Hz; "robust" per-event scale estimated from the residuals;
+    #   "snr" also derives per-frame uncertainty from measurement signal-to-noise.
+    # harmonic_mode: "sum" merges harmonic intensity; "ratio" measures each harmonic
+    #   and averages them as Doppler ratios with inverse-variance weights.
+    # max_harmonic: highest harmonic searched (0 uses each event's harmonic count).
+    # ridge="demod" measures from raw audio (fit_projected(..., audio=...)).
+    max_frames: int | None = 140
+    reextract: int = 0
+    noise: str = "fixed"
+    harmonic_mode: str = "sum"
+    max_harmonic: int = 0
+    demod_window: float = 2.0
 
     def __post_init__(self):
-        if self.degree not in (0, 1, 2) or self.ridge not in ("peak", "viterbi"):
-            raise ValueError("degree must be 0, 1 or 2 and ridge must be peak or viterbi")
+        if self.degree not in (0, 1, 2) or self.ridge not in ("peak", "viterbi", "demod"):
+            raise ValueError("degree must be 0, 1 or 2 and ridge must be peak, viterbi or demod")
+        if (
+            (self.max_frames is not None and self.max_frames < 5)
+            or not 0 <= self.reextract <= 10
+            or self.noise not in ("fixed", "robust", "snr")
+            or self.harmonic_mode not in ("sum", "ratio")
+            or self.max_harmonic not in (0, 1, 2, 3, 4)
+            or not 0.5 <= self.demod_window <= 8.0
+        ):
+            raise ValueError("unsupported measurement options")
+        if self.ridge == "viterbi" and (
+            self.harmonic_mode != "sum" or self.noise == "snr" or self.max_harmonic
+        ):
+            raise ValueError("viterbi ridges support only summed harmonics without SNR weights")
         if self.smoothing not in ("none", "spline", "kalman") or self.loss not in (
             "linear",
             "soft_l1",
@@ -172,13 +201,179 @@ def _peak_ridge(spec, event, times, model, width=7.0):
     return ridge, valid, np.clip((peak - background) / np.maximum(0.2, 3 * dispersion), 0.2, 1.0)
 
 
-def _observations(spec, events, tracks, candidate, options, atmosphere):
+def _peak_contrast(intensity, indices):
+    """Peak height above the frame median, in whitened (log-power over robust spread) units."""
+    return intensity[np.arange(len(indices)), indices] - np.median(intensity, axis=1)
+
+
+def _harmonic_peak(spec, times, model, harmonic, width=7.0):
+    """``_peak_ridge`` for one harmonic on a 0.125 Hz grid in that harmonic's Hz.
+
+    The search covers +/-``width`` fundamental-equivalent Hz.  Returns the
+    fundamental-equivalent ridge, validity, the legacy weight and peak contrast.
+    """
+    step = 0.125
+    offsets = np.arange(-width * harmonic, width * harmonic + step / 2, step)
+    hz = model[:, None] * harmonic + offsets
+    center = spec.sample(times[:, None], hz)
+    background = 0.5 * (spec.sample(times[:, None], hz - 3) + spec.sample(times[:, None], hz + 3))
+    intensity = np.maximum(center - background, 0)
+    indices = np.argmax(intensity, axis=1)
+    rows = np.arange(len(times))
+    peak = intensity[rows, indices]
+    level = np.median(intensity, axis=1)
+    dispersion = 1.4826 * np.median(np.abs(intensity - level[:, None]), axis=1)
+    valid = (
+        (indices > 0)
+        & (indices < len(offsets) - 1)
+        & np.isfinite(model)
+        & (peak - level > np.maximum(0.06, 2.5 * dispersion))
+    )
+    shift = offsets[indices]
+    good = np.flatnonzero(valid)
+    left, middle, right = (intensity[good, indices[good] + delta] for delta in (-1, 0, 1))
+    curvature = left - 2 * middle + right
+    subbin = np.divide(0.5 * (left - right), curvature, out=np.zeros_like(middle), where=curvature < -1e-9)
+    shift[good] += np.clip(subbin, -0.5, 0.5) * step
+    weight = np.clip((peak - level) / np.maximum(0.2, 3 * dispersion), 0.2, 1.0)
+    return model + shift / harmonic, valid, weight, _peak_contrast(intensity, indices)
+
+
+def _peak_sigma(contrast, window_seconds, sweep):
+    """STFT peak-frequency uncertainty (Hz at the measured harmonic).
+
+    Noise: the Cramér-Rao bound for a Hann-windowed tone, sqrt(8 / rho) / (2 pi T),
+    with power SNR rho ~ exp(contrast) because whitened power is roughly log power
+    in units of its robust spread.  Smear: a tone sweeping ``sweep`` Hz within one
+    window.  On synthetic waveform dev seeds 0-2 (4 s window) the peak error was
+    0.055 Hz below 1 Hz of sweep, grew about 0.06 x sweep, and broke down beyond
+    ~8 Hz, where the smeared ridge falls under the +/-3 Hz sideband subtraction.
+    """
+    rho = np.exp(np.clip(contrast, 0.0, 30.0))
+    noise = np.sqrt(8.0 / rho) / (2 * np.pi * window_seconds)
+    smear = np.hypot(0.22 / window_seconds, 0.06 * sweep) * (1 + (sweep / 9.5) ** 4)
+    return np.hypot(noise, smear)
+
+
+def _sweep(times, model, harmonic, window_seconds):
+    if len(times) < 2:
+        return np.zeros(len(times))
+    return harmonic * np.abs(np.nan_to_num(np.gradient(model, times))) * window_seconds
+
+
+def _combine_harmonics(ridges, valids, sigmas):
+    """Inverse-variance mean of fundamental-equivalent harmonic estimates.
+
+    Harmonic h measures the same Doppler ratio with h times finer resolution in
+    fundamental Hz.  Harmonics that disagree with the most precise valid one
+    (a neighbouring line, not the same tone) are dropped for that frame.
+    """
+    ridges, valids, sigmas = map(np.asarray, (ridges, valids, sigmas))
+    precision = np.where(valids, 1 / np.maximum(np.nan_to_num(sigmas, nan=np.inf), 1e-6) ** 2, 0.0)
+    rows = np.arange(ridges.shape[1])
+    best = np.argmax(precision, axis=0)
+    reference, reference_sigma = ridges[best, rows], sigmas[best, rows]
+    tolerance = 3 * np.sqrt(np.nan_to_num(sigmas, nan=np.inf) ** 2 + reference_sigma**2) + 0.2
+    precision = np.where(np.abs(np.nan_to_num(ridges - reference, nan=np.inf)) <= tolerance, precision, 0.0)
+    total = precision.sum(axis=0)
+    valid = total > 0
+    ridge = np.where(
+        valid, (precision * np.nan_to_num(ridges)).sum(axis=0) / np.maximum(total, 1e-300), reference
+    )
+    return ridge, valid, np.where(valid, 1 / np.sqrt(np.maximum(total, 1e-300)), np.inf)
+
+
+def _scatter(ridge, valid):
+    """A harmonic's realised precision: robust scatter of second differences of its valid frames.
+
+    Independent errors of size sigma give r[k] - (r[k-1] + r[k+1]) / 2 a spread of
+    sqrt(1.5) sigma; the smooth Doppler curve contributes little at 0.5-1 s spacing.
+    """
+    values = ridge[valid]
+    if len(values) < 12:
+        return np.inf
+    second = values[1:-1] - 0.5 * (values[:-2] + values[2:])
+    return float(max(1.4826 * np.median(np.abs(second)) / np.sqrt(1.5), 1e-3))
+
+
+def _agreement(ridge, valid, sigma, reference, reference_valid, reference_sigma):
+    both = valid & reference_valid
+    if both.sum() < 12:
+        return 0.0
+    tolerance = 3 * np.hypot(sigma[both], reference_sigma[both]) + 0.2
+    return float(np.mean(np.abs(ridge[both] - reference[both]) <= tolerance))
+
+
+def _measure(spec, event, times, guide, options, audio, lines, half_band):
+    """Per-frame fundamental-equivalent ridge, validity and 1-sigma uncertainty in Hz."""
+    predicted = guide(times)
+    stft_seconds = 1.0 / (spec.frequencies[1] - spec.frequencies[0])
+    measured = {}
+    for h in range(1, (options.max_harmonic or event.harmonics) + 1):
+        if options.ridge == "demod":
+            ridge, valid, sigma, _ = demodulate(
+                audio, times, guide, h, half_band * h, options.demod_window, lines
+            )
+            if options.noise != "snr":
+                sigma = np.full(len(times), 0.3 / h)
+        else:
+            ridge, valid, weight, contrast = _harmonic_peak(spec, times, predicted, h, half_band)
+            if options.noise == "snr":
+                sigma = _peak_sigma(contrast, stft_seconds, _sweep(times, predicted, h, stft_seconds)) / h
+            else:
+                sigma = 0.3 / (h * np.sqrt(weight))
+            # A spectrogram peak's precision is not known a priori (smearing, a
+            # buried harmonic): rescale it to that harmonic's realised scatter.
+            if valid.any():
+                sigma = sigma * _scatter(ridge, valid) / np.median(sigma[valid])
+        measured[h] = (ridge, valid, sigma)
+    declared = [measured[h] for h in measured if h <= event.harmonics]
+    reference = _combine_harmonics(*zip(*declared))
+    # A harmonic beyond those declared counts only if it mostly agrees with them.
+    extra = [m for h, m in measured.items() if h > event.harmonics and _agreement(*m, *reference) >= 0.5]
+    if not extra:
+        return reference
+    return _combine_harmonics(*zip(*declared, *extra))
+
+
+def _observations(
+    spec, events, tracks, candidate, options, atmosphere, guides=None, audio=None, lines=None, half_bands=None
+):
+    """Measure each event around ``guides`` (callables of time), by default the start candidate.
+
+    Weights encode the per-frame uncertainty sigma as (0.3 / sigma)**2, so the
+    residual (predicted - ridge) * sqrt(w) / 0.3 is in units of sigma.
+    """
     observations = []
     for i, (event, track) in enumerate(zip(events, tracks, strict=True)):
-        times = event.sample_times(spec, maximum=140)
-        predicted, _ = predict(track, np.array(candidate["position"]), times, candidate["f0"][i], atmosphere)
-        if options.ridge == "peak":
+        times = event.sample_times(spec, maximum=options.max_frames or len(spec.times))
+        if guides is None:
+            predicted, _ = predict(
+                track, np.array(candidate["position"]), times, candidate["f0"][i], atmosphere
+            )
+        else:
+            predicted = guides[i](times)
+        if options.ridge == "demod" or options.harmonic_mode == "ratio":
+            guide = guides[i] if guides is not None else _start_guide(track, candidate, i, atmosphere)
+            half_band = 7.0 if half_bands is None else half_bands[i]
+            line_list = lines[i] if lines is not None else ()
+            ridge, valid, sigma = _measure(spec, event, times, guide, options, audio, line_list, half_band)
+            center = np.median(sigma[valid]) if valid.any() else 0.3
+            if options.noise == "snr":
+                # Bounded influence: no frame counts for more than 9x the event median.
+                sigma = np.maximum(sigma, center / 3)
+            elif options.noise == "fixed":
+                # The fixed convention: the event's median frame uncertainty is 0.3 Hz.
+                sigma = sigma * 0.3 / center
+            weights = np.where(valid, (0.3 / np.where(valid, sigma, 1.0)) ** 2, 0.0)
+        elif options.ridge == "peak":
+            if options.max_harmonic:
+                event = replace(event, harmonics=options.max_harmonic)
             ridge, valid, weights = _peak_ridge(spec, event, times, predicted)
+            if options.noise == "snr":
+                intensity_sigma = _summed_peak_sigma(spec, event, times, predicted)
+                center = np.median(intensity_sigma[valid]) if valid.any() else 0.3
+                weights = (0.3 / np.maximum(intensity_sigma, center / 3)) ** 2
         else:
             ridge, valid, quality = extract_ridge(spec, event, predicted, times, width=7.0)
             weights = np.clip(quality, 0.2, 1.0)
@@ -186,6 +381,25 @@ def _observations(spec, events, tracks, candidate, options, atmosphere):
             raise ValueError(f"insufficient ridge samples for {track.id}")
         observations.append((times, ridge, valid, weights))
     return observations
+
+
+def _start_guide(track, candidate, index, atmosphere):
+    position = np.array(candidate["position"])
+    return lambda t: predict(track, position, t, candidate["f0"][index], atmosphere)[0]
+
+
+def _summed_peak_sigma(spec, event, times, model, width=7.0):
+    """Contrast-derived uncertainty for the summed-harmonic ridge of ``_peak_ridge``."""
+    offsets = np.arange(-width, width + 0.0625, 0.125)
+    intensity = np.zeros((len(times), len(offsets)))
+    for h in range(1, event.harmonics + 1):
+        hz = (model[:, None] + offsets) * h
+        center = spec.sample(times[:, None], hz)
+        background = 0.5 * (spec.sample(times[:, None], hz - 3) + spec.sample(times[:, None], hz + 3))
+        intensity += np.maximum(center - background, 0) / np.sqrt(h)
+    contrast = _peak_contrast(intensity, np.argmax(intensity, axis=1))
+    window = 1.0 / (spec.frequencies[1] - spec.frequencies[0])
+    return _peak_sigma(contrast, window, _sweep(times, model, 1, window))
 
 
 def predict_result(track, event, times, result, index):
@@ -221,27 +435,45 @@ def fit_projected(
     exclude_event=None,
     frame=None,
     elevation=None,
+    audio=None,
+    keep_observations=False,
 ):
+    """Projected least squares; ``audio`` (``demod.Audio``) is required for ``ridge="demod"``.
+
+    ``keep_observations`` adds the final measured ridges to the result for diagnostics.
+    """
     if len(events) != len(tracks) or len(events) != len(candidate["f0"]) or not events:
         raise ValueError("events, flights and source frequencies must match")
     if validation_fold not in (None, 0, 1, 2):
         raise ValueError("validation_fold must be None or 0, 1, 2")
+    if options.ridge == "demod" and audio is None:
+        raise ValueError("demodulation ridges need the raw audio")
     working = (
         [smooth_trajectory(t, options.smoothing) for t in tracks] if options.smoothing != "none" else tracks
     )
     clock = float(candidate["clock"])
     local = [Trajectory(t.id, t.times - clock, t.positions, t.max_gap, t.metadata) for t in working]
-    observations = _observations(spec, events, local, candidate, options, atmosphere)
-    train = []
-    for i, (times, _, valid, _) in enumerate(observations):
-        mask = valid.copy()
-        if validation_fold is not None:
-            mask &= np.floor((times - events[i].window[0]) / 15).astype(int) % 3 != validation_fold
-        if i == exclude_event:
-            mask[:] = False
-        elif mask.sum() < 10:
-            raise ValueError("too few training samples after blocking")
-        train.append(mask)
+    lines = None
+    if options.ridge == "demod":
+        # Hum is persistent; +/-300 s is long enough that an aircraft tone is not.
+        lines = [stationary_lines(audio, (e.window[0] - 300, e.window[1] + 300)) for e in events]
+    measured = _observations(spec, events, local, candidate, options, atmosphere, audio=audio, lines=lines)
+
+    def blocked(observations):
+        train = []
+        for i, (times, _, valid, _) in enumerate(observations):
+            mask = valid.copy()
+            if validation_fold is not None:
+                mask &= np.floor((times - events[i].window[0]) / 15).astype(int) % 3 != validation_fold
+            if i == exclude_event:
+                mask[:] = False
+            elif mask.sum() < 10:
+                raise ValueError("too few training samples after blocking")
+            train.append(mask)
+        return train
+
+    observations = measured
+    train = blocked(observations)
     names = ["east", "north", "clock"]
     x0 = [0.0, 0.0, 0.0]
     lower = [-options.radius, -options.radius, -8.0]
@@ -330,35 +562,80 @@ def fit_projected(
         cache["coefficients"], cache["predictions"] = coefficients, predictions
         return np.array(r)
 
-    fit = least_squares(
-        residual,
-        x0,
-        bounds=(lower, upper),
-        x_scale=scale,
-        loss=options.loss,
-        f_scale=1.0,
-        max_nfev=options.max_nfev,
-        ftol=1e-6,
-        xtol=1e-6,
-        gtol=1e-6,
-    )
-    residual(fit.x)
+    def solve(start):
+        return least_squares(
+            residual,
+            start,
+            bounds=(lower, upper),
+            x_scale=scale,
+            loss=options.loss,
+            f_scale=1.0,
+            max_nfev=options.max_nfev,
+            ftol=1e-6,
+            xtol=1e-6,
+            gtol=1e-6,
+        )
+
+    def fitted_guide(p, coefficients, i):
+        values, observer, atmo = state(p)
+        effective_observer = observer - np.array([0.0, 0.0, values.get("altitude", 0.0)])
+        rate = 1 + values.get("clock_rate", 0.0) * 1e-6
+
+        def guide(t):
+            factor, emit = predict(local[i], effective_observer, np.asarray(t) * rate + p[2], atmosphere=atmo)
+            return factor * np.polynomial.polynomial.polyval((emit - events[i].cpa) / 60, coefficients[i])
+
+        return guide
+
+    inflation = _correlation_inflation(spec, measured, options)
+    noise_scales = None if options.noise == "fixed" else _start_scales(measured)
+    history, start, fit = [], x0, None
+    for iteration in range(options.reextract + 1):
+        if iteration:
+            guides = [fitted_guide(fit.x, cache["coefficients"], i) for i in range(len(events))]
+            spread = [_robust_scale(o[1], o[2], p) for o, p in zip(observations, cache["predictions"])]
+            # Later passes start near the data, so the search narrows to cover the residual misfit.
+            half_bands = [float(np.clip(1.0 + 6.0 * s, 2.0, 7.0)) for s in spread]
+            measured = _observations(
+                spec, events, local, candidate, options, atmosphere, guides, audio, lines, half_bands
+            )
+        for _ in range(1 if noise_scales is None else 2):
+            if noise_scales is not None:
+                # sigma = inflation * sqrt((scale * frame sigma)^2 + floor^2), as a weight (0.3 / sigma)^2.
+                observations = [
+                    (t, r, v, 0.09 / (c * c * (s * s * 0.09 / np.maximum(w, 1e-12) + f * f)))
+                    for (t, r, v, w), (s, f), c in zip(measured, noise_scales, inflation, strict=True)
+                ]
+            else:
+                observations = measured
+            train = blocked(observations)
+            fit = solve(start)
+            residual(fit.x)
+            start = fit.x
+            if noise_scales is not None:
+                noise_scales = _residual_scales(
+                    measured, train, cache["predictions"], noise_scales, additive=options.noise == "snr"
+                )
+        history.append(state(fit.x)[1])
+        if iteration and np.linalg.norm(history[-1][:2] - history[-2][:2]) < 1.0:
+            break
     coefficients = cache["coefficients"]
     predictions = cache["predictions"]
     values, observer, atmo = state(fit.x)
-    losses, coverage, scores, validation = [], [], [], []
+    losses, coverage, scores, validation, rms = [], [], [], [], []
     for event, (times, ridge, valid, _), mask, prediction in zip(
         events, observations, train, predictions, strict=True
     ):
         error = np.nan_to_num(np.abs(prediction - ridge), nan=15.0)
         losses.append(float(np.median(error[valid])))
+        rms.append(float(np.sqrt(np.mean(error[valid] ** 2))))
         held = valid & ~mask
         if held.any():
             # bounded influence for individual corrupted frames; retain entire held-out block
             validation.extend(np.minimum(error[held] ** 2, 9.0))
         coverage.append(float(np.mean(np.isfinite(prediction))))
         scores.append(score_curve(spec, times, prediction, "contrast", event.harmonics))
-    return {
+    result = {
         "position": observer.tolist(),
         "clock": float(clock + fit.x[2]),
         "flights": [t.id for t in tracks],
@@ -375,6 +652,7 @@ def fit_projected(
         "score": float(np.mean(scores)),
         "event_scores": scores,
         "event_residual_hz": losses,
+        "event_residual_rms_hz": rms,
         "coverage": coverage,
         "validation_loss": float(np.mean(validation)) if validation else None,
         "validation_samples": len(validation),
@@ -387,6 +665,86 @@ def fit_projected(
         ),
         "uncertainty_note": "Conditional experimental fit; nuisance parameters can imitate position error.",
     }
+    if len(history) > 1 or noise_scales is not None or options.ridge == "demod":
+        result["measurement"] = {
+            "passes": len(history),
+            "position_history": [p.tolist() for p in history],
+            "noise_scale_and_floor_hz": None if noise_scales is None else [list(s) for s in noise_scales],
+            "correlation_inflation": [float(c) for c in inflation],
+            "valid_frames": [int(o[2].sum()) for o in observations],
+            "frames": [len(o[0]) for o in observations],
+            "median_sigma_hz": [
+                float(np.median(0.3 / np.sqrt(o[3][o[2]]))) if o[2].any() else None for o in observations
+            ],
+            "stationary_lines_hz": None if lines is None else [[float(f) for f in x] for x in lines],
+        }
+    if keep_observations:
+        result["observations"] = [
+            {
+                "times": times.tolist(),
+                "ridge_hz": np.nan_to_num(ridge, nan=0.0).tolist(),
+                "valid": valid.tolist(),
+                "sigma_hz": np.where(valid, 0.3 / np.sqrt(np.maximum(weights, 1e-12)), 0.0).tolist(),
+                "model_hz": np.nan_to_num(prediction, nan=0.0).tolist(),
+            }
+            for (times, ridge, valid, weights), prediction in zip(observations, predictions, strict=True)
+        ]
+    return result
+
+
+def _robust_scale(ridge, valid, prediction):
+    error = (prediction - ridge)[valid & np.isfinite(prediction)]
+    if len(error) < 5:
+        return 1.0
+    return float(1.4826 * np.median(np.abs(error - np.median(error))))
+
+
+def _correlation_inflation(spec, observations, options):
+    """sqrt(frames per independent measurement) for overlapping analysis windows.
+
+    A Hann window of length T averages noise over 2T/3 s, so frames closer
+    than that share noise; without this, keeping every frame would overstate
+    the information relative to the priors.
+    """
+    window = options.demod_window if options.ridge == "demod" else 1 / np.diff(spec.frequencies[:2])[0]
+    spacing = [float(np.median(np.diff(o[0]))) for o in observations]
+    return [float(np.sqrt(max(1.0, 2 * window / 3 / s))) for s in spacing]
+
+
+def _start_scales(observations):
+    # Start from the fixed 0.3 Hz convention: scale so the median frame sigma is 0.3 Hz, no floor.
+    return [(float(0.3 / np.median(0.3 / np.sqrt(w[v]))), 0.0) for _, _, v, w in observations]
+
+
+def _residual_scales(observations, train, predictions, previous, additive=False):
+    """Per-event (scale, floor in Hz) making residuals unit-variance in a robust sense.
+
+    ``robust``: sigma = scale * frame sigma.  ``snr`` (``additive``): the SNR-derived
+    sigma is a lower bound, so excess residual is an additive floor
+    sigma^2 = frame sigma^2 + floor^2 (model misfit, real tone wander), not a
+    multiple of the frame's measurement noise.
+    """
+    scales = []
+    for (_, ridge, _, weights), mask, prediction, old in zip(observations, train, predictions, previous):
+        use = mask & np.isfinite(prediction)
+        if use.sum() < 12:
+            scales.append(old)
+            continue
+        error = np.abs(prediction - ridge)[use]
+        sigma = 0.3 / np.sqrt(np.maximum(weights[use], 1e-12))
+        ratio = 1.4826 * np.median(error / sigma)
+        if not additive or ratio <= 1:
+            scales.append((float(max(ratio, 0.05)), 0.0))
+            continue
+        low, high = 0.0, float(np.max(error)) + 1.0
+        for _ in range(50):
+            floor = 0.5 * (low + high)
+            if 1.4826 * np.median(error / np.hypot(sigma, floor)) > 1:
+                low = floor
+            else:
+                high = floor
+        scales.append((1.0, float(0.5 * (low + high))))
+    return scales
 
 
 def select_model(
