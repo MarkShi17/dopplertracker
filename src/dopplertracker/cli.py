@@ -11,7 +11,15 @@ import numpy as np
 from .advanced import ModelOptions, fit_consensus, fit_projected, select_model
 from .benchmark import SCENARIOS, run_benchmark, write_demo
 from .data import extract_archive, fetch_day, load_tracks, save_tracks
-from .detection import detect, fit_event, load_events, save_events
+from .detection import (
+    FlyoverOptions,
+    detect,
+    detect_flyovers,
+    fit_event,
+    fit_flyover,
+    load_events,
+    save_events,
+)
 from .evidence import assess_candidate
 from .geo import LocalFrame, ground_grid, validate_bbox
 from .physics import Atmosphere, closest_approaches
@@ -54,15 +62,27 @@ def parser():
         )
         p.add_argument("spectrogram")
         p.add_argument("--band", nargs=2, type=float, default=(60, 300))
-        p.add_argument("--harmonics", type=int, default=1)
+        p.add_argument("--harmonics", type=int, help="Harmonics scored (default 1 legacy, 2 calibrated)")
         p.add_argument("--out", required=True)
         p.add_argument("--raw-score", action="store_true", help="Skip robust spectral whitening")
+        p.add_argument(
+            "--detector",
+            choices=["legacy", "calibrated"],
+            default="legacy",
+            help="legacy: original brightness fit; calibrated: contrast bank with null z-scores",
+        )
         if name == "fit":
             p.add_argument("--window", nargs=2, type=float, required=True)
         else:
-            p.add_argument("--window-seconds", type=float, default=120.0)
-            p.add_argument("--stride", type=float, default=60.0)
+            p.add_argument("--window-seconds", type=float, default=120.0, help="Legacy detector only")
+            p.add_argument("--stride", type=float, default=60.0, help="Legacy detector only")
             p.add_argument("--top", type=int, default=10)
+            p.add_argument(
+                "--min-z",
+                type=float,
+                default=FlyoverOptions.min_z,
+                help="Calibrated detector abstains below this null z-score",
+            )
     for name in ("fetch-day", "extract-region"):
         p = commands.add_parser(name, help="Stream ADS-B archives and retain a padded region")
         p.add_argument("source", help="YYYY-MM-DD" if name == "fetch-day" else "Local TAR archive")
@@ -346,8 +366,25 @@ def execute(args):
         )
         return 0
     if args.command in ("fit", "detect"):
+        calibrated = args.detector == "calibrated"
+        harmonics = args.harmonics or (2 if calibrated else 1)
+        if calibrated:
+            min_z = getattr(args, "min_z", FlyoverOptions.min_z)
+            options = FlyoverOptions(band=tuple(args.band), harmonics=harmonics, min_z=min_z)
         if args.command == "fit":
-            events = [fit_event(spec, args.window, args.band, args.harmonics)]
+            if calibrated:
+                events = [fit_flyover(spec, args.window, options)]
+            else:
+                events = [fit_event(spec, args.window, args.band, harmonics)]
+        elif calibrated:
+            events = detect_flyovers(
+                spec,
+                options,
+                args.top,
+                progress=lambda i, n: note(f"Refined candidates {i}/{n}"),
+            )
+            if not events:
+                note(f"No flyover reached z >= {args.min_z:g}; the detector abstained.")
         else:
             events = detect(
                 spec,
@@ -355,15 +392,21 @@ def execute(args):
                 args.window_seconds,
                 args.stride,
                 args.top,
-                args.harmonics,
+                harmonics,
                 progress=lambda i, n: note(f"Flyover windows {i}/{n}"),
             )
         save_events(events, args.out)
         for event in events:
-            print(
+            line = (
                 f"CPA={event.cpa:.1f}s  f0={event.f0:.2f}Hz  speed={event.speed:.1f}m/s  "
                 f"slant={event.distance:.0f}m  score={event.score:.3f}"
             )
+            if event.z is not None:
+                line += (
+                    f"  z={event.z:.1f}  speed {event.speed_range[0]:.0f}-{event.speed_range[1]:.0f}m/s"
+                    f"  slant {event.distance_range[0]:.0f}-{event.distance_range[1]:.0f}m"
+                )
+            print(line)
         return 0
     tracks, frame = load_tracks(args.traces)
     events = load_events(args.events)
