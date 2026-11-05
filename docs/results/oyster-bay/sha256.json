@@ -1,0 +1,12 @@
+{
+  "before-cadence-fix.json": "9735c097ec21fba3adb99e0c11f28591bb322188c1098f818f1b1fd71e551678",
+  "coarse-shortlist.json": "36e7e61e71d6f8bc6f553666c433d4003abc6ee5f1df90a63790f6c4327ccb6c",
+  "inputs.json": "5464710931d473b003b1725319d59c3512176574bb41168d60cb3675eae7891d",
+  "published-baseline.json": "d8190fb3da999e7cbf60e08461cc108d394755145ebafc88a9fc5a1a136ff625",
+  "published-provenance.json": "b648fdddb6a11ca23cf45bf8acc17ec3d82319c37f19f866f382ac37e9dd1867",
+  "real-audio-comparison.png": "25a6f8e42e3d81213e28309bbf369db70a9f29e6907803eb4d921fe5ce789b7f",
+  "refined-shortlist.csv": "6e987be1a956b4183a691dabf3f3d5348f82e85737e5fc07a301c1e0de636309",
+  "refined-shortlist.json": "88ae5f0db987fa1dd714500decf8aefc7fa61d87cf9d6fe35a978ac04e4953a4",
+  "refinement.csv": "6a98af29710e8808fe2368b66284721f7f664c217414a58d13cd12760b98fe0b",
+  "refinement.json": "b6c48d5aa9189f9b0fc98611494eb0071c76003a03ea4d42427fe749c446384c"
+}

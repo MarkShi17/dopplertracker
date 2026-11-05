@@ -1,0 +1,54 @@
+{
+  "trials": 20,
+  "seeds": [
+    200,
+    201,
+    202,
+    203,
+    204,
+    205,
+    206,
+    207,
+    208,
+    209,
+    210,
+    211,
+    212,
+    213,
+    214,
+    215,
+    216,
+    217,
+    218,
+    219
+  ],
+  "acceptance": {
+    "true": {
+      "accepted": 20,
+      "rejected": 0,
+      "rate": 1.0
+    },
+    "noise": {
+      "accepted": 0,
+      "rejected": 20,
+      "rate": 0.0
+    },
+    "broadband": {
+      "accepted": 0,
+      "rejected": 20,
+      "rate": 0.0
+    },
+    "wrong_position": {
+      "accepted": 0,
+      "rejected": 20,
+      "rate": 0.0
+    },
+    "wrong_clock": {
+      "accepted": 0,
+      "rejected": 20,
+      "rate": 0.0
+    }
+  },
+  "threshold_policy": "Frozen evidence thresholds; controls do not tune them.",
+  "limitation": "Synthetic direct-tone controls; not a calibrated real-world false-match rate."
+}

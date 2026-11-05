@@ -1,0 +1,670 @@
+{
+  "validation": "synthetic waveform; not real recording validation",
+  "generator": "independent analytic_pass Doppler followed by phase-integrated time-domain chirps",
+  "sample_rate_hz": 2048,
+  "duration_seconds": 600.0,
+  "noise_documentation": {
+    "clean_audio": {
+      "gaussian_amplitude": 0.025,
+      "hum_amplitude": 0.025
+    },
+    "noisy_audio": {
+      "gaussian_amplitude": 0.12,
+      "hum_amplitude": 0.08
+    }
+  },
+  "seeds": [
+    100,
+    101
+  ],
+  "windows": [
+    1.0,
+    2.0,
+    4.0,
+    8.0
+  ],
+  "trials": [
+    {
+      "scenario": "clean_audio",
+      "seed": 100,
+      "window_seconds": 1.0,
+      "frequency_bin_hz": 1.0,
+      "degree": 0,
+      "spectrogram_shape": [
+        311,
+        1199
+      ],
+      "spectrogram_bytes": 1491556,
+      "success": true,
+      "error": null,
+      "location_error_m": 6.579666567343743,
+      "clock_error_s": 0.07576448361767019,
+      "ridge_residual_hz": 0.08236983455667495,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 9,
+      "seconds": 0.12678712501656264
+    },
+    {
+      "scenario": "clean_audio",
+      "seed": 100,
+      "window_seconds": 1.0,
+      "frequency_bin_hz": 1.0,
+      "degree": 1,
+      "spectrogram_shape": [
+        311,
+        1199
+      ],
+      "spectrogram_bytes": 1491556,
+      "success": true,
+      "error": null,
+      "location_error_m": 5.300181933391551,
+      "clock_error_s": 0.0757946411311522,
+      "ridge_residual_hz": 0.08071199984160889,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 9,
+      "seconds": 0.09542687505017966
+    },
+    {
+      "scenario": "clean_audio",
+      "seed": 100,
+      "window_seconds": 2.0,
+      "frequency_bin_hz": 0.5,
+      "degree": 0,
+      "spectrogram_shape": [
+        621,
+        1197
+      ],
+      "spectrogram_bytes": 2973348,
+      "success": true,
+      "error": null,
+      "location_error_m": 2.158467528641637,
+      "clock_error_s": 0.019292029389043897,
+      "ridge_residual_hz": 0.05235084855391392,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 9,
+      "seconds": 0.09064395807217807
+    },
+    {
+      "scenario": "clean_audio",
+      "seed": 100,
+      "window_seconds": 2.0,
+      "frequency_bin_hz": 0.5,
+      "degree": 1,
+      "spectrogram_shape": [
+        621,
+        1197
+      ],
+      "spectrogram_bytes": 2973348,
+      "success": true,
+      "error": null,
+      "location_error_m": 1.0818721118085928,
+      "clock_error_s": 0.008442565006765879,
+      "ridge_residual_hz": 0.05262031809019163,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 9,
+      "seconds": 0.08427754207514226
+    },
+    {
+      "scenario": "clean_audio",
+      "seed": 100,
+      "window_seconds": 4.0,
+      "frequency_bin_hz": 0.25,
+      "degree": 0,
+      "spectrogram_shape": [
+        1241,
+        1193
+      ],
+      "spectrogram_bytes": 5922052,
+      "success": true,
+      "error": null,
+      "location_error_m": 1.0369887709126422,
+      "clock_error_s": 0.01248101289674719,
+      "ridge_residual_hz": 0.023506494554145736,
+      "optimizer_message": "Both `ftol` and `xtol` termination conditions are satisfied.",
+      "nfev": 9,
+      "seconds": 0.09131600009277463
+    },
+    {
+      "scenario": "clean_audio",
+      "seed": 100,
+      "window_seconds": 4.0,
+      "frequency_bin_hz": 0.25,
+      "degree": 1,
+      "spectrogram_shape": [
+        1241,
+        1193
+      ],
+      "spectrogram_bytes": 5922052,
+      "success": true,
+      "error": null,
+      "location_error_m": 1.6815007786726721,
+      "clock_error_s": 0.016572212537145747,
+      "ridge_residual_hz": 0.022501364823483527,
+      "optimizer_message": "Both `ftol` and `xtol` termination conditions are satisfied.",
+      "nfev": 9,
+      "seconds": 0.09850962494965643
+    },
+    {
+      "scenario": "clean_audio",
+      "seed": 100,
+      "window_seconds": 8.0,
+      "frequency_bin_hz": 0.125,
+      "degree": 0,
+      "spectrogram_shape": [
+        2481,
+        1185
+      ],
+      "spectrogram_bytes": 11759940,
+      "success": true,
+      "error": null,
+      "location_error_m": 1.3743306487276807,
+      "clock_error_s": 0.023991982294971514,
+      "ridge_residual_hz": 0.020157754332698136,
+      "optimizer_message": "Both `ftol` and `xtol` termination conditions are satisfied.",
+      "nfev": 9,
+      "seconds": 0.0937043329467997
+    },
+    {
+      "scenario": "clean_audio",
+      "seed": 100,
+      "window_seconds": 8.0,
+      "frequency_bin_hz": 0.125,
+      "degree": 1,
+      "spectrogram_shape": [
+        2481,
+        1185
+      ],
+      "spectrogram_bytes": 11759940,
+      "success": true,
+      "error": null,
+      "location_error_m": 1.928649271709963,
+      "clock_error_s": 0.025670234216880028,
+      "ridge_residual_hz": 0.020795195357834473,
+      "optimizer_message": "Both `ftol` and `xtol` termination conditions are satisfied.",
+      "nfev": 9,
+      "seconds": 0.0933699159650132
+    },
+    {
+      "scenario": "clean_audio",
+      "seed": 101,
+      "window_seconds": 1.0,
+      "frequency_bin_hz": 1.0,
+      "degree": 0,
+      "spectrogram_shape": [
+        311,
+        1199
+      ],
+      "spectrogram_bytes": 1491556,
+      "success": true,
+      "error": null,
+      "location_error_m": 1.951361672375635,
+      "clock_error_s": -0.023460051372427848,
+      "ridge_residual_hz": 0.0809491875016543,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 9,
+      "seconds": 0.08360629191156477
+    },
+    {
+      "scenario": "clean_audio",
+      "seed": 101,
+      "window_seconds": 1.0,
+      "frequency_bin_hz": 1.0,
+      "degree": 1,
+      "spectrogram_shape": [
+        311,
+        1199
+      ],
+      "spectrogram_bytes": 1491556,
+      "success": true,
+      "error": null,
+      "location_error_m": 0.45758887379342406,
+      "clock_error_s": -0.011865445766544747,
+      "ridge_residual_hz": 0.07930640416724562,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 9,
+      "seconds": 0.1010601669549942
+    },
+    {
+      "scenario": "clean_audio",
+      "seed": 101,
+      "window_seconds": 2.0,
+      "frequency_bin_hz": 0.5,
+      "degree": 0,
+      "spectrogram_shape": [
+        621,
+        1197
+      ],
+      "spectrogram_bytes": 2973348,
+      "success": true,
+      "error": null,
+      "location_error_m": 1.703505334043744,
+      "clock_error_s": -0.011916845736820392,
+      "ridge_residual_hz": 0.05240388532092529,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 10,
+      "seconds": 0.09947908401954919
+    },
+    {
+      "scenario": "clean_audio",
+      "seed": 101,
+      "window_seconds": 2.0,
+      "frequency_bin_hz": 0.5,
+      "degree": 1,
+      "spectrogram_shape": [
+        621,
+        1197
+      ],
+      "spectrogram_bytes": 2973348,
+      "success": true,
+      "error": null,
+      "location_error_m": 3.187665389745048,
+      "clock_error_s": -0.020737072655816424,
+      "ridge_residual_hz": 0.05361934410816597,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 10,
+      "seconds": 0.1228618340101093
+    },
+    {
+      "scenario": "clean_audio",
+      "seed": 101,
+      "window_seconds": 4.0,
+      "frequency_bin_hz": 0.25,
+      "degree": 0,
+      "spectrogram_shape": [
+        1241,
+        1193
+      ],
+      "spectrogram_bytes": 5922052,
+      "success": true,
+      "error": null,
+      "location_error_m": 0.5814583162590587,
+      "clock_error_s": -0.003981879036801694,
+      "ridge_residual_hz": 0.021169943524782298,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 10,
+      "seconds": 0.0905783330090344
+    },
+    {
+      "scenario": "clean_audio",
+      "seed": 101,
+      "window_seconds": 4.0,
+      "frequency_bin_hz": 0.25,
+      "degree": 1,
+      "spectrogram_shape": [
+        1241,
+        1193
+      ],
+      "spectrogram_bytes": 5922052,
+      "success": true,
+      "error": null,
+      "location_error_m": 1.0933784418751644,
+      "clock_error_s": -0.007414089757843689,
+      "ridge_residual_hz": 0.020353389373456803,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 10,
+      "seconds": 0.09758158295881003
+    },
+    {
+      "scenario": "clean_audio",
+      "seed": 101,
+      "window_seconds": 8.0,
+      "frequency_bin_hz": 0.125,
+      "degree": 0,
+      "spectrogram_shape": [
+        2481,
+        1185
+      ],
+      "spectrogram_bytes": 11759940,
+      "success": true,
+      "error": null,
+      "location_error_m": 0.5767573966947735,
+      "clock_error_s": 0.004705076191102775,
+      "ridge_residual_hz": 0.018181567695570777,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 10,
+      "seconds": 0.1008458340074867
+    },
+    {
+      "scenario": "clean_audio",
+      "seed": 101,
+      "window_seconds": 8.0,
+      "frequency_bin_hz": 0.125,
+      "degree": 1,
+      "spectrogram_shape": [
+        2481,
+        1185
+      ],
+      "spectrogram_bytes": 11759940,
+      "success": true,
+      "error": null,
+      "location_error_m": 1.247309391079388,
+      "clock_error_s": -0.0016446762430374906,
+      "ridge_residual_hz": 0.018207964520686442,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 10,
+      "seconds": 0.10447091597598046
+    },
+    {
+      "scenario": "noisy_audio",
+      "seed": 100,
+      "window_seconds": 1.0,
+      "frequency_bin_hz": 1.0,
+      "degree": 0,
+      "spectrogram_shape": [
+        311,
+        1199
+      ],
+      "spectrogram_bytes": 1491556,
+      "success": true,
+      "error": null,
+      "location_error_m": 3.7955901215553296,
+      "clock_error_s": 0.013834550276971724,
+      "ridge_residual_hz": 0.11337500315617177,
+      "optimizer_message": "Both `ftol` and `xtol` termination conditions are satisfied.",
+      "nfev": 9,
+      "seconds": 0.08990945899859071
+    },
+    {
+      "scenario": "noisy_audio",
+      "seed": 100,
+      "window_seconds": 1.0,
+      "frequency_bin_hz": 1.0,
+      "degree": 1,
+      "spectrogram_shape": [
+        311,
+        1199
+      ],
+      "spectrogram_bytes": 1491556,
+      "success": true,
+      "error": null,
+      "location_error_m": 3.039478430517104,
+      "clock_error_s": 0.017062553940816294,
+      "ridge_residual_hz": 0.11023049691041346,
+      "optimizer_message": "Both `ftol` and `xtol` termination conditions are satisfied.",
+      "nfev": 9,
+      "seconds": 0.09491750004235655
+    },
+    {
+      "scenario": "noisy_audio",
+      "seed": 100,
+      "window_seconds": 2.0,
+      "frequency_bin_hz": 0.5,
+      "degree": 0,
+      "spectrogram_shape": [
+        621,
+        1197
+      ],
+      "spectrogram_bytes": 2973348,
+      "success": true,
+      "error": null,
+      "location_error_m": 2.41369934565747,
+      "clock_error_s": 0.003363649390965451,
+      "ridge_residual_hz": 0.07542682752212689,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 9,
+      "seconds": 0.08265770797152072
+    },
+    {
+      "scenario": "noisy_audio",
+      "seed": 100,
+      "window_seconds": 2.0,
+      "frequency_bin_hz": 0.5,
+      "degree": 1,
+      "spectrogram_shape": [
+        621,
+        1197
+      ],
+      "spectrogram_bytes": 2973348,
+      "success": true,
+      "error": null,
+      "location_error_m": 3.107296110558546,
+      "clock_error_s": -0.013355216888744192,
+      "ridge_residual_hz": 0.07444715992222466,
+      "optimizer_message": "Both `ftol` and `xtol` termination conditions are satisfied.",
+      "nfev": 9,
+      "seconds": 0.08419616695027798
+    },
+    {
+      "scenario": "noisy_audio",
+      "seed": 100,
+      "window_seconds": 4.0,
+      "frequency_bin_hz": 0.25,
+      "degree": 0,
+      "spectrogram_shape": [
+        1241,
+        1193
+      ],
+      "spectrogram_bytes": 5922052,
+      "success": true,
+      "error": null,
+      "location_error_m": 2.8312681696912922,
+      "clock_error_s": 0.027553195078540926,
+      "ridge_residual_hz": 0.037037716234979236,
+      "optimizer_message": "Both `ftol` and `xtol` termination conditions are satisfied.",
+      "nfev": 9,
+      "seconds": 0.0870035421103239
+    },
+    {
+      "scenario": "noisy_audio",
+      "seed": 100,
+      "window_seconds": 4.0,
+      "frequency_bin_hz": 0.25,
+      "degree": 1,
+      "spectrogram_shape": [
+        1241,
+        1193
+      ],
+      "spectrogram_bytes": 5922052,
+      "success": true,
+      "error": null,
+      "location_error_m": 4.759780778038733,
+      "clock_error_s": 0.03924360596752058,
+      "ridge_residual_hz": 0.03580046750481832,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 9,
+      "seconds": 0.09574225009419024
+    },
+    {
+      "scenario": "noisy_audio",
+      "seed": 100,
+      "window_seconds": 8.0,
+      "frequency_bin_hz": 0.125,
+      "degree": 0,
+      "spectrogram_shape": [
+        2481,
+        1185
+      ],
+      "spectrogram_bytes": 11759940,
+      "success": true,
+      "error": null,
+      "location_error_m": 6.476005300480963,
+      "clock_error_s": 0.051041408623716755,
+      "ridge_residual_hz": 0.045647326161246816,
+      "optimizer_message": "Both `ftol` and `xtol` termination conditions are satisfied.",
+      "nfev": 9,
+      "seconds": 0.09587191708851606
+    },
+    {
+      "scenario": "noisy_audio",
+      "seed": 100,
+      "window_seconds": 8.0,
+      "frequency_bin_hz": 0.125,
+      "degree": 1,
+      "spectrogram_shape": [
+        2481,
+        1185
+      ],
+      "spectrogram_bytes": 11759940,
+      "success": true,
+      "error": null,
+      "location_error_m": 8.740288983894297,
+      "clock_error_s": 0.06277291949154618,
+      "ridge_residual_hz": 0.04444711075753105,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 8,
+      "seconds": 0.08380220900289714
+    },
+    {
+      "scenario": "noisy_audio",
+      "seed": 101,
+      "window_seconds": 1.0,
+      "frequency_bin_hz": 1.0,
+      "degree": 0,
+      "spectrogram_shape": [
+        311,
+        1199
+      ],
+      "spectrogram_bytes": 1491556,
+      "success": true,
+      "error": null,
+      "location_error_m": 0.6879656650605651,
+      "clock_error_s": -0.00627336035788828,
+      "ridge_residual_hz": 0.09716327170337043,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 9,
+      "seconds": 0.08932991593610495
+    },
+    {
+      "scenario": "noisy_audio",
+      "seed": 101,
+      "window_seconds": 1.0,
+      "frequency_bin_hz": 1.0,
+      "degree": 1,
+      "spectrogram_shape": [
+        311,
+        1199
+      ],
+      "spectrogram_bytes": 1491556,
+      "success": true,
+      "error": null,
+      "location_error_m": 4.161456547529326,
+      "clock_error_s": 0.016117833913098678,
+      "ridge_residual_hz": 0.09800289771385688,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 9,
+      "seconds": 0.0870731669710949
+    },
+    {
+      "scenario": "noisy_audio",
+      "seed": 101,
+      "window_seconds": 2.0,
+      "frequency_bin_hz": 0.5,
+      "degree": 0,
+      "spectrogram_shape": [
+        621,
+        1197
+      ],
+      "spectrogram_bytes": 2973348,
+      "success": true,
+      "error": null,
+      "location_error_m": 3.360455153274143,
+      "clock_error_s": -0.03350854215101107,
+      "ridge_residual_hz": 0.07091196808150357,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 9,
+      "seconds": 0.12260616605635732
+    },
+    {
+      "scenario": "noisy_audio",
+      "seed": 101,
+      "window_seconds": 2.0,
+      "frequency_bin_hz": 0.5,
+      "degree": 1,
+      "spectrogram_shape": [
+        621,
+        1197
+      ],
+      "spectrogram_bytes": 2973348,
+      "success": true,
+      "error": null,
+      "location_error_m": 4.4162002059792,
+      "clock_error_s": -0.04339214754092724,
+      "ridge_residual_hz": 0.07260614289903344,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 9,
+      "seconds": 0.10109795804601163
+    },
+    {
+      "scenario": "noisy_audio",
+      "seed": 101,
+      "window_seconds": 4.0,
+      "frequency_bin_hz": 0.25,
+      "degree": 0,
+      "spectrogram_shape": [
+        1241,
+        1193
+      ],
+      "spectrogram_bytes": 5922052,
+      "success": true,
+      "error": null,
+      "location_error_m": 3.4885127316125017,
+      "clock_error_s": -0.041854091138142535,
+      "ridge_residual_hz": 0.03892483273166647,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 9,
+      "seconds": 0.09956045798026025
+    },
+    {
+      "scenario": "noisy_audio",
+      "seed": 101,
+      "window_seconds": 4.0,
+      "frequency_bin_hz": 0.25,
+      "degree": 1,
+      "spectrogram_shape": [
+        1241,
+        1193
+      ],
+      "spectrogram_bytes": 5922052,
+      "success": true,
+      "error": null,
+      "location_error_m": 6.839742477119273,
+      "clock_error_s": -0.06320758708941082,
+      "ridge_residual_hz": 0.040583456845171874,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 9,
+      "seconds": 0.12469062500167638
+    },
+    {
+      "scenario": "noisy_audio",
+      "seed": 101,
+      "window_seconds": 8.0,
+      "frequency_bin_hz": 0.125,
+      "degree": 0,
+      "spectrogram_shape": [
+        2481,
+        1185
+      ],
+      "spectrogram_bytes": 11759940,
+      "success": true,
+      "error": null,
+      "location_error_m": 2.380454049408237,
+      "clock_error_s": -0.046980337883908374,
+      "ridge_residual_hz": 0.04103186167926746,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 9,
+      "seconds": 0.09380279097240418
+    },
+    {
+      "scenario": "noisy_audio",
+      "seed": 101,
+      "window_seconds": 8.0,
+      "frequency_bin_hz": 0.125,
+      "degree": 1,
+      "spectrogram_shape": [
+        2481,
+        1185
+      ],
+      "spectrogram_bytes": 11759940,
+      "success": true,
+      "error": null,
+      "location_error_m": 3.694159068705632,
+      "clock_error_s": -0.05894036960474841,
+      "ridge_residual_hz": 0.04320132630725482,
+      "optimizer_message": "`ftol` termination condition is satisfied.",
+      "nfev": 9,
+      "seconds": 0.09327291697263718
+    }
+  ],
+  "attempted_trials": 32,
+  "failed_trials": 0
+}

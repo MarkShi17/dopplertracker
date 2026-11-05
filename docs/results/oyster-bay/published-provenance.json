@@ -1,0 +1,38 @@
+{
+  "source_repository": "https://github.com/mjshiggins/dopplertrack",
+  "reference_commit": "a16b7006dfe38b4880919ca2652f402342686289",
+  "recording_url": "https://www.youtube.com/watch?v=4CxVxuMVkMc",
+  "recording_date": "2026-09-08",
+  "evaluation_truth": [
+    40.876466,
+    -73.524951
+  ],
+  "warning": "Published reference data, not outputs of our implementation. Raw audio and flight tracks are still required.",
+  "files": [
+    {
+      "path": "data/oyster-bay/published/oyster_bay_ev1.json",
+      "source_path": "docs/results/oyster_bay_ev1.json",
+      "sha": "619e54a098d1afd1bb84e20a619306afb02428e3"
+    },
+    {
+      "path": "data/oyster-bay/published/oyster_bay_ev2.json",
+      "source_path": "docs/results/oyster_bay_ev2.json",
+      "sha": "1694afabc7de2c13c4455be0c6928166a081e05c"
+    },
+    {
+      "path": "data/oyster-bay/published/oyster_bay_known_point.csv",
+      "source_path": "docs/results/oyster_bay_known_point.csv",
+      "sha": "3605fedc941000bcfedc1b1f80ba6a216a945e6f"
+    },
+    {
+      "path": "data/oyster-bay/published/oyster_bay_refined_50m.csv",
+      "source_path": "docs/results/oyster_bay_refined_50m.csv",
+      "sha": "739790b776744ffcab4c990df9cf354d10109e93"
+    },
+    {
+      "path": "data/oyster-bay/published/oyster_bay_search_best_per_pair.csv",
+      "source_path": "docs/results/oyster_bay_search_best_per_pair.csv",
+      "sha": "e811cf61b9e183b39f553618657b8f6423e7827f"
+    }
+  ]
+}

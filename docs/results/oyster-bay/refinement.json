@@ -1,0 +1,5592 @@
+{
+  "plan": {
+    "validation": "Real recording, conditional refinement with published flight identities and coarse candidate; not a blind search.",
+    "recording_id": "4CxVxuMVkMc",
+    "methods": [
+      "brightness",
+      "contrast",
+      "legacy-ridge",
+      "legacy-drift",
+      "projected-constant",
+      "projected-linear",
+      "spline-linear",
+      "kalman-linear",
+      "spline-cv"
+    ],
+    "heights_ellipsoid_m": [
+      -30.0,
+      0.0
+    ],
+    "sound_speeds_m_s": [
+      343.0,
+      340.0
+    ],
+    "height_note": "-30 m approximates a sea-level shoreline with geoid correction; 0 m is a datum sensitivity case. Camera height and weather are not measured.",
+    "primary_condition": {
+      "height_m": -30.0,
+      "sound_speed_m_s": 343.0
+    },
+    "initial_latlon": [
+      40.876104922746144,
+      -73.52356936754546
+    ],
+    "initial_clock": 1788898648.7235358,
+    "flights": [
+      "a1dfeb:1788899524.900",
+      "ace391:1788901235.390"
+    ],
+    "initial_calibration": "At the common fixed coarse position, jointly sweep a shared +/-4 s clock shift and per-event +/-12 Hz source frequencies; no true location input.",
+    "source_hashes": {
+      "geo.py": "eb34c3bd77db460e422793330fbb74dd704351e0b93b47855a71174a3acdc6c7",
+      "advanced.py": "c200fea8b16fad3cc20d9eae20ec3cbe2d9eea96f4cc963ff5563ae34ac334d1",
+      "detection.py": "15faf6744059246b6cef859f110d83297020ba9726417013468c51546990bae8",
+      "signal.py": "e5058a832b40daac44cafb36dc440af0b01c0a3f95209d02addfd45a332d553b",
+      "benchmark.py": "a03ec844d67b20f051877db7065a541f4a41d3174fe9bf113c24e3b56716e79b",
+      "stress_benchmark.py": "c1eaae71606cbbd9bebba10836f05c871f3d01e60bf34c2eedad92d1a81b94cb",
+      "audio_benchmark.py": "5cd0bd1ac006ddd4f0a0f0d82b7d5d9a854cd467acc439a8f9f909043d8e2ac9",
+      "scoring.py": "53d676639efa30762309146725b83aa2f7f6d342d856cd7ab907a6f2d6ca70fc",
+      "download.py": "4c014b33ea98721318d370d235fbbd7014cb6c4e88b578ad0e5b633bb5dfb91e",
+      "terrain.py": "93130d81e03ac7d5649a5fbc0081663f4f8762c8b8783640ae8950d325ea9c20",
+      "refine.py": "5dec596ef23dd182a0144fbdf7fa71539111d1d7574fe12361da3f54c6c2cbab",
+      "__init__.py": "3daa9057b0628eb5915aa00a80e975258472096a170b0eed441638227c84ecb0",
+      "evidence_controls.py": "ec021baf7daa049cdbbe71ebf9e53f3e36a2747e2bf475b5e3a9dd248e193ea2",
+      "physics.py": "4f4ac4ed29c32a360fc2b06cf59fcf47b1c409bdecc7232f22c7b00b270a91e5",
+      "cli.py": "69fa09422c964af2e6e5c6b2f70946711e09298ae3ecaf6e8cd335a437d7678a",
+      "stress_scenes.py": "de2de8ef387f89bde52609e54811274dbb3de48d97d0e2cab5f215f0911b2e96",
+      "search.py": "1f5b11eefcb1d267907f4f07d83f333c2da0ccce147325dcaa099141d42c4e95",
+      "detection_benchmark.py": "86791d2ea16032f8bcc72ae5fba8f848149c42b3f4ba99c49f479cac31c405be",
+      "identification.py": "72f27f947df247013b92e5063ffc9c9fcbb6f6a1ef8eeefa2421f79eea8939c7",
+      "evidence.py": "77dc368ed015a8d1784e196d8334bd8af5c69954ba81cbe84fa8e0e08ea92193",
+      "__main__.py": "307299fda7b77d22c64cb51430ec75e5f59d78e9c948786afb3b2544fe45e4b7",
+      "data.py": "98862903f9f1cb92135cfd3575f43c044df8ea9535a33d48297f2164ced3c298"
+    }
+  },
+  "evaluation_truth": [
+    40.876466,
+    -73.524951
+  ],
+  "trials": [
+    {
+      "method": "brightness",
+      "height_m": -30.0,
+      "sound_speed_m_s": 343.0,
+      "initial_candidate": {
+        "position": [
+          -1986.7123192837494,
+          2899.2381161565436,
+          -30.969508294565003
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.60525429885242
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.5830280971195045
+      },
+      "result": {
+        "position": [
+          -2042.284208218558,
+          2857.103686535119,
+          -30.967975850170887
+        ],
+        "clock": 1788898649.5706367,
+        "f0": [
+          112.74844430456069,
+          125.3219694390843
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.6220708834686284,
+        "success": true,
+        "method": "brightness-continuous",
+        "sound_speed_m_s": 343.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.7207207207207207,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.7747747747747747,
+              "center_score": 8.113913689104997,
+              "null_median_score": -0.1964015412216848,
+              "null_max_score": 0.10099428913766059,
+              "support_over_null": 8.310315230326681,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6666666666666666,
+              "center_score": 4.530777651173076,
+              "null_median_score": -0.22905107875770103,
+              "null_max_score": 0.0,
+              "support_over_null": 4.759828729930777,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.87572537101786,
+          -73.52422850647632,
+          -30.0
+        ]
+      },
+      "error": null,
+      "seconds": 0.1442964159650728,
+      "error_m": 102.35731263470318
+    },
+    {
+      "method": "contrast",
+      "height_m": -30.0,
+      "sound_speed_m_s": 343.0,
+      "initial_candidate": {
+        "position": [
+          -1986.7123192837494,
+          2899.2381161565436,
+          -30.969508294565003
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.60525429885242
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.5830280971195045
+      },
+      "result": {
+        "position": [
+          -2032.620054366568,
+          2860.3911429201053,
+          -30.966370154304286
+        ],
+        "clock": 1788898649.63914,
+        "f0": [
+          112.72263412504665,
+          125.40769485751244
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.2812199526968668,
+        "success": true,
+        "method": "contrast-continuous",
+        "sound_speed_m_s": 343.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.7252252252252251,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.7837837837837838,
+              "center_score": 8.677046908759976,
+              "null_median_score": -0.24443646123539792,
+              "null_max_score": 0.0658665437592181,
+              "support_over_null": 8.921483369995375,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6666666666666666,
+              "center_score": 4.701128992017729,
+              "null_median_score": -0.1928191833149981,
+              "null_max_score": 0.14404249337689207,
+              "support_over_null": 4.893948175332727,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.87575499816006,
+          -73.5241138671564,
+          -29.999999999068677
+        ]
+      },
+      "error": null,
+      "seconds": 0.16784658294636756,
+      "error_m": 105.91079796038845
+    },
+    {
+      "method": "legacy-ridge",
+      "height_m": -30.0,
+      "sound_speed_m_s": 343.0,
+      "initial_candidate": {
+        "position": [
+          -1986.7123192837494,
+          2899.2381161565436,
+          -30.969508294565003
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.60525429885242
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.5830280971195045
+      },
+      "result": {
+        "position": [
+          -2097.3518097762703,
+          2860.6145426330863,
+          -30.987398180818445
+        ],
+        "clock": 1788898650.124381,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          113.67946135240172,
+          125.45910493122084
+        ],
+        "frequency_drift_hz_s": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 343.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "score": 1.2927200292323866,
+        "event_scores": [
+          1.6703658821963685,
+          0.9150741762684048
+        ],
+        "event_residual_hz": [
+          0.3833420591134882,
+          0.30142142724608334
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "ridge_fraction": [
+          1.0,
+          0.9819819819819819
+        ],
+        "geometry_condition": 1.2655778895342333,
+        "geometry_eigenvalues": [
+          0.007414267783599229,
+          0.00938333337400917
+        ],
+        "at_bounds": false,
+        "success": true,
+        "optimizer_message": "`xtol` termination condition is satisfied.",
+        "method": "robust-ridge",
+        "uncertainty_note": "Local conditioning only; not a calibrated confidence interval.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.7027027027027026,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.7747747747747747,
+              "center_score": 8.092128273612106,
+              "null_median_score": -0.21197653342274958,
+              "null_max_score": 0.17101693348780894,
+              "support_over_null": 8.304104807034856,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6306306306306306,
+              "center_score": 5.066738093718766,
+              "null_median_score": -0.21044765806078972,
+              "null_max_score": 0.16685829549995068,
+              "support_over_null": 5.277185751779556,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.87575684682968,
+          -73.52488180922748,
+          -30.0
+        ]
+      },
+      "error": null,
+      "seconds": 0.04436025000177324,
+      "error_m": 78.98236848263387
+    },
+    {
+      "method": "legacy-drift",
+      "height_m": -30.0,
+      "sound_speed_m_s": 343.0,
+      "initial_candidate": {
+        "position": [
+          -1986.7123192837494,
+          2899.2381161565436,
+          -30.969508294565003
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.60525429885242
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.5830280971195045
+      },
+      "result": {
+        "position": [
+          -2020.0391572139802,
+          2860.5268033951925,
+          -30.962439913841536
+        ],
+        "clock": 1788898649.8215039,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          112.53004336094162,
+          125.30499581188288
+        ],
+        "frequency_drift_hz_s": [
+          -0.01133325622756438,
+          -0.011920449982275597
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 343.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "score": 1.5074745115869135,
+        "event_scores": [
+          2.058543562175048,
+          0.9564054609987787
+        ],
+        "event_residual_hz": [
+          0.12302108306256798,
+          0.26267843502026267
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "ridge_fraction": [
+          1.0,
+          0.9819819819819819
+        ],
+        "geometry_condition": 6.136813563923204,
+        "geometry_eigenvalues": [
+          0.00184154258573751,
+          0.011301203518696162
+        ],
+        "at_bounds": false,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "method": "robust-ridge",
+        "uncertainty_note": "Local conditioning only; not a calibrated confidence interval.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.7972972972972974,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.954954954954955,
+              "center_score": 9.641743026782349,
+              "null_median_score": -0.2682397658340715,
+              "null_max_score": 0.08772323933164172,
+              "support_over_null": 9.90998279261642,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6396396396396397,
+              "center_score": 5.356136578111999,
+              "null_median_score": -0.15361788331290804,
+              "null_max_score": 0.0,
+              "support_over_null": 5.509754461424907,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.875756250855346,
+          -73.52396461487409,
+          -30.0
+        ]
+      },
+      "error": null,
+      "seconds": 0.04340229101944715,
+      "error_m": 114.58256347973055
+    },
+    {
+      "method": "projected-constant",
+      "height_m": -30.0,
+      "sound_speed_m_s": 343.0,
+      "initial_candidate": {
+        "position": [
+          -1986.7123192837494,
+          2899.2381161565436,
+          -30.969508294565003
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.60525429885242
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.5830280971195045
+      },
+      "result": {
+        "position": [
+          -2114.891266265654,
+          2857.2303610379913,
+          -30.99166100768298
+        ],
+        "clock": 1788898650.1419997,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          113.7150090545067,
+          125.50298338590346
+        ],
+        "frequency_drift_hz_s": [
+          0.0,
+          0.0
+        ],
+        "frequency_curvature_hz_s2": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 343.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "aircraft_altitude_offset_m": 0.0,
+        "clock_rate_ppm": 0.0,
+        "method": "projected",
+        "options": {
+          "degree": 0,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "none",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130
+        },
+        "score": 1.2846796907205964,
+        "event_scores": [
+          1.6588823570583382,
+          0.9104770243828546
+        ],
+        "event_residual_hz": [
+          0.4578382365173468,
+          0.5258290155579175
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "validation_loss": null,
+        "validation_samples": 0,
+        "excluded_event": null,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "nfev": 5,
+        "at_bounds": false,
+        "uncertainty_note": "Conditional experimental fit; nuisance parameters can imitate position error.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.7117117117117118,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.7567567567567568,
+              "center_score": 8.588885139029532,
+              "null_median_score": -0.1788285417269526,
+              "null_max_score": 0.16656174385366895,
+              "support_over_null": 8.767713680756485,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6666666666666666,
+              "center_score": 4.763543628943443,
+              "null_median_score": -0.17795578921197025,
+              "null_max_score": 0.22429152259418692,
+              "support_over_null": 4.941499418155414,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.87572632765219,
+          -73.52508987602378,
+          -30.000000000931323
+        ]
+      },
+      "error": null,
+      "seconds": 0.03476362500805408,
+      "error_m": 82.98360731832479
+    },
+    {
+      "method": "projected-linear",
+      "height_m": -30.0,
+      "sound_speed_m_s": 343.0,
+      "initial_candidate": {
+        "position": [
+          -1986.7123192837494,
+          2899.2381161565436,
+          -30.969508294565003
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.60525429885242
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.5830280971195045
+      },
+      "result": {
+        "position": [
+          -2054.676981695732,
+          2873.220326658945,
+          -30.97920774881959
+        ],
+        "clock": 1788898649.7352004,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          112.56653674531077,
+          125.2852092902686
+        ],
+        "frequency_drift_hz_s": [
+          -0.011483447670172824,
+          -0.009285736827723705
+        ],
+        "frequency_curvature_hz_s2": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 343.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "aircraft_altitude_offset_m": 0.0,
+        "clock_rate_ppm": 0.0,
+        "method": "projected",
+        "options": {
+          "degree": 1,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "none",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130
+        },
+        "score": 1.5039016912819398,
+        "event_scores": [
+          2.0639847678196976,
+          0.9438186147441819
+        ],
+        "event_residual_hz": [
+          0.21078074252497458,
+          0.4931357611183955
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "validation_loss": null,
+        "validation_samples": 0,
+        "excluded_event": null,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "nfev": 5,
+        "at_bounds": false,
+        "uncertainty_note": "Conditional experimental fit; nuisance parameters can imitate position error.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.8198198198198199,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.972972972972973,
+              "center_score": 9.518575845039699,
+              "null_median_score": -0.23889752135571674,
+              "null_max_score": 0.24524217569554907,
+              "support_over_null": 9.757473366395416,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6666666666666666,
+              "center_score": 5.0153198326054245,
+              "null_median_score": -0.21189362058588618,
+              "null_max_score": 0.34029593175001366,
+              "support_over_null": 5.227213453191311,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.87587046836323,
+          -73.52437558057184,
+          -30.0
+        ]
+      },
+      "error": null,
+      "seconds": 0.03440887504257262,
+      "error_m": 82.03117997829061
+    },
+    {
+      "method": "spline-linear",
+      "height_m": -30.0,
+      "sound_speed_m_s": 343.0,
+      "initial_candidate": {
+        "position": [
+          -1986.7123192837494,
+          2899.2381161565436,
+          -30.969508294565003
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.60525429885242
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.5830280971195045
+      },
+      "result": {
+        "position": [
+          -2102.245948622205,
+          2899.764699598638,
+          -31.006729022373747
+        ],
+        "clock": 1788898649.8263998,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          112.7120694288862,
+          125.54282146851727
+        ],
+        "frequency_drift_hz_s": [
+          -0.01334950077763649,
+          -0.006083993253320637
+        ],
+        "frequency_curvature_hz_s2": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 343.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "aircraft_altitude_offset_m": 0.0,
+        "clock_rate_ppm": 0.0,
+        "method": "projected",
+        "options": {
+          "degree": 1,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "spline",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130
+        },
+        "score": 1.5009037071037645,
+        "event_scores": [
+          2.0815094114788484,
+          0.9202980027286805
+        ],
+        "event_residual_hz": [
+          0.17249377062392313,
+          0.6253009132086902
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "validation_loss": null,
+        "validation_samples": 0,
+        "excluded_event": null,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "nfev": 6,
+        "at_bounds": false,
+        "uncertainty_note": "Conditional experimental fit; nuisance parameters can imitate position error.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.7927927927927928,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.954954954954955,
+              "center_score": 9.687492068962351,
+              "null_median_score": -0.20172026268082546,
+              "null_max_score": 0.04820616342355863,
+              "support_over_null": 9.889212331643177,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6306306306306306,
+              "center_score": 5.000934437697822,
+              "null_median_score": -0.17016497421533675,
+              "null_max_score": 0.1300184785143169,
+              "support_over_null": 5.171099411913159,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.87610937649814,
+          -73.52494000285853,
+          -30.0
+        ]
+      },
+      "error": null,
+      "seconds": 0.03840470896102488,
+      "error_m": 39.628321726494256
+    },
+    {
+      "method": "kalman-linear",
+      "height_m": -30.0,
+      "sound_speed_m_s": 343.0,
+      "initial_candidate": {
+        "position": [
+          -1986.7123192837494,
+          2899.2381161565436,
+          -30.969508294565003
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.60525429885242
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.5830280971195045
+      },
+      "result": {
+        "position": [
+          -2082.6640190598846,
+          2892.1283232808173,
+          -30.996838395722534
+        ],
+        "clock": 1788898649.7082348,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          112.57749153189512,
+          125.40619191511779
+        ],
+        "frequency_drift_hz_s": [
+          -0.012193492889885265,
+          -0.004675992262072891
+        ],
+        "frequency_curvature_hz_s2": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 343.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "aircraft_altitude_offset_m": 0.0,
+        "clock_rate_ppm": 0.0,
+        "method": "projected",
+        "options": {
+          "degree": 1,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "kalman",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130
+        },
+        "score": 1.5658965724810416,
+        "event_scores": [
+          2.0692032181316775,
+          1.0625899268304055
+        ],
+        "event_residual_hz": [
+          0.20775319216855337,
+          0.42360916732687315
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "validation_loss": null,
+        "validation_samples": 0,
+        "excluded_event": null,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "nfev": 4,
+        "at_bounds": false,
+        "uncertainty_note": "Conditional experimental fit; nuisance parameters can imitate position error.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.8603603603603605,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.972972972972973,
+              "center_score": 9.804211426834794,
+              "null_median_score": -0.18486271666640278,
+              "null_max_score": 0.2697690450155558,
+              "support_over_null": 9.989074143501197,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.7477477477477478,
+              "center_score": 5.607464807277134,
+              "null_median_score": -0.16367727174895638,
+              "null_max_score": -0.03241752525435965,
+              "support_over_null": 5.771142079026091,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.87604066186905,
+          -73.52470766699993,
+          -30.0
+        ]
+      },
+      "error": null,
+      "seconds": 0.0391305829398334,
+      "error_m": 51.51201031820157
+    },
+    {
+      "method": "spline-cv",
+      "height_m": -30.0,
+      "sound_speed_m_s": 343.0,
+      "initial_candidate": {
+        "position": [
+          -1986.7123192837494,
+          2899.2381161565436,
+          -30.969508294565003
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.60525429885242
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.5830280971195045
+      },
+      "result": {
+        "position": [
+          -2138.4144701516766,
+          2835.6922531355917,
+          -30.989857727108983
+        ],
+        "clock": 1788898650.2266426,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          113.98828549658938,
+          125.42197642753509
+        ],
+        "frequency_drift_hz_s": [
+          0.0,
+          0.0
+        ],
+        "frequency_curvature_hz_s2": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 343.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "aircraft_altitude_offset_m": 0.0,
+        "clock_rate_ppm": 0.0,
+        "method": "projected",
+        "options": {
+          "degree": 0,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "spline",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130
+        },
+        "score": 1.3226890966089746,
+        "event_scores": [
+          1.6782062340622281,
+          0.9671719591557212
+        ],
+        "event_residual_hz": [
+          0.47033837442285886,
+          0.5982429936822768
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "validation_loss": null,
+        "validation_samples": 0,
+        "excluded_event": null,
+        "success": true,
+        "optimizer_message": "`xtol` termination condition is satisfied.",
+        "nfev": 11,
+        "at_bounds": false,
+        "uncertainty_note": "Conditional experimental fit; nuisance parameters can imitate position error.",
+        "selection": "blocked validation, one-standard-error rule",
+        "selection_trials": [
+          {
+            "options": {
+              "degree": 0,
+              "ridge": "peak",
+              "loss": "soft_l1",
+              "smoothing": "spline",
+              "fit_sound_speed": false,
+              "fit_wind": false,
+              "fit_altitude": false,
+              "fit_clock_rate": false,
+              "robust_source": true,
+              "radius": 1200.0,
+              "max_nfev": 130
+            },
+            "mean": 1.3607983183232415,
+            "se": 0.17645394001921347,
+            "fold_losses": [
+              1.787049413048051,
+              1.2096765728748713,
+              1.0856689690468018
+            ]
+          },
+          {
+            "options": {
+              "degree": 1,
+              "ridge": "peak",
+              "loss": "soft_l1",
+              "smoothing": "spline",
+              "fit_sound_speed": false,
+              "fit_wind": false,
+              "fit_altitude": false,
+              "fit_clock_rate": false,
+              "robust_source": true,
+              "radius": 1200.0,
+              "max_nfev": 130
+            },
+            "mean": 1.358314785140833,
+            "se": 0.11379631352385235,
+            "fold_losses": [
+              1.6223191559956507,
+              1.3037688680165702,
+              1.148856331410278
+            ]
+          },
+          {
+            "options": {
+              "degree": 2,
+              "ridge": "peak",
+              "loss": "soft_l1",
+              "smoothing": "spline",
+              "fit_sound_speed": false,
+              "fit_wind": false,
+              "fit_altitude": false,
+              "fit_clock_rate": false,
+              "robust_source": true,
+              "radius": 1200.0,
+              "max_nfev": 130
+            },
+            "mean": 1.3196108680859786,
+            "se": 0.15368903145813007,
+            "fold_losses": [
+              1.6936613132976444,
+              1.16941133060802,
+              1.0957599603522712
+            ]
+          }
+        ],
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.7252252252252253,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.7477477477477478,
+              "center_score": 8.339729738567122,
+              "null_median_score": -0.22204176314871912,
+              "null_max_score": 0.007929568874717654,
+              "support_over_null": 8.56177150171584,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.7027027027027027,
+              "center_score": 5.373788414822859,
+              "null_median_score": -0.19393312466585033,
+              "null_max_score": 0.08414936720469918,
+              "support_over_null": 5.567721539488709,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.875532318702426,
+          -73.5253688679919,
+          -30.0
+        ]
+      },
+      "error": null,
+      "seconds": 0.3054562920005992,
+      "error_m": 109.51563093772994
+    },
+    {
+      "method": "brightness",
+      "height_m": -30.0,
+      "sound_speed_m_s": 340.0,
+      "initial_candidate": {
+        "position": [
+          -1986.7123192837494,
+          2899.2381161565436,
+          -30.969508294565003
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.40525429885241
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.7677811269853907
+      },
+      "result": {
+        "position": [
+          -2064.074630542786,
+          2842.372556762046,
+          -30.96838258863295
+        ],
+        "clock": 1788898649.7493958,
+        "f0": [
+          112.90891550985285,
+          125.0435352165022
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.835075745515779,
+        "success": true,
+        "method": "brightness-continuous",
+        "sound_speed_m_s": 340.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.8153153153153153,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.9279279279279279,
+              "center_score": 9.810489856352246,
+              "null_median_score": -0.2419907171855811,
+              "null_max_score": 0.22695797349071478,
+              "support_over_null": 10.052480573537828,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.7027027027027027,
+              "center_score": 5.488145842725719,
+              "null_median_score": -0.17119060674527553,
+              "null_max_score": 0.23601460915997224,
+              "support_over_null": 5.659336449470994,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.87559266449322,
+          -73.52448696685809,
+          -30.0
+        ]
+      },
+      "error": null,
+      "seconds": 0.21437274990603328,
+      "error_m": 104.59177416968181
+    },
+    {
+      "method": "contrast",
+      "height_m": -30.0,
+      "sound_speed_m_s": 340.0,
+      "initial_candidate": {
+        "position": [
+          -1986.7123192837494,
+          2899.2381161565436,
+          -30.969508294565003
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.40525429885241
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.7677811269853907
+      },
+      "result": {
+        "position": [
+          -2047.248303285077,
+          2805.31000217526,
+          -30.946518553114174
+        ],
+        "clock": 1788898650.0370917,
+        "f0": [
+          113.01731024950858,
+          124.95487374635867
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.4997931129893964,
+        "success": true,
+        "method": "contrast-continuous",
+        "sound_speed_m_s": 340.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.8423423423423424,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.963963963963964,
+              "center_score": 8.691070136681681,
+              "null_median_score": -0.17943854064934822,
+              "null_max_score": 0.1700553897531835,
+              "support_over_null": 8.87050867733103,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.7207207207207207,
+              "center_score": 5.055251116656185,
+              "null_median_score": -0.15826681779328022,
+              "null_max_score": 0.09481243978527927,
+              "support_over_null": 5.213517934449466,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.875258963040835,
+          -73.52428722724555,
+          -30.0
+        ]
+      },
+      "error": null,
+      "seconds": 0.2973639160627499,
+      "error_m": 145.26789924200824
+    },
+    {
+      "method": "legacy-ridge",
+      "height_m": -30.0,
+      "sound_speed_m_s": 340.0,
+      "initial_candidate": {
+        "position": [
+          -1986.7123192837494,
+          2899.2381161565436,
+          -30.969508294565003
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.40525429885241
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.7677811269853907
+      },
+      "result": {
+        "position": [
+          -2058.0642132132502,
+          2846.437833318992,
+          -30.96826046852175
+        ],
+        "clock": 1788898649.9586866,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          112.97231345312191,
+          125.30443045687893
+        ],
+        "frequency_drift_hz_s": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 340.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "score": 1.470730720425685,
+        "event_scores": [
+          2.002812037758144,
+          0.938649403093226
+        ],
+        "event_residual_hz": [
+          0.1800400719491222,
+          0.33172651359279826
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "ridge_fraction": [
+          1.0,
+          0.9819819819819819
+        ],
+        "geometry_condition": 1.7105549052873246,
+        "geometry_eigenvalues": [
+          0.006367456980381994,
+          0.010891884771998435
+        ],
+        "at_bounds": false,
+        "success": true,
+        "optimizer_message": "Both `ftol` and `xtol` termination conditions are satisfied.",
+        "method": "robust-ridge",
+        "uncertainty_note": "Local conditioning only; not a calibrated confidence interval.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.8108108108108107,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.954954954954955,
+              "center_score": 9.975239285327651,
+              "null_median_score": -0.21016415612802947,
+              "null_max_score": 0.3545348555294018,
+              "support_over_null": 10.185403441455682,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6666666666666666,
+              "center_score": 4.2822757408466,
+              "null_median_score": -0.18413110668177218,
+              "null_max_score": 0.054253380775709265,
+              "support_over_null": 4.466406847528373,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.87562928690291,
+          -73.52441567625418,
+          -30.0
+        ]
+      },
+      "error": null,
+      "seconds": 0.047571790986694396,
+      "error_m": 103.31178937473715
+    },
+    {
+      "method": "legacy-drift",
+      "height_m": -30.0,
+      "sound_speed_m_s": 340.0,
+      "initial_candidate": {
+        "position": [
+          -1986.7123192837494,
+          2899.2381161565436,
+          -30.969508294565003
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.40525429885241
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.7677811269853907
+      },
+      "result": {
+        "position": [
+          -2012.927955847538,
+          2827.032663891706,
+          -30.945224922741772
+        ],
+        "clock": 1788898649.9694302,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          112.67804162430232,
+          125.2193751064933
+        ],
+        "frequency_drift_hz_s": [
+          -0.003345778642735707,
+          -0.008422448981289141
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 340.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "score": 1.5115847419651853,
+        "event_scores": [
+          2.0671005150650084,
+          0.9560689688653623
+        ],
+        "event_residual_hz": [
+          0.12218545939127523,
+          0.3179184092228695
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "ridge_fraction": [
+          1.0,
+          0.9819819819819819
+        ],
+        "geometry_condition": 7.1626513254583335,
+        "geometry_eigenvalues": [
+          0.001563374315633829,
+          0.01119790511406216
+        ],
+        "at_bounds": false,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "method": "robust-ridge",
+        "uncertainty_note": "Local conditioning only; not a calibrated confidence interval.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.8108108108108109,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.963963963963964,
+              "center_score": 9.953836208906369,
+              "null_median_score": -0.22910857396431217,
+              "null_max_score": 0.032287095730293425,
+              "support_over_null": 10.182944782870681,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6576576576576577,
+              "center_score": 5.402104281431953,
+              "null_median_score": -0.18603387854352815,
+              "null_max_score": 0.052242295619952535,
+              "support_over_null": 5.588138159975481,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.87545465784473,
+          -73.5238801431792,
+          -30.0
+        ]
+      },
+      "error": null,
+      "seconds": 0.04665879195090383,
+      "error_m": 144.1052403957688
+    },
+    {
+      "method": "projected-constant",
+      "height_m": -30.0,
+      "sound_speed_m_s": 340.0,
+      "initial_candidate": {
+        "position": [
+          -1986.7123192837494,
+          2899.2381161565436,
+          -30.969508294565003
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.40525429885241
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.7677811269853907
+      },
+      "result": {
+        "position": [
+          -2060.2371131595614,
+          2849.5225401294624,
+          -30.97034169989979
+        ],
+        "clock": 1788898649.9790745,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          112.98533152217816,
+          125.27657318832695
+        ],
+        "frequency_drift_hz_s": [
+          0.0,
+          0.0
+        ],
+        "frequency_curvature_hz_s2": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 340.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "aircraft_altitude_offset_m": 0.0,
+        "clock_rate_ppm": 0.0,
+        "method": "projected",
+        "options": {
+          "degree": 0,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "none",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130
+        },
+        "score": 1.4724619149276665,
+        "event_scores": [
+          2.0019182636437427,
+          0.9430055662115904
+        ],
+        "event_residual_hz": [
+          0.2650843310905344,
+          0.48561690445237105
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "validation_loss": null,
+        "validation_samples": 0,
+        "excluded_event": null,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "nfev": 6,
+        "at_bounds": false,
+        "uncertainty_note": "Conditional experimental fit; nuisance parameters can imitate position error.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.8063063063063063,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.954954954954955,
+              "center_score": 9.719730245136553,
+              "null_median_score": -0.20553908846985808,
+              "null_max_score": 0.3636107312816743,
+              "support_over_null": 9.925269333606412,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6576576576576577,
+              "center_score": 4.703670748999791,
+              "null_median_score": -0.19567404836917818,
+              "null_max_score": 0.052221738842949575,
+              "support_over_null": 4.899344797368969,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.87565705884152,
+          -73.5244414644904,
+          -30.000000000931323
+        ]
+      },
+      "error": null,
+      "seconds": 0.04009654198307544,
+      "error_m": 99.58977420715884
+    },
+    {
+      "method": "projected-linear",
+      "height_m": -30.0,
+      "sound_speed_m_s": 340.0,
+      "initial_candidate": {
+        "position": [
+          -1986.7123192837494,
+          2899.2381161565436,
+          -30.969508294565003
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.40525429885241
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.7677811269853907
+      },
+      "result": {
+        "position": [
+          -2041.0997688722196,
+          2848.8876898250123,
+          -30.963913263852646
+        ],
+        "clock": 1788898649.870734,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          112.666044723511,
+          125.17311477464573
+        ],
+        "frequency_drift_hz_s": [
+          -0.003627086309561193,
+          -0.0038793236151201836
+        ],
+        "frequency_curvature_hz_s2": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 340.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "aircraft_altitude_offset_m": 0.0,
+        "clock_rate_ppm": 0.0,
+        "method": "projected",
+        "options": {
+          "degree": 1,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "none",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130
+        },
+        "score": 1.5059147122602954,
+        "event_scores": [
+          2.0625973118652867,
+          0.9492321126553039
+        ],
+        "event_residual_hz": [
+          0.19686476388457663,
+          0.4820821459146032
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "validation_loss": null,
+        "validation_samples": 0,
+        "excluded_event": null,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "nfev": 5,
+        "at_bounds": false,
+        "uncertainty_note": "Conditional experimental fit; nuisance parameters can imitate position error.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.8108108108108109,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.963963963963964,
+              "center_score": 9.648628033861959,
+              "null_median_score": -0.21385085304224116,
+              "null_max_score": 0.10706907248500792,
+              "support_over_null": 9.8624788869042,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6576576576576577,
+              "center_score": 5.279826606534025,
+              "null_median_score": -0.20260194389325983,
+              "null_max_score": 0.20867432897688784,
+              "support_over_null": 5.482428550427285,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.87565138995481,
+          -73.5242144279996,
+          -30.0
+        ]
+      },
+      "error": null,
+      "seconds": 0.03882575000170618,
+      "error_m": 109.7367748759498
+    },
+    {
+      "method": "spline-linear",
+      "height_m": -30.0,
+      "sound_speed_m_s": 340.0,
+      "initial_candidate": {
+        "position": [
+          -1986.7123192837494,
+          2899.2381161565436,
+          -30.969508294565003
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.40525429885241
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.7677811269853907
+      },
+      "result": {
+        "position": [
+          -2071.6362503670853,
+          2859.388535308067,
+          -30.97845479284092
+        ],
+        "clock": 1788898650.0886626,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          112.88228959718921,
+          125.44637669299487
+        ],
+        "frequency_drift_hz_s": [
+          -0.004896219976230942,
+          -0.0027511403827252716
+        ],
+        "frequency_curvature_hz_s2": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 340.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "aircraft_altitude_offset_m": 0.0,
+        "clock_rate_ppm": 0.0,
+        "method": "projected",
+        "options": {
+          "degree": 1,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "spline",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130
+        },
+        "score": 1.492585603782022,
+        "event_scores": [
+          2.0734920051232395,
+          0.9116792024408045
+        ],
+        "event_residual_hz": [
+          0.18035532920150388,
+          0.6317861904955464
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "validation_loss": null,
+        "validation_samples": 0,
+        "excluded_event": null,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "nfev": 6,
+        "at_bounds": false,
+        "uncertainty_note": "Conditional experimental fit; nuisance parameters can imitate position error.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.7882882882882882,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.963963963963964,
+              "center_score": 9.439623818026233,
+              "null_median_score": -0.236033035522251,
+              "null_max_score": -0.008634584349388713,
+              "support_over_null": 9.675656853548483,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6126126126126126,
+              "center_score": 4.904722704559789,
+              "null_median_score": -0.1640922056467739,
+              "null_max_score": 0.11760148196808481,
+              "support_over_null": 5.068814910206562,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.875745872161076,
+          -73.5245767301309,
+          -30.000000000931323
+        ]
+      },
+      "error": null,
+      "seconds": 0.04136400006245822,
+      "error_m": 85.98523671385153
+    },
+    {
+      "method": "kalman-linear",
+      "height_m": -30.0,
+      "sound_speed_m_s": 340.0,
+      "initial_candidate": {
+        "position": [
+          -1986.7123192837494,
+          2899.2381161565436,
+          -30.969508294565003
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.40525429885241
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.7677811269853907
+      },
+      "result": {
+        "position": [
+          -2075.33583560181,
+          2873.676455759183,
+          -30.986092754310448
+        ],
+        "clock": 1788898649.8543704,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          112.69726792920395,
+          125.32819891104178
+        ],
+        "frequency_drift_hz_s": [
+          -0.004428646911930012,
+          0.0008515829236674474
+        ],
+        "frequency_curvature_hz_s2": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 340.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "aircraft_altitude_offset_m": 0.0,
+        "clock_rate_ppm": 0.0,
+        "method": "projected",
+        "options": {
+          "degree": 1,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "kalman",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130
+        },
+        "score": 1.5713879341066366,
+        "event_scores": [
+          2.0715404043100105,
+          1.0712354639032629
+        ],
+        "event_residual_hz": [
+          0.18589467040756347,
+          0.41544793555844706
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "validation_loss": null,
+        "validation_samples": 0,
+        "excluded_event": null,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "nfev": 4,
+        "at_bounds": false,
+        "uncertainty_note": "Conditional experimental fit; nuisance parameters can imitate position error.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.8648648648648649,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.972972972972973,
+              "center_score": 9.49934823300336,
+              "null_median_score": -0.2279031969374274,
+              "null_max_score": 0.13189124689132184,
+              "support_over_null": 9.727251429940788,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.7567567567567568,
+              "center_score": 5.424265674931762,
+              "null_median_score": -0.1878224562324231,
+              "null_max_score": -0.044617663218339126,
+              "support_over_null": 5.612088131164185,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.8758745237214,
+          -73.52462066760025,
+          -29.999999999068677
+        ]
+      },
+      "error": null,
+      "seconds": 0.037635750020854175,
+      "error_m": 71.35874999615335
+    },
+    {
+      "method": "spline-cv",
+      "height_m": -30.0,
+      "sound_speed_m_s": 340.0,
+      "initial_candidate": {
+        "position": [
+          -1986.7123192837494,
+          2899.2381161565436,
+          -30.969508294565003
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.40525429885241
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.7677811269853907
+      },
+      "result": {
+        "position": [
+          -2081.1233519044863,
+          2833.2371860549256,
+          -30.969840304807576
+        ],
+        "clock": 1788898650.2059414,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          113.3013414081116,
+          125.38166520597889
+        ],
+        "frequency_drift_hz_s": [
+          0.0,
+          0.0
+        ],
+        "frequency_curvature_hz_s2": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 340.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "aircraft_altitude_offset_m": 0.0,
+        "clock_rate_ppm": 0.0,
+        "method": "projected",
+        "options": {
+          "degree": 0,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "spline",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130
+        },
+        "score": 1.4502586266916802,
+        "event_scores": [
+          1.9816149949213342,
+          0.9189022584620262
+        ],
+        "event_residual_hz": [
+          0.27367593617114494,
+          0.6051855642432429
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "validation_loss": null,
+        "validation_samples": 0,
+        "excluded_event": null,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "nfev": 8,
+        "at_bounds": false,
+        "uncertainty_note": "Conditional experimental fit; nuisance parameters can imitate position error.",
+        "selection": "blocked validation, one-standard-error rule",
+        "selection_trials": [
+          {
+            "options": {
+              "degree": 0,
+              "ridge": "peak",
+              "loss": "soft_l1",
+              "smoothing": "spline",
+              "fit_sound_speed": false,
+              "fit_wind": false,
+              "fit_altitude": false,
+              "fit_clock_rate": false,
+              "robust_source": true,
+              "radius": 1200.0,
+              "max_nfev": 130
+            },
+            "mean": 1.3825107165627373,
+            "se": 0.17434747278131882,
+            "fold_losses": [
+              1.7648409654507684,
+              1.3561314267115638,
+              1.0265597575258802
+            ]
+          },
+          {
+            "options": {
+              "degree": 1,
+              "ridge": "peak",
+              "loss": "soft_l1",
+              "smoothing": "spline",
+              "fit_sound_speed": false,
+              "fit_wind": false,
+              "fit_altitude": false,
+              "fit_clock_rate": false,
+              "robust_source": true,
+              "radius": 1200.0,
+              "max_nfev": 130
+            },
+            "mean": 1.4599169443371272,
+            "se": 0.1503558779510323,
+            "fold_losses": [
+              1.7705536719666504,
+              1.4759450795838627,
+              1.133252081460868
+            ]
+          },
+          {
+            "options": {
+              "degree": 2,
+              "ridge": "peak",
+              "loss": "soft_l1",
+              "smoothing": "spline",
+              "fit_sound_speed": false,
+              "fit_wind": false,
+              "fit_altitude": false,
+              "fit_clock_rate": false,
+              "robust_source": true,
+              "radius": 1200.0,
+              "max_nfev": 130
+            },
+            "mean": 1.4301160232107695,
+            "se": 0.1761102801477125,
+            "fold_losses": [
+              1.8374555526774783,
+              1.3494203178641675,
+              1.1034721990906635
+            ]
+          }
+        ],
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.7972972972972974,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.9459459459459459,
+              "center_score": 9.227679868299285,
+              "null_median_score": -0.20837765477033093,
+              "null_max_score": 0.2534328653901168,
+              "support_over_null": 9.436057523069616,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6486486486486487,
+              "center_score": 4.913244940641034,
+              "null_median_score": -0.1561530791067532,
+              "null_max_score": 0.24380389541553427,
+              "support_over_null": 5.069398019747787,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.87551035853994,
+          -73.52468919229128,
+          -30.0
+        ]
+      },
+      "error": null,
+      "seconds": 0.25305737496819347,
+      "error_m": 108.41073622384992
+    },
+    {
+      "method": "brightness",
+      "height_m": 0.0,
+      "sound_speed_m_s": 343.0,
+      "initial_candidate": {
+        "position": [
+          -1986.721650558407,
+          2899.2517859167156,
+          -0.9695128592081801
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.62214600603563,
+          125.80525429885242
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.6171419776859883
+      },
+      "result": {
+        "position": [
+          -2011.9546629314873,
+          2864.7448851288136,
+          -0.9617814379237188
+        ],
+        "clock": 1788898649.79861,
+        "f0": [
+          112.85546513892345,
+          125.68981470707497
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.644674829415431,
+        "success": true,
+        "method": "brightness-continuous",
+        "sound_speed_m_s": 343.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.7387387387387387,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.8378378378378378,
+              "center_score": 8.038360341375284,
+              "null_median_score": -0.23983973441962012,
+              "null_max_score": 0.05830757209378821,
+              "support_over_null": 8.278200075794905,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6396396396396397,
+              "center_score": 5.248238950490647,
+              "null_median_score": -0.18887718909404827,
+              "null_max_score": 0.09954431240387203,
+              "support_over_null": 5.437116139584695,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.87579413241815,
+          -73.52386860644826,
+          9.313225746154785e-10
+        ]
+      },
+      "error": null,
+      "seconds": 0.21819308295380324,
+      "error_m": 117.86112213796275
+    },
+    {
+      "method": "contrast",
+      "height_m": 0.0,
+      "sound_speed_m_s": 343.0,
+      "initial_candidate": {
+        "position": [
+          -1986.721650558407,
+          2899.2517859167156,
+          -0.9695128592081801
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.62214600603563,
+          125.80525429885242
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.6171419776859883
+      },
+      "result": {
+        "position": [
+          -2018.259654191294,
+          2875.4741268802927,
+          -0.9686103105113943
+        ],
+        "clock": 1788898649.8401184,
+        "f0": [
+          112.78974931692031,
+          125.70465793821748
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.3089280452570782,
+        "success": true,
+        "method": "contrast-continuous",
+        "sound_speed_m_s": 343.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.7162162162162162,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.8018018018018018,
+              "center_score": 8.446970830721014,
+              "null_median_score": -0.22213554024730198,
+              "null_max_score": 0.15181774156275488,
+              "support_over_null": 8.669106370968317,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6306306306306306,
+              "center_score": 4.948434836598953,
+              "null_median_score": -0.1461857152432331,
+              "null_max_score": 0.11657685104904039,
+              "support_over_null": 5.094620551842185,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.87589073193202,
+          -73.52394343983829,
+          0.0
+        ]
+      },
+      "error": null,
+      "seconds": 0.20458570797927678,
+      "error_m": 106.27448868954427
+    },
+    {
+      "method": "legacy-ridge",
+      "height_m": 0.0,
+      "sound_speed_m_s": 343.0,
+      "initial_candidate": {
+        "position": [
+          -1986.721650558407,
+          2899.2517859167156,
+          -0.9695128592081801
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.62214600603563,
+          125.80525429885242
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.6171419776859883
+      },
+      "result": {
+        "position": [
+          -2107.241459147443,
+          2863.3991144099527,
+          -0.9919010976600475
+        ],
+        "clock": 1788898649.941907,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          113.58324054165782,
+          125.46681128505513
+        ],
+        "frequency_drift_hz_s": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 343.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "score": 1.3079885838780703,
+        "event_scores": [
+          1.7002394935658174,
+          0.9157376741903233
+        ],
+        "event_residual_hz": [
+          0.3402762996732349,
+          0.29813600426643916
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "ridge_fraction": [
+          1.0,
+          0.990990990990991
+        ],
+        "geometry_condition": 1.6433367762043387,
+        "geometry_eigenvalues": [
+          0.006313176770429693,
+          0.010374675561526051
+        ],
+        "at_bounds": false,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "method": "robust-ridge",
+        "uncertainty_note": "Local conditioning only; not a calibrated confidence interval.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.7387387387387387,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.7837837837837838,
+              "center_score": 7.81736669269801,
+              "null_median_score": -0.25528590120942013,
+              "null_max_score": 0.26607977987287373,
+              "support_over_null": 8.07265259390743,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6936936936936937,
+              "center_score": 4.756648990007576,
+              "null_median_score": -0.201029437068414,
+              "null_max_score": 0.11624998625266865,
+              "support_over_null": 4.957678427075989,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.87578177464396,
+          -73.52499902646646,
+          9.313225746154785e-10
+        ]
+      },
+      "error": null,
+      "seconds": 0.036180750001221895,
+      "error_m": 76.09201955068765
+    },
+    {
+      "method": "legacy-drift",
+      "height_m": 0.0,
+      "sound_speed_m_s": 343.0,
+      "initial_candidate": {
+        "position": [
+          -1986.721650558407,
+          2899.2517859167156,
+          -0.9695128592081801
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.62214600603563,
+          125.80525429885242
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.6171419776859883
+      },
+      "result": {
+        "position": [
+          -2045.4162816265812,
+          2867.3270142034203,
+          -0.9735723551991669
+        ],
+        "clock": 1788898649.6502254,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          112.5900023591648,
+          125.30318669822834
+        ],
+        "frequency_drift_hz_s": [
+          -0.00996389910734594,
+          -0.009685746358556195
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 343.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "score": 1.5115323374987442,
+        "event_scores": [
+          2.059658623014307,
+          0.9634060519831813
+        ],
+        "event_residual_hz": [
+          0.1078310482874798,
+          0.28471009224736576
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "ridge_fraction": [
+          1.0,
+          0.990990990990991
+        ],
+        "geometry_condition": 7.022321383096173,
+        "geometry_eigenvalues": [
+          0.0016171750914572617,
+          0.011356323224950839
+        ],
+        "at_bounds": false,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "method": "robust-ridge",
+        "uncertainty_note": "Local conditioning only; not a calibrated confidence interval.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.8288288288288288,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.972972972972973,
+              "center_score": 9.819111473937072,
+              "null_median_score": -0.2518123286966981,
+              "null_max_score": 0.13136970521458421,
+              "support_over_null": 10.07092380263377,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6846846846846847,
+              "center_score": 5.171068009446669,
+              "null_median_score": -0.19161194882144034,
+              "null_max_score": 0.0,
+              "support_over_null": 5.362679958268109,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.87581730126846,
+          -73.52426558322448,
+          -9.313225746154785e-10
+        ]
+      },
+      "error": null,
+      "seconds": 0.05071370804216713,
+      "error_m": 92.34510336234447
+    },
+    {
+      "method": "projected-constant",
+      "height_m": 0.0,
+      "sound_speed_m_s": 343.0,
+      "initial_candidate": {
+        "position": [
+          -1986.721650558407,
+          2899.2517859167156,
+          -0.9695128592081801
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.62214600603563,
+          125.80525429885242
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.6171419776859883
+      },
+      "result": {
+        "position": [
+          -2105.772603528231,
+          2863.3998056622527,
+          -0.9914169849830614
+        ],
+        "clock": 1788898650.1097233,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          113.62615291311238,
+          125.55575668377536
+        ],
+        "frequency_drift_hz_s": [
+          0.0,
+          0.0
+        ],
+        "frequency_curvature_hz_s2": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 343.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "aircraft_altitude_offset_m": 0.0,
+        "clock_rate_ppm": 0.0,
+        "method": "projected",
+        "options": {
+          "degree": 0,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "none",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130
+        },
+        "score": 1.3101178963320685,
+        "event_scores": [
+          1.709890107081416,
+          0.9103456855827211
+        ],
+        "event_residual_hz": [
+          0.4217110187596802,
+          0.5179127180140455
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "validation_loss": null,
+        "validation_samples": 0,
+        "excluded_event": null,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "nfev": 5,
+        "at_bounds": false,
+        "uncertainty_note": "Conditional experimental fit; nuisance parameters can imitate position error.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.7162162162162162,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.7927927927927928,
+              "center_score": 8.253424676955005,
+              "null_median_score": -0.21843495202844662,
+              "null_max_score": 0.20596505262890336,
+              "support_over_null": 8.471859628983452,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6396396396396397,
+              "center_score": 4.520899208965112,
+              "null_median_score": -0.1784629702080754,
+              "null_max_score": 0.22303535715479678,
+              "support_over_null": 4.699362179173187,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.875781784641994,
+          -73.5249816008626,
+          9.313225746154785e-10
+        ]
+      },
+      "error": null,
+      "seconds": 0.03493449999950826,
+      "error_m": 76.02691367108665
+    },
+    {
+      "method": "projected-linear",
+      "height_m": 0.0,
+      "sound_speed_m_s": 343.0,
+      "initial_candidate": {
+        "position": [
+          -1986.721650558407,
+          2899.2517859167156,
+          -0.9695128592081801
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.62214600603563,
+          125.80525429885242
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.6171419776859883
+      },
+      "result": {
+        "position": [
+          -2047.4508025052687,
+          2870.410567489913,
+          -0.9756145206231395
+        ],
+        "clock": 1788898649.7819831,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          112.6653644114619,
+          125.33596765016391
+        ],
+        "frequency_drift_hz_s": [
+          -0.00968818375727461,
+          -0.009446918221659962
+        ],
+        "frequency_curvature_hz_s2": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 343.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "aircraft_altitude_offset_m": 0.0,
+        "clock_rate_ppm": 0.0,
+        "method": "projected",
+        "options": {
+          "degree": 1,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "none",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130
+        },
+        "score": 1.5059859532107434,
+        "event_scores": [
+          2.0658867363404494,
+          0.9460851700810372
+        ],
+        "event_residual_hz": [
+          0.20157101898226415,
+          0.4829114868589812
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "validation_loss": null,
+        "validation_samples": 0,
+        "excluded_event": null,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "nfev": 5,
+        "at_bounds": false,
+        "uncertainty_note": "Conditional experimental fit; nuisance parameters can imitate position error.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.8153153153153154,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.972972972972973,
+              "center_score": 9.502177487373036,
+              "null_median_score": -0.1830315573757723,
+              "null_max_score": 0.18859021050924826,
+              "support_over_null": 9.685209044748808,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6576576576576577,
+              "center_score": 4.968749087372504,
+              "null_median_score": -0.25473171847195086,
+              "null_max_score": 0.2883926390103947,
+              "support_over_null": 5.223480805844455,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.875845063067054,
+          -73.5242897296997,
+          0.0
+        ]
+      },
+      "error": null,
+      "seconds": 0.036564167006872594,
+      "error_m": 88.66727223629911
+    },
+    {
+      "method": "spline-linear",
+      "height_m": 0.0,
+      "sound_speed_m_s": 343.0,
+      "initial_candidate": {
+        "position": [
+          -1986.721650558407,
+          2899.2517859167156,
+          -0.9695128592081801
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.62214600603563,
+          125.80525429885242
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.6171419776859883
+      },
+      "result": {
+        "position": [
+          -2089.175101218742,
+          2882.377618027876,
+          -0.9945354389644763
+        ],
+        "clock": 1788898649.8736062,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          112.84071887906966,
+          125.52055425464623
+        ],
+        "frequency_drift_hz_s": [
+          -0.01111536008027455,
+          -0.0059085811713817955
+        ],
+        "frequency_curvature_hz_s2": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 343.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "aircraft_altitude_offset_m": 0.0,
+        "clock_rate_ppm": 0.0,
+        "method": "projected",
+        "options": {
+          "degree": 1,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "spline",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130
+        },
+        "score": 1.4950579151602197,
+        "event_scores": [
+          2.0762129289477738,
+          0.9139029013726657
+        ],
+        "event_residual_hz": [
+          0.18130178816375064,
+          0.5695157931244523
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "validation_loss": null,
+        "validation_samples": 0,
+        "excluded_event": null,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "nfev": 4,
+        "at_bounds": false,
+        "uncertainty_note": "Conditional experimental fit; nuisance parameters can imitate position error.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.7927927927927928,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.963963963963964,
+              "center_score": 9.66557007495494,
+              "null_median_score": -0.1616981883114873,
+              "null_max_score": -0.025100662451012726,
+              "support_over_null": 9.827268263266427,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6216216216216216,
+              "center_score": 5.028815004943956,
+              "null_median_score": -0.16270282705490652,
+              "null_max_score": 0.16076778659432525,
+              "support_over_null": 5.191517831998863,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.87595271908855,
+          -73.52478476196396,
+          0.0
+        ]
+      },
+      "error": null,
+      "seconds": 0.034182999981567264,
+      "error_m": 58.697727057765384
+    },
+    {
+      "method": "kalman-linear",
+      "height_m": 0.0,
+      "sound_speed_m_s": 343.0,
+      "initial_candidate": {
+        "position": [
+          -1986.721650558407,
+          2899.2517859167156,
+          -0.9695128592081801
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.62214600603563,
+          125.80525429885242
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.6171419776859883
+      },
+      "result": {
+        "position": [
+          -2080.2537617389357,
+          2886.2927343273013,
+          -0.993398431209016
+        ],
+        "clock": 1788898649.7074122,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          112.67643099257776,
+          125.39343984784703
+        ],
+        "frequency_drift_hz_s": [
+          -0.010299663071280692,
+          -0.004682616050104326
+        ],
+        "frequency_curvature_hz_s2": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 343.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "aircraft_altitude_offset_m": 0.0,
+        "clock_rate_ppm": 0.0,
+        "method": "projected",
+        "options": {
+          "degree": 1,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "kalman",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130
+        },
+        "score": 1.5705970258388757,
+        "event_scores": [
+          2.0762741151358046,
+          1.0649199365419468
+        ],
+        "event_residual_hz": [
+          0.19122805616743221,
+          0.4240247318211914
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "validation_loss": null,
+        "validation_samples": 0,
+        "excluded_event": null,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "nfev": 4,
+        "at_bounds": false,
+        "uncertainty_note": "Conditional experimental fit; nuisance parameters can imitate position error.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.8558558558558559,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.954954954954955,
+              "center_score": 9.7019127189851,
+              "null_median_score": -0.2022831405196515,
+              "null_max_score": 0.14183409934712457,
+              "support_over_null": 9.904195859504753,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.7567567567567568,
+              "center_score": 5.3673714040490665,
+              "null_median_score": -0.21294001092589804,
+              "null_max_score": -0.058426168613549594,
+              "support_over_null": 5.580311414974965,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.875987996729656,
+          -73.52467893745974,
+          -9.313225746154785e-10
+        ]
+      },
+      "error": null,
+      "seconds": 0.03654754196759313,
+      "error_m": 57.824872247147155
+    },
+    {
+      "method": "spline-cv",
+      "height_m": 0.0,
+      "sound_speed_m_s": 343.0,
+      "initial_candidate": {
+        "position": [
+          -1986.721650558407,
+          2899.2517859167156,
+          -0.9695128592081801
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.62214600603563,
+          125.80525429885242
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.6171419776859883
+      },
+      "result": {
+        "position": [
+          -2119.377345955305,
+          2831.8775765293567,
+          -0.9818090222527189
+        ],
+        "clock": 1788898650.1988375,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          113.87540985651903,
+          125.44132623855776
+        ],
+        "frequency_drift_hz_s": [
+          0.0,
+          0.0
+        ],
+        "frequency_curvature_hz_s2": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 343.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "aircraft_altitude_offset_m": 0.0,
+        "clock_rate_ppm": 0.0,
+        "method": "projected",
+        "options": {
+          "degree": 0,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "spline",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130
+        },
+        "score": 1.350511510141216,
+        "event_scores": [
+          1.7330114741407716,
+          0.9680115461416603
+        ],
+        "event_residual_hz": [
+          0.3919867883570447,
+          0.6236559533281252
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "validation_loss": null,
+        "validation_samples": 0,
+        "excluded_event": null,
+        "success": true,
+        "optimizer_message": "`xtol` termination condition is satisfied.",
+        "nfev": 10,
+        "at_bounds": false,
+        "uncertainty_note": "Conditional experimental fit; nuisance parameters can imitate position error.",
+        "selection": "blocked validation, one-standard-error rule",
+        "selection_trials": [
+          {
+            "options": {
+              "degree": 0,
+              "ridge": "peak",
+              "loss": "soft_l1",
+              "smoothing": "spline",
+              "fit_sound_speed": false,
+              "fit_wind": false,
+              "fit_altitude": false,
+              "fit_clock_rate": false,
+              "robust_source": true,
+              "radius": 1200.0,
+              "max_nfev": 130
+            },
+            "mean": 1.3331894081581783,
+            "se": 0.16533694005530422,
+            "fold_losses": [
+              1.7266450510079412,
+              1.2195751216905504,
+              1.0533480517760436
+            ]
+          },
+          {
+            "options": {
+              "degree": 1,
+              "ridge": "peak",
+              "loss": "soft_l1",
+              "smoothing": "spline",
+              "fit_sound_speed": false,
+              "fit_wind": false,
+              "fit_altitude": false,
+              "fit_clock_rate": false,
+              "robust_source": true,
+              "radius": 1200.0,
+              "max_nfev": 130
+            },
+            "mean": 1.3173048213969145,
+            "se": 0.11460752534306609,
+            "fold_losses": [
+              1.5757669950127084,
+              1.2829682049285813,
+              1.093179264249454
+            ]
+          },
+          {
+            "options": {
+              "degree": 2,
+              "ridge": "peak",
+              "loss": "soft_l1",
+              "smoothing": "spline",
+              "fit_sound_speed": false,
+              "fit_wind": false,
+              "fit_altitude": false,
+              "fit_clock_rate": false,
+              "robust_source": true,
+              "radius": 1200.0,
+              "max_nfev": 130
+            },
+            "mean": 1.285309689707826,
+            "se": 0.12577916987261387,
+            "fold_losses": [
+              1.5821612828535006,
+              1.2083062062972871,
+              1.0654615799726899
+            ]
+          }
+        ],
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.7387387387387387,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.7747747747747747,
+              "center_score": 8.185626648776335,
+              "null_median_score": -0.2534900472151609,
+              "null_max_score": 0.06526327340907781,
+              "support_over_null": 8.439116695991496,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.7027027027027027,
+              "center_score": 5.647755088498125,
+              "null_median_score": -0.1938635217894335,
+              "null_max_score": -0.0366725185057024,
+              "support_over_null": 5.841618610287559,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.875497897238056,
+          -73.52514289182723,
+          9.313225746154785e-10
+        ]
+      },
+      "error": null,
+      "seconds": 0.27393629192374647,
+      "error_m": 108.71925070664236
+    },
+    {
+      "method": "brightness",
+      "height_m": 0.0,
+      "sound_speed_m_s": 340.0,
+      "initial_candidate": {
+        "position": [
+          -1986.721650558407,
+          2899.2517859167156,
+          -0.9695128592081801
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.40525429885241
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.7816221546454014
+      },
+      "result": {
+        "position": [
+          -2024.4916238299313,
+          2841.9662407257747,
+          -0.9555278170005295
+        ],
+        "clock": 1788898649.9277253,
+        "f0": [
+          112.82708262561826,
+          125.19202277195801
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.8463664813378151,
+        "success": true,
+        "method": "brightness-continuous",
+        "sound_speed_m_s": 340.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.8063063063063063,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.954954954954955,
+              "center_score": 9.493982205105992,
+              "null_median_score": -0.2271369324948766,
+              "null_max_score": 0.1556161280431409,
+              "support_over_null": 9.721119137600867,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6576576576576577,
+              "center_score": 5.51150546453097,
+              "null_median_score": -0.12626437268913168,
+              "null_max_score": 0.0013656752090564085,
+              "support_over_null": 5.637769837220102,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.87558898371361,
+          -73.52401726319485,
+          9.313225746154785e-10
+        ]
+      },
+      "error": null,
+      "seconds": 0.14103079109918326,
+      "error_m": 125.22138872838251
+    },
+    {
+      "method": "contrast",
+      "height_m": 0.0,
+      "sound_speed_m_s": 340.0,
+      "initial_candidate": {
+        "position": [
+          -1986.721650558407,
+          2899.2517859167156,
+          -0.9695128592081801
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.40525429885241
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.7816221546454014
+      },
+      "result": {
+        "position": [
+          -2026.219726792716,
+          2823.2499287081923,
+          -0.947743565331848
+        ],
+        "clock": 1788898649.9036543,
+        "f0": [
+          112.85188032974058,
+          125.04253589864766
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.5177171203320192,
+        "success": true,
+        "method": "contrast-continuous",
+        "sound_speed_m_s": 340.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.8333333333333334,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.963963963963964,
+              "center_score": 9.874217287770586,
+              "null_median_score": -0.2274927623269016,
+              "null_max_score": 0.1996702500113651,
+              "support_over_null": 10.101710050097488,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.7027027027027027,
+              "center_score": 5.250696331838369,
+              "null_median_score": -0.17989613586603426,
+              "null_max_score": 0.23940710915810137,
+              "support_over_null": 5.430592467704403,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.8754204422099,
+          -73.5240377033326,
+          0.0
+        ]
+      },
+      "error": null,
+      "seconds": 0.2411862500011921,
+      "error_m": 139.3136187329422
+    },
+    {
+      "method": "legacy-ridge",
+      "height_m": 0.0,
+      "sound_speed_m_s": 340.0,
+      "initial_candidate": {
+        "position": [
+          -1986.721650558407,
+          2899.2517859167156,
+          -0.9695128592081801
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.40525429885241
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.7816221546454014
+      },
+      "result": {
+        "position": [
+          -2046.92792025818,
+          2839.901586544246,
+          -0.9617566831479962
+        ],
+        "clock": 1788898649.8876271,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          112.88303712046967,
+          125.20895773160363
+        ],
+        "frequency_drift_hz_s": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 340.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "score": 1.5006581066207958,
+        "event_scores": [
+          2.0483396871717616,
+          0.95297652606983
+        ],
+        "event_residual_hz": [
+          0.13927402634658392,
+          0.30894544447587435
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "ridge_fraction": [
+          1.0,
+          0.972972972972973
+        ],
+        "geometry_condition": 1.6239767166763426,
+        "geometry_eigenvalues": [
+          0.007365261356197514,
+          0.011961012954700785
+        ],
+        "at_bounds": false,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "method": "robust-ridge",
+        "uncertainty_note": "Local conditioning only; not a calibrated confidence interval.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.8378378378378378,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.963963963963964,
+              "center_score": 9.815825036724716,
+              "null_median_score": -0.20081637459946206,
+              "null_max_score": 0.1110535416496579,
+              "support_over_null": 10.016641411324178,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.7117117117117117,
+              "center_score": 4.881642412345751,
+              "null_median_score": -0.1769879377380491,
+              "null_max_score": 0.01913458844852485,
+              "support_over_null": 5.0586303500838,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.87557033615043,
+          -73.52428342615026,
+          0.0
+        ]
+      },
+      "error": null,
+      "seconds": 0.04101570800412446,
+      "error_m": 114.27920348403524
+    },
+    {
+      "method": "legacy-drift",
+      "height_m": 0.0,
+      "sound_speed_m_s": 340.0,
+      "initial_candidate": {
+        "position": [
+          -1986.721650558407,
+          2899.2517859167156,
+          -0.9695128592081801
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.40525429885241
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.7816221546454014
+      },
+      "result": {
+        "position": [
+          -2023.3934370694196,
+          2824.6449366756488,
+          -0.9474667553126892
+        ],
+        "clock": 1788898649.8986857,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          112.7802480879946,
+          125.13243181708351
+        ],
+        "frequency_drift_hz_s": [
+          -0.0010828056810154247,
+          -0.004439676067179231
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 340.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "score": 1.5163458850566784,
+        "event_scores": [
+          2.074572954491968,
+          0.9581188156213889
+        ],
+        "event_residual_hz": [
+          0.10934028167079646,
+          0.287059858823703
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "ridge_fraction": [
+          1.0,
+          0.972972972972973
+        ],
+        "geometry_condition": 7.000303945214688,
+        "geometry_eigenvalues": [
+          0.0015491385153514866,
+          0.010844440460699035
+        ],
+        "at_bounds": false,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "method": "robust-ridge",
+        "uncertainty_note": "Local conditioning only; not a calibrated confidence interval.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.8153153153153153,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.954954954954955,
+              "center_score": 9.633539218646668,
+              "null_median_score": -0.206251544779991,
+              "null_max_score": 0.11108922379552516,
+              "support_over_null": 9.83979076342666,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6756756756756757,
+              "center_score": 5.132968811093012,
+              "null_median_score": -0.1639368499661335,
+              "null_max_score": 0.1293136304054311,
+              "support_over_null": 5.296905661059146,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.875433011000666,
+          -73.5240041786767,
+          0.0
+        ]
+      },
+      "error": null,
+      "seconds": 0.04935650003608316,
+      "error_m": 139.7468550295912
+    },
+    {
+      "method": "projected-constant",
+      "height_m": 0.0,
+      "sound_speed_m_s": 340.0,
+      "initial_candidate": {
+        "position": [
+          -1986.721650558407,
+          2899.2517859167156,
+          -0.9695128592081801
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.40525429885241
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.7816221546454014
+      },
+      "result": {
+        "position": [
+          -2060.024159050353,
+          2859.6423845413274,
+          -0.9748085952007841
+        ],
+        "clock": 1788898649.9479792,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          112.92283217569894,
+          125.30844450738628
+        ],
+        "frequency_drift_hz_s": [
+          0.0,
+          0.0
+        ],
+        "frequency_curvature_hz_s2": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 340.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "aircraft_altitude_offset_m": 0.0,
+        "clock_rate_ppm": 0.0,
+        "method": "projected",
+        "options": {
+          "degree": 0,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "none",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130
+        },
+        "score": 1.4894384124481288,
+        "event_scores": [
+          2.03379726989206,
+          0.9450795550041976
+        ],
+        "event_residual_hz": [
+          0.21043781727254895,
+          0.5320676378237295
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "validation_loss": null,
+        "validation_samples": 0,
+        "excluded_event": null,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "nfev": 5,
+        "at_bounds": false,
+        "uncertainty_note": "Conditional experimental fit; nuisance parameters can imitate position error.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.8153153153153154,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.972972972972973,
+              "center_score": 9.545136080076228,
+              "null_median_score": -0.2025743081758366,
+              "null_max_score": 0.15148438168917588,
+              "support_over_null": 9.747710388252065,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6576576576576577,
+              "center_score": 5.323041451128079,
+              "null_median_score": -0.2280468412381827,
+              "null_max_score": 0.15612874938100837,
+              "support_over_null": 5.551088292366262,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.875748065908006,
+          -73.52443885680768,
+          9.313225746154785e-10
+        ]
+      },
+      "error": null,
+      "seconds": 0.03516341699287295,
+      "error_m": 90.66495498995012
+    },
+    {
+      "method": "projected-linear",
+      "height_m": 0.0,
+      "sound_speed_m_s": 340.0,
+      "initial_candidate": {
+        "position": [
+          -1986.721650558407,
+          2899.2517859167156,
+          -0.9695128592081801
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.40525429885241
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.7816221546454014
+      },
+      "result": {
+        "position": [
+          -2031.7794026435952,
+          2841.4184007923527,
+          -0.9575972060958975
+        ],
+        "clock": 1788898649.9098055,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          112.7433495954609,
+          125.16613957861766
+        ],
+        "frequency_drift_hz_s": [
+          -0.001805198308168117,
+          -0.005271376668905578
+        ],
+        "frequency_curvature_hz_s2": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 340.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "aircraft_altitude_offset_m": 0.0,
+        "clock_rate_ppm": 0.0,
+        "method": "projected",
+        "options": {
+          "degree": 1,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "none",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130
+        },
+        "score": 1.5060161492139807,
+        "event_scores": [
+          2.0702615474598347,
+          0.9417707509681267
+        ],
+        "event_residual_hz": [
+          0.198048690817771,
+          0.5273501302059245
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "validation_loss": null,
+        "validation_samples": 0,
+        "excluded_event": null,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "nfev": 5,
+        "at_bounds": false,
+        "uncertainty_note": "Conditional experimental fit; nuisance parameters can imitate position error.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.7882882882882882,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.954954954954955,
+              "center_score": 9.921704486781188,
+              "null_median_score": -0.23678494257078395,
+              "null_max_score": 0.04601962845046358,
+              "support_over_null": 10.158489429351972,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6216216216216216,
+              "center_score": 5.08314354283026,
+              "null_median_score": -0.22753220948317315,
+              "null_max_score": 0.2273683761710817,
+              "support_over_null": 5.310675752313433,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.87558403248204,
+          -73.52410371891268,
+          9.313225746154785e-10
+        ]
+      },
+      "error": null,
+      "seconds": 0.03526570799294859,
+      "error_m": 121.21774418813825
+    },
+    {
+      "method": "spline-linear",
+      "height_m": 0.0,
+      "sound_speed_m_s": 340.0,
+      "initial_candidate": {
+        "position": [
+          -1986.721650558407,
+          2899.2517859167156,
+          -0.9695128592081801
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.40525429885241
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.7816221546454014
+      },
+      "result": {
+        "position": [
+          -2089.843794003273,
+          2876.1670887445125,
+          -0.9919438107287988
+        ],
+        "clock": 1788898650.005313,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          112.91842451043874,
+          125.48574313856288
+        ],
+        "frequency_drift_hz_s": [
+          -0.003831652166146347,
+          0.0003338946622158643
+        ],
+        "frequency_curvature_hz_s2": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 340.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "aircraft_altitude_offset_m": 0.0,
+        "clock_rate_ppm": 0.0,
+        "method": "projected",
+        "options": {
+          "degree": 1,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "spline",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130
+        },
+        "score": 1.5063995390126448,
+        "event_scores": [
+          2.0750371926208775,
+          0.937761885404412
+        ],
+        "event_residual_hz": [
+          0.20030645872031982,
+          0.5788764180359323
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "validation_loss": null,
+        "validation_samples": 0,
+        "excluded_event": null,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "nfev": 5,
+        "at_bounds": false,
+        "uncertainty_note": "Conditional experimental fit; nuisance parameters can imitate position error.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.8063063063063063,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.954954954954955,
+              "center_score": 9.428833746794883,
+              "null_median_score": -0.2122007631930674,
+              "null_max_score": 0.0,
+              "support_over_null": 9.64103450998795,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6576576576576577,
+              "center_score": 5.224000383858345,
+              "null_median_score": -0.1480786938175031,
+              "null_max_score": 0.10281464592973301,
+              "support_over_null": 5.372079077675848,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.875896792619116,
+          -73.52479267408324,
+          0.0
+        ]
+      },
+      "error": null,
+      "seconds": 0.03736216598190367,
+      "error_m": 64.60479684604665
+    },
+    {
+      "method": "kalman-linear",
+      "height_m": 0.0,
+      "sound_speed_m_s": 340.0,
+      "initial_candidate": {
+        "position": [
+          -1986.721650558407,
+          2899.2517859167156,
+          -0.9695128592081801
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.40525429885241
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.7816221546454014
+      },
+      "result": {
+        "position": [
+          -2065.0175143253864,
+          2865.8875401337564,
+          -0.9792308455009788
+        ],
+        "clock": 1788898649.895206,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          112.78106951262464,
+          125.32922190933233
+        ],
+        "frequency_drift_hz_s": [
+          -0.002662723823155846,
+          0.000880001685465072
+        ],
+        "frequency_curvature_hz_s2": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 340.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "aircraft_altitude_offset_m": 0.0,
+        "clock_rate_ppm": 0.0,
+        "method": "projected",
+        "options": {
+          "degree": 1,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "kalman",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130
+        },
+        "score": 1.5735149613319714,
+        "event_scores": [
+          2.0743369941145633,
+          1.0726929285493796
+        ],
+        "event_residual_hz": [
+          0.1950201162374725,
+          0.442852845682431
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "validation_loss": null,
+        "validation_samples": 0,
+        "excluded_event": null,
+        "success": true,
+        "optimizer_message": "`ftol` termination condition is satisfied.",
+        "nfev": 4,
+        "at_bounds": false,
+        "uncertainty_note": "Conditional experimental fit; nuisance parameters can imitate position error.",
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.8513513513513513,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.954954954954955,
+              "center_score": 9.546935018775097,
+              "null_median_score": -0.21295172697699652,
+              "null_max_score": 0.07553890190710486,
+              "support_over_null": 9.759886745752093,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.7477477477477478,
+              "center_score": 5.251842792706587,
+              "null_median_score": -0.17496064617484477,
+              "null_max_score": 0.0,
+              "support_over_null": 5.426803438881432,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.87580428991913,
+          -73.52449811562664,
+          0.0
+        ]
+      },
+      "error": null,
+      "seconds": 0.0381053329911083,
+      "error_m": 82.80817742989986
+    },
+    {
+      "method": "spline-cv",
+      "height_m": 0.0,
+      "sound_speed_m_s": 340.0,
+      "initial_candidate": {
+        "position": [
+          -1986.721650558407,
+          2899.2517859167156,
+          -0.9695128592081801
+        ],
+        "clock": 1788898649.7235358,
+        "f0": [
+          112.42214600603563,
+          125.40525429885241
+        ],
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "score": 1.7816221546454014
+      },
+      "result": {
+        "position": [
+          -2083.652206186952,
+          2848.0354706698695,
+          -0.9772668370189876
+        ],
+        "clock": 1788898650.1248925,
+        "flights": [
+          "a1dfeb:1788899524.900",
+          "ace391:1788901235.390"
+        ],
+        "f0": [
+          113.22307079381105,
+          125.4280418101405
+        ],
+        "frequency_drift_hz_s": [
+          0.0,
+          0.0
+        ],
+        "frequency_curvature_hz_s2": [
+          0.0,
+          0.0
+        ],
+        "source_reference_utc": [
+          1788900805.6821914,
+          1788901723.6601348
+        ],
+        "sound_speed_m_s": 340.0,
+        "wind_enu_m_s": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "aircraft_altitude_offset_m": 0.0,
+        "clock_rate_ppm": 0.0,
+        "method": "projected",
+        "options": {
+          "degree": 0,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "spline",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130
+        },
+        "score": 1.4705636516841543,
+        "event_scores": [
+          2.0117513985900892,
+          0.9293759047782192
+        ],
+        "event_residual_hz": [
+          0.22903286556399394,
+          0.6172519085265833
+        ],
+        "coverage": [
+          1.0,
+          1.0
+        ],
+        "validation_loss": null,
+        "validation_samples": 0,
+        "excluded_event": null,
+        "success": true,
+        "optimizer_message": "`xtol` termination condition is satisfied.",
+        "nfev": 9,
+        "at_bounds": false,
+        "uncertainty_note": "Conditional experimental fit; nuisance parameters can imitate position error.",
+        "selection": "blocked validation, one-standard-error rule",
+        "selection_trials": [
+          {
+            "options": {
+              "degree": 0,
+              "ridge": "peak",
+              "loss": "soft_l1",
+              "smoothing": "spline",
+              "fit_sound_speed": false,
+              "fit_wind": false,
+              "fit_altitude": false,
+              "fit_clock_rate": false,
+              "robust_source": true,
+              "radius": 1200.0,
+              "max_nfev": 130
+            },
+            "mean": 1.3605572727889073,
+            "se": 0.15490734480065638,
+            "fold_losses": [
+              1.6833784772328595,
+              1.3718404373924007,
+              1.026452903741462
+            ]
+          },
+          {
+            "options": {
+              "degree": 1,
+              "ridge": "peak",
+              "loss": "soft_l1",
+              "smoothing": "spline",
+              "fit_sound_speed": false,
+              "fit_wind": false,
+              "fit_altitude": false,
+              "fit_clock_rate": false,
+              "robust_source": true,
+              "radius": 1200.0,
+              "max_nfev": 130
+            },
+            "mean": 1.4630499269165227,
+            "se": 0.14204063093530664,
+            "fold_losses": [
+              1.7427713160101064,
+              1.5023731940597125,
+              1.1440052706797488
+            ]
+          },
+          {
+            "options": {
+              "degree": 2,
+              "ridge": "peak",
+              "loss": "soft_l1",
+              "smoothing": "spline",
+              "fit_sound_speed": false,
+              "fit_wind": false,
+              "fit_altitude": false,
+              "fit_clock_rate": false,
+              "robust_source": true,
+              "radius": 1200.0,
+              "max_nfev": 130
+            },
+            "mean": 1.445113957126886,
+            "se": 0.16161523939353306,
+            "fold_losses": [
+              1.813910862493335,
+              1.3853321853621017,
+              1.1360988235252214
+            ]
+          }
+        ],
+        "evidence": {
+          "accepted": true,
+          "coverage": 1.0,
+          "mean_coverage": 1.0,
+          "mean_frame_support": 0.8153153153153153,
+          "per_event": [
+            {
+              "flight": "a1dfeb:1788899524.900",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.963963963963964,
+              "center_score": 9.469264519325755,
+              "null_median_score": -0.23833681198144202,
+              "null_max_score": 0.014949479551687465,
+              "support_over_null": 9.707601331307197,
+              "accepted": true
+            },
+            {
+              "flight": "ace391:1788901235.390",
+              "frames": 111,
+              "valid_frames": 111,
+              "coverage": 1.0,
+              "frame_support": 0.6666666666666666,
+              "center_score": 4.729885227095225,
+              "null_median_score": -0.15469320955858434,
+              "null_max_score": 0.019824583516236574,
+              "support_over_null": 4.884578436653809,
+              "accepted": true
+            }
+          ],
+          "null_offsets_hz": [
+            -6.0,
+            -7.0,
+            -8.0,
+            -9.0,
+            -10.0,
+            -11.0,
+            -12.0,
+            -13.0,
+            -14.0,
+            -15.0,
+            -16.0,
+            6.0,
+            7.0,
+            8.0,
+            9.0,
+            10.0,
+            11.0,
+            12.0,
+            13.0,
+            14.0,
+            15.0,
+            16.0
+          ],
+          "method": "frozen-curve local-contrast versus frequency-shifted empirical nulls",
+          "calibration_note": "Heuristic empirical comparison only; not a calibrated probability or multiple-search p-value. Candidate search/refinement invalidates naive p-values."
+        },
+        "lat_lon_height": [
+          40.875643487908,
+          -73.5247191265125,
+          0.0
+        ]
+      },
+      "error": null,
+      "seconds": 0.2710123748984188,
+      "error_m": 93.40894126044037
+    }
+  ],
+  "published_refined_error_m": 43.29136950720495,
+  "published_coarse_error_m": 123.17071293963771
+}

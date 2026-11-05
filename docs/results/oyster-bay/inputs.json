@@ -1,0 +1,28 @@
+{
+  "status": "real inputs prepared; no localization comparison run yet",
+  "recording_url": "https://www.youtube.com/watch?v=4CxVxuMVkMc",
+  "date": "2026-09-08",
+  "track_segments": 13077,
+  "frame": [
+    40.85,
+    -73.5
+  ],
+  "files": {
+    "data/oyster-bay/recording.webm": "6884324b4fb9babbc89b10de71f283dd338766a15d2fbd1aeedb52216276692d",
+    "data/oyster-bay/spectrogram.npz": "00dba9c6c1c5d4f9686719eded8c7719fa9f95ee62904668a73c6ef99c6d2d1a",
+    "data/oyster-bay/traces.npz": "679e9f5fdc9a808b137c61ca5918c9c7916f61ce211fbcbe69219a7fc98bcd4f",
+    "data/oyster-bay/events.json": "1eeef1521f941018cf519f02f882f7252daeaa56001631ee23b4d7f5911e0c62"
+  },
+  "event_policy": "Published measured windows and approximate curve parameters, not automatic detection.",
+  "flight_archive": {
+    "release": "v2026.09.08-planes-readsb-prod-0",
+    "urls": [
+      "https://github.com/adsblol/globe_history_2026/releases/download/v2026.09.08-planes-readsb-prod-0/v2026.09.08-planes-readsb-prod-0.tar.aa",
+      "https://github.com/adsblol/globe_history_2026/releases/download/v2026.09.08-planes-readsb-prod-0/v2026.09.08-planes-readsb-prod-0.tar.ab"
+    ],
+    "sha256": [
+      "f9804df3f9e9e173928ee239938d955bb661266f76393d1042bf12b7cb85de44",
+      "0d41348dbd9f4c64ee00eafd28ad89e8e748d14c3a2c9c0b11b6b6adae7f9579"
+    ]
+  }
+}

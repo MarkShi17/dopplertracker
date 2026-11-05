@@ -1,0 +1,2374 @@
+{
+  "validation": "synthetic; known flight assignments",
+  "generator": "independent analytic straight-pass solution",
+  "grid_spacing_m": 200.0,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "scenarios": [
+    "clean",
+    "interference",
+    "rpm_drift",
+    "overhead",
+    "sound_speed_error"
+  ],
+  "limitations": "Tests conditional localization, not countrywide flight identification. Events are seeded from the generator. No real recordings, stratified weather, multipath or ADS-B position error in this benchmark.",
+  "summary": {
+    "brightness-grid": {
+      "median_error_m": 115.30305455735872,
+      "p90_error_m": 167.29726497376237,
+      "max_error_m": 199.80208945609525,
+      "trials": 15
+    },
+    "brightness-continuous": {
+      "median_error_m": 9.16770255138721,
+      "p90_error_m": 90.94272899356649,
+      "max_error_m": 94.28117532652784,
+      "trials": 15
+    },
+    "contrast-grid": {
+      "median_error_m": 115.30305455735872,
+      "p90_error_m": 167.29726497376237,
+      "max_error_m": 199.80208945609525,
+      "trials": 15
+    },
+    "contrast-continuous": {
+      "median_error_m": 7.775627184179879,
+      "p90_error_m": 91.37357642534154,
+      "max_error_m": 93.75253001270838,
+      "trials": 15
+    },
+    "robust-ridge": {
+      "median_error_m": 21.166640195865362,
+      "p90_error_m": 99.85352087164878,
+      "max_error_m": 100.2242505712719,
+      "trials": 15
+    },
+    "robust-ridge-drift": {
+      "median_error_m": 3.5446689453158124,
+      "p90_error_m": 32.508108375754226,
+      "max_error_m": 93.37056430384678,
+      "trials": 15
+    },
+    "robust-ridge-atmosphere": {
+      "median_error_m": 2.3654656173633173,
+      "p90_error_m": 32.63739120760411,
+      "max_error_m": 93.52593201317978,
+      "trials": 15
+    }
+  },
+  "trials": [
+    {
+      "scenario": "clean",
+      "seed": 0,
+      "method": "brightness-grid",
+      "error_m": 113.35264609018004,
+      "position": [
+        200.0,
+        -200.0,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": 1.0,
+      "score": 3.627007895671111,
+      "seconds": 1.4110167080070823,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "clean",
+      "seed": 0,
+      "method": "brightness-continuous",
+      "error_m": 2.515332947969029,
+      "position": [
+        142.0956640470912,
+        -101.45925525701303,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": -0.020878158151317106,
+      "score": 5.448434951468553,
+      "seconds": 0.8983192079467699,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "clean",
+      "seed": 0,
+      "method": "contrast-grid",
+      "error_m": 113.35264609018004,
+      "position": [
+        200.0,
+        -200.0,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": 1.0,
+      "score": 3.4824261291198133,
+      "seconds": 1.2736325419973582,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "clean",
+      "seed": 0,
+      "method": "contrast-continuous",
+      "error_m": 2.7050838573907603,
+      "position": [
+        141.9006787621541,
+        -101.43028329349539,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": -0.021839241941844056,
+      "score": 5.298414946795596,
+      "seconds": 1.0243811670225114,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "clean",
+      "seed": 0,
+      "method": "robust-ridge",
+      "error_m": 3.1848035316011245,
+      "position": [
+        142.1218321178503,
+        -103.13095393149565,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": -6.0190474738375244e-05,
+      "score": 5.292357557684739,
+      "seconds": 0.08575524995103478,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 2.3883963353871023
+    },
+    {
+      "scenario": "clean",
+      "seed": 0,
+      "method": "robust-ridge-drift",
+      "error_m": 3.7359349087205294,
+      "position": [
+        141.8382936907422,
+        -103.64476686343431,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": -0.0032217609898654853,
+      "score": 5.292710273776269,
+      "seconds": 0.09605133289005607,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 3.3136767741280817
+    },
+    {
+      "scenario": "clean",
+      "seed": 0,
+      "method": "robust-ridge-atmosphere",
+      "error_m": 3.789100019410223,
+      "position": [
+        141.83032410918543,
+        -103.71421128771604,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": -0.002564200739514355,
+      "score": 5.292696759056333,
+      "seconds": 0.16968379204627126,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 2.9714892138285554
+    },
+    {
+      "scenario": "clean",
+      "seed": 1,
+      "method": "brightness-grid",
+      "error_m": 83.52775564019488,
+      "position": [
+        200.0,
+        0.0,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": 1.0,
+      "score": 3.8688770201458813,
+      "seconds": 0.5601868750527501,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "clean",
+      "seed": 1,
+      "method": "brightness-continuous",
+      "error_m": 0.564209536174297,
+      "position": [
+        135.30760190474444,
+        -53.686685263925746,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": -0.00889442685102848,
+      "score": 5.4450928046397395,
+      "seconds": 0.8071161250118166,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "clean",
+      "seed": 1,
+      "method": "contrast-grid",
+      "error_m": 83.52775564019488,
+      "position": [
+        200.0,
+        0.0,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": 1.0,
+      "score": 3.7199668506631762,
+      "seconds": 1.230116792023182,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "clean",
+      "seed": 1,
+      "method": "contrast-continuous",
+      "error_m": 0.5952782166018233,
+      "position": [
+        135.32800138096036,
+        -53.79133682432315,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": -0.009866049911035901,
+      "score": 5.296174493253944,
+      "seconds": 1.2597164999460801,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "clean",
+      "seed": 1,
+      "method": "robust-ridge",
+      "error_m": 1.7177649205832253,
+      "position": [
+        134.1541864705418,
+        -53.8557322004417,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": 0.0015811910262741868,
+      "score": 5.285691308033787,
+      "seconds": 0.07352641702163965,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 2.3854329119426723
+    },
+    {
+      "scenario": "clean",
+      "seed": 1,
+      "method": "robust-ridge-drift",
+      "error_m": 3.5446689453158124,
+      "position": [
+        132.6419351715528,
+        -55.02213676280793,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": -0.01222811325137374,
+      "score": 5.283007988394007,
+      "seconds": 0.28333016706164926,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 3.2744797352498645
+    },
+    {
+      "scenario": "clean",
+      "seed": 1,
+      "method": "robust-ridge-atmosphere",
+      "error_m": 3.3547468916353935,
+      "position": [
+        132.70269248003063,
+        -54.68812262227847,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": -0.015173901941051504,
+      "score": 5.282823758227763,
+      "seconds": 0.2024347500409931,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 2.97896105800368
+    },
+    {
+      "scenario": "clean",
+      "seed": 2,
+      "method": "brightness-grid",
+      "error_m": 128.43175028558846,
+      "position": [
+        200.0,
+        0.0,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 1.0,
+      "score": 3.349848958390176,
+      "seconds": 0.676658249925822,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "clean",
+      "seed": 2,
+      "method": "brightness-continuous",
+      "error_m": 2.1848091990267413,
+      "position": [
+        120.43626568153887,
+        -99.61991026874347,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 0.0200567566257418,
+      "score": 5.445747279225578,
+      "seconds": 0.9451205419609323,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "clean",
+      "seed": 2,
+      "method": "contrast-grid",
+      "error_m": 128.43175028558846,
+      "position": [
+        200.0,
+        0.0,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 1.0,
+      "score": 3.2016223236198407,
+      "seconds": 0.8489286249969155,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "clean",
+      "seed": 2,
+      "method": "contrast-continuous",
+      "error_m": 2.2197637610533536,
+      "position": [
+        120.47031275110618,
+        -99.62782972013657,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 0.022038214367238185,
+      "score": 5.290799157676093,
+      "seconds": 0.9980137910461053,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "clean",
+      "seed": 2,
+      "method": "robust-ridge",
+      "error_m": 1.501427957364112,
+      "position": [
+        119.80800451105135,
+        -98.96851745398578,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 0.018586750923811568,
+      "score": 5.288282824614239,
+      "seconds": 0.06557833310216665,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 2.398107397109713
+    },
+    {
+      "scenario": "clean",
+      "seed": 2,
+      "method": "robust-ridge-drift",
+      "error_m": 0.6809479860863625,
+      "position": [
+        118.75569056669877,
+        -99.62290311226931,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 0.008778018592734194,
+      "score": 5.286794867463018,
+      "seconds": 0.09233620797749609,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 3.3430643369692925
+    },
+    {
+      "scenario": "clean",
+      "seed": 2,
+      "method": "robust-ridge-atmosphere",
+      "error_m": 0.4779917470124897,
+      "position": [
+        118.7817836346849,
+        -99.19823092884447,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 0.004511739267183623,
+      "score": 5.286477022102848,
+      "seconds": 0.10995987500064075,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 2.992282605367945
+    },
+    {
+      "scenario": "interference",
+      "seed": 0,
+      "method": "brightness-grid",
+      "error_m": 113.35264609018004,
+      "position": [
+        200.0,
+        -200.0,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": 1.0,
+      "score": 6.25956938705788,
+      "seconds": 0.39435929199680686,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "interference",
+      "seed": 0,
+      "method": "brightness-continuous",
+      "error_m": 3.1667293489424018,
+      "position": [
+        141.42595683114405,
+        -101.29923852300003,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": -0.02812932055966222,
+      "score": 8.088539299813393,
+      "seconds": 0.5723596250172704,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "interference",
+      "seed": 0,
+      "method": "contrast-grid",
+      "error_m": 115.30305455735872,
+      "position": [
+        200.0,
+        0.0,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": 1.0,
+      "score": 3.1377806559282946,
+      "seconds": 0.7771685000043362,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "interference",
+      "seed": 0,
+      "method": "contrast-continuous",
+      "error_m": 3.412174584794031,
+      "position": [
+        141.17539700870756,
+        -101.15652064361527,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": -0.028969002272497324,
+      "score": 4.878468075085137,
+      "seconds": 0.776348292012699,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "interference",
+      "seed": 0,
+      "method": "robust-ridge",
+      "error_m": 0.4634148694947148,
+      "position": [
+        144.1241100810989,
+        -101.1010858712363,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": 0.024190352717992636,
+      "score": 4.86881044528969,
+      "seconds": 0.07224370795302093,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 2.4003203151118795
+    },
+    {
+      "scenario": "interference",
+      "seed": 0,
+      "method": "robust-ridge-drift",
+      "error_m": 0.6583147444887782,
+      "position": [
+        144.50691121722315,
+        -101.76831585976292,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": 0.020113616065052464,
+      "score": 4.868147987076955,
+      "seconds": 0.09251904091797769,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 3.341362036958889
+    },
+    {
+      "scenario": "interference",
+      "seed": 0,
+      "method": "robust-ridge-atmosphere",
+      "error_m": 0.34922837988067484,
+      "position": [
+        144.5355629904342,
+        -101.46030210930545,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": 0.017155725512204345,
+      "score": 4.868726439422664,
+      "seconds": 0.10600266698747873,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 2.9907118256878933
+    },
+    {
+      "scenario": "interference",
+      "seed": 1,
+      "method": "brightness-grid",
+      "error_m": 83.52775564019488,
+      "position": [
+        200.0,
+        0.0,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": 1.0,
+      "score": 6.092146048685801,
+      "seconds": 0.3696247920161113,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "interference",
+      "seed": 1,
+      "method": "brightness-continuous",
+      "error_m": 2.0866160414908523,
+      "position": [
+        137.13366932102434,
+        -51.84029693807402,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": 0.011895379444612164,
+      "score": 7.656819741378146,
+      "seconds": 0.9606336250435561,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "interference",
+      "seed": 1,
+      "method": "contrast-grid",
+      "error_m": 83.52775564019488,
+      "position": [
+        200.0,
+        0.0,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": 1.0,
+      "score": 3.423363972942683,
+      "seconds": 0.7791313750203699,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "interference",
+      "seed": 1,
+      "method": "contrast-continuous",
+      "error_m": 1.5295675497795176,
+      "position": [
+        135.80212058460958,
+        -51.9381845043124,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": -0.0016732181836316418,
+      "score": 4.92127893264816,
+      "seconds": 0.861464332905598,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "interference",
+      "seed": 1,
+      "method": "robust-ridge",
+      "error_m": 1.7244720314131223,
+      "position": [
+        134.83794868648863,
+        -52.05525063067382,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": -0.0002051975349344204,
+      "score": 4.917692399411679,
+      "seconds": 0.07894229202065617,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 2.380968198230168
+    },
+    {
+      "scenario": "interference",
+      "seed": 1,
+      "method": "robust-ridge-drift",
+      "error_m": 1.9625279903003325,
+      "position": [
+        135.76265369021675,
+        -51.50608534687735,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": 0.004458190007494922,
+      "score": 4.9156896627376705,
+      "seconds": 0.09614295896608382,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 3.305583366103705
+    },
+    {
+      "scenario": "interference",
+      "seed": 1,
+      "method": "robust-ridge-atmosphere",
+      "error_m": 1.7146180063472405,
+      "position": [
+        135.71956493283284,
+        -51.756324741049774,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": 0.006758221988510615,
+      "score": 4.916016570798816,
+      "seconds": 0.09618091699667275,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 3.01950809864546
+    },
+    {
+      "scenario": "interference",
+      "seed": 2,
+      "method": "brightness-grid",
+      "error_m": 129.81705010134533,
+      "position": [
+        200.0,
+        -200.0,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 1.0,
+      "score": 5.960516956671458,
+      "seconds": 0.38158024998847395,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "interference",
+      "seed": 2,
+      "method": "brightness-continuous",
+      "error_m": 1.286792118667863,
+      "position": [
+        119.24888991759656,
+        -99.98860472946069,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 0.0037631702491491836,
+      "score": 7.888505169646133,
+      "seconds": 0.5879785410361364,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "interference",
+      "seed": 2,
+      "method": "contrast-grid",
+      "error_m": 129.81705010134533,
+      "position": [
+        200.0,
+        -200.0,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 1.0,
+      "score": 3.092706659486495,
+      "seconds": 0.8042442499427125,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "interference",
+      "seed": 2,
+      "method": "contrast-continuous",
+      "error_m": 1.0593886173174394,
+      "position": [
+        118.93929707325644,
+        -99.95994282268671,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 0.0009339133351011775,
+      "score": 4.925003274959557,
+      "seconds": 0.8771307499846444,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "interference",
+      "seed": 2,
+      "method": "robust-ridge",
+      "error_m": 2.36275861249974,
+      "position": [
+        118.13361120080648,
+        -101.46157028514915,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": -0.0138044107997497,
+      "score": 4.922679149536334,
+      "seconds": 0.06648799998220056,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 2.3698361733181192
+    },
+    {
+      "scenario": "interference",
+      "seed": 2,
+      "method": "robust-ridge-drift",
+      "error_m": 2.2080870370009746,
+      "position": [
+        119.84272384802324,
+        -100.69782991213638,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": -0.004287200353388476,
+      "score": 4.925387985548378,
+      "seconds": 0.08898837491869926,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 3.31333713727125
+    },
+    {
+      "scenario": "interference",
+      "seed": 2,
+      "method": "robust-ridge-atmosphere",
+      "error_m": 2.3802262854964127,
+      "position": [
+        119.82319823817465,
+        -100.94527306676153,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": -0.0019473712504292084,
+      "score": 4.925025941574596,
+      "seconds": 0.09516337502282113,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 2.9460257864761012
+    },
+    {
+      "scenario": "rpm_drift",
+      "seed": 0,
+      "method": "brightness-grid",
+      "error_m": 175.16777563423682,
+      "position": [
+        0.0,
+        -200.0,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": -1.0,
+      "score": 3.3152560303224767,
+      "seconds": 0.3449967090273276,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "rpm_drift",
+      "seed": 0,
+      "method": "brightness-continuous",
+      "error_m": 87.75362879322321,
+      "position": [
+        78.17555294850332,
+        -158.47499292161257,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": -0.4902235282207864,
+      "score": 3.887335369577681,
+      "seconds": 0.7372673330828547,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "rpm_drift",
+      "seed": 0,
+      "method": "contrast-grid",
+      "error_m": 175.16777563423682,
+      "position": [
+        0.0,
+        -200.0,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": -1.0,
+      "score": 3.169184194994527,
+      "seconds": 0.8205836659763008,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "rpm_drift",
+      "seed": 0,
+      "method": "contrast-continuous",
+      "error_m": 87.52394057566451,
+      "position": [
+        76.86408243453636,
+        -156.5586269118205,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": -0.47861349924333285,
+      "score": 3.7437644990003096,
+      "seconds": 0.7735441250260919,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "rpm_drift",
+      "seed": 0,
+      "method": "robust-ridge",
+      "error_m": 100.06129068287156,
+      "position": [
+        76.09387701199336,
+        -174.05950090601394,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": -0.6544007029615615,
+      "score": 3.691929267232623,
+      "seconds": 0.055298375082202256,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 2.1643323498229585
+    },
+    {
+      "scenario": "rpm_drift",
+      "seed": 0,
+      "method": "robust-ridge-drift",
+      "error_m": 1.4288527205821808,
+      "position": [
+        143.16062712841247,
+        -101.03636202119644,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": -0.008670189787514437,
+      "score": 5.289063617646963,
+      "seconds": 0.09389733301941305,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 3.268631402509945
+    },
+    {
+      "scenario": "rpm_drift",
+      "seed": 0,
+      "method": "robust-ridge-atmosphere",
+      "error_m": 1.4830582590557653,
+      "position": [
+        143.11487898185024,
+        -101.29208761124599,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": -0.006363915965377109,
+      "score": 5.2893484437574125,
+      "seconds": 0.13014304102398455,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 2.9760217917566227
+    },
+    {
+      "scenario": "rpm_drift",
+      "seed": 1,
+      "method": "brightness-grid",
+      "error_m": 199.80208945609525,
+      "position": [
+        0.0,
+        -200.0,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": -1.0,
+      "score": 3.1366385201744564,
+      "seconds": 0.36240412504412234,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "rpm_drift",
+      "seed": 1,
+      "method": "brightness-continuous",
+      "error_m": 90.6041970894286,
+      "position": [
+        70.87214444076137,
+        -116.63335899784418,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": -0.5509007970071554,
+      "score": 3.9093220368240917,
+      "seconds": 0.7398637090809643,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "rpm_drift",
+      "seed": 1,
+      "method": "contrast-grid",
+      "error_m": 199.80208945609525,
+      "position": [
+        0.0,
+        -200.0,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": -1.0,
+      "score": 2.9897292602237986,
+      "seconds": 0.7444649999961257,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "rpm_drift",
+      "seed": 1,
+      "method": "contrast-continuous",
+      "error_m": 90.65352751666384,
+      "position": [
+        70.92021652140677,
+        -116.75343874167436,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": -0.551706882572761,
+      "score": 3.7603445045189487,
+      "seconds": 0.7547536250203848,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "rpm_drift",
+      "seed": 1,
+      "method": "robust-ridge",
+      "error_m": 99.54186615481461,
+      "position": [
+        70.44612183242945,
+        -128.52656277523883,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": -0.6514545167945673,
+      "score": 3.7078810448109785,
+      "seconds": 0.07614329201169312,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 2.1039859884337107
+    },
+    {
+      "scenario": "rpm_drift",
+      "seed": 1,
+      "method": "robust-ridge-drift",
+      "error_m": 2.6328003807092277,
+      "position": [
+        135.4636284363055,
+        -56.07507368045566,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": 0.001915948507434262,
+      "score": 5.285820446164566,
+      "seconds": 0.13236675004009157,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 3.2628828471466806
+    },
+    {
+      "scenario": "rpm_drift",
+      "seed": 1,
+      "method": "robust-ridge-atmosphere",
+      "error_m": 2.3654656173633173,
+      "position": [
+        135.5122907779291,
+        -55.81190941897884,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": -0.00046579419768488783,
+      "score": 5.2856126194123965,
+      "seconds": 0.2145485420478508,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 2.973808957175625
+    },
+    {
+      "scenario": "rpm_drift",
+      "seed": 2,
+      "method": "brightness-grid",
+      "error_m": 155.4914989830507,
+      "position": [
+        0.0,
+        -200.0,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": -1.0,
+      "score": 3.603360546354374,
+      "seconds": 0.4511956670321524,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "rpm_drift",
+      "seed": 2,
+      "method": "brightness-continuous",
+      "error_m": 85.06617839843669,
+      "position": [
+        51.096335535177495,
+        -151.24193141010892,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": -0.3624495516242754,
+      "score": 3.8864994593768785,
+      "seconds": 0.7420192079152912,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "rpm_drift",
+      "seed": 2,
+      "method": "contrast-grid",
+      "error_m": 155.4914989830507,
+      "position": [
+        0.0,
+        -200.0,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": -1.0,
+      "score": 3.4551302351404316,
+      "seconds": 0.7987904589390382,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "rpm_drift",
+      "seed": 2,
+      "method": "contrast-continuous",
+      "error_m": 84.81787175861447,
+      "position": [
+        51.3741931870079,
+        -151.19484796835206,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": -0.3618950412099782,
+      "score": 3.738418321701626,
+      "seconds": 0.7449464160017669,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "rpm_drift",
+      "seed": 2,
+      "method": "robust-ridge",
+      "error_m": 100.2242505712719,
+      "position": [
+        51.87599721656849,
+        -174.14590963841408,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": -0.6461679224476429,
+      "score": 3.6746374248499456,
+      "seconds": 0.057044000015594065,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 2.1213774151580274
+    },
+    {
+      "scenario": "rpm_drift",
+      "seed": 2,
+      "method": "robust-ridge-drift",
+      "error_m": 2.3077434083591872,
+      "position": [
+        120.60670650398474,
+        -99.35840289879629,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 0.015354136967024257,
+      "score": 5.287065403216864,
+      "seconds": 0.09136895800475031,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 3.319320979229938
+    },
+    {
+      "scenario": "rpm_drift",
+      "seed": 2,
+      "method": "robust-ridge-atmosphere",
+      "error_m": 2.3093781094354737,
+      "position": [
+        120.61422318358163,
+        -99.29772917176345,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 0.014762545188211629,
+      "score": 5.286909882313789,
+      "seconds": 0.11770116596017033,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 3.0123585695268535
+    },
+    {
+      "scenario": "overhead",
+      "seed": 0,
+      "method": "brightness-grid",
+      "error_m": 115.30305455735872,
+      "position": [
+        200.0,
+        0.0,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": 0.0,
+      "score": 5.153466878878437,
+      "seconds": 0.39172537496779114,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "overhead",
+      "seed": 0,
+      "method": "brightness-continuous",
+      "error_m": 9.16770255138721,
+      "position": [
+        152.88602957671534,
+        -97.2190144696254,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": 0.11239417916200689,
+      "score": 5.449850725556032,
+      "seconds": 0.8061999579658732,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "overhead",
+      "seed": 0,
+      "method": "contrast-grid",
+      "error_m": 115.30305455735872,
+      "position": [
+        200.0,
+        0.0,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": 0.0,
+      "score": 5.004812909439783,
+      "seconds": 0.798301792005077,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "overhead",
+      "seed": 0,
+      "method": "contrast-continuous",
+      "error_m": 16.191393289731568,
+      "position": [
+        157.88036661934137,
+        -91.87068436381057,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": 0.16187210240084876,
+      "score": 5.300724893355647,
+      "seconds": 1.3479588340269402,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "overhead",
+      "seed": 0,
+      "method": "robust-ridge",
+      "error_m": 59.7533970972786,
+      "position": [
+        105.72444779426598,
+        -146.50375878648745,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": -0.3467511319675993,
+      "score": 5.295173189453897,
+      "seconds": 0.0716719999909401,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 20.317954636474543
+    },
+    {
+      "scenario": "overhead",
+      "seed": 0,
+      "method": "robust-ridge-drift",
+      "error_m": 93.37056430384678,
+      "position": [
+        85.16596516500067,
+        -173.13690649029826,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": -0.6100878165188546,
+      "score": 5.289968261530218,
+      "seconds": 0.077556167030707,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 21.771633535196628
+    },
+    {
+      "scenario": "overhead",
+      "seed": 0,
+      "method": "robust-ridge-atmosphere",
+      "error_m": 93.52593201317978,
+      "position": [
+        85.098826799165,
+        -173.28292405186096,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": -0.5997624890811963,
+      "score": 5.289745410952002,
+      "seconds": 0.12356820807326585,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 21.773631576325936
+    },
+    {
+      "scenario": "overhead",
+      "seed": 1,
+      "method": "brightness-grid",
+      "error_m": 83.52775564019488,
+      "position": [
+        200.0,
+        0.0,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": 1.0,
+      "score": 5.106750177815317,
+      "seconds": 0.410497915931046,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "overhead",
+      "seed": 1,
+      "method": "brightness-continuous",
+      "error_m": 11.317583945139043,
+      "position": [
+        146.6420372653365,
+        -50.13080826851414,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": 0.1365567401248473,
+      "score": 5.445947535579269,
+      "seconds": 1.081999292015098,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "overhead",
+      "seed": 1,
+      "method": "contrast-grid",
+      "error_m": 83.52775564019488,
+      "position": [
+        200.0,
+        0.0,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": 1.0,
+      "score": 4.959157974547416,
+      "seconds": 0.9221879589604214,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "overhead",
+      "seed": 1,
+      "method": "contrast-continuous",
+      "error_m": 7.775627184179879,
+      "position": [
+        143.53650598391215,
+        -52.45175755907818,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": 0.09269850505769517,
+      "score": 5.300146503050702,
+      "seconds": 1.696639166912064,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "overhead",
+      "seed": 1,
+      "method": "robust-ridge",
+      "error_m": 21.166640195865362,
+      "position": [
+        127.20043702341687,
+        -72.79628163768781,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": -0.01752429678018963,
+      "score": 5.287243822792489,
+      "seconds": 0.0634387080790475,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 19.041394715102342
+    },
+    {
+      "scenario": "overhead",
+      "seed": 1,
+      "method": "robust-ridge-drift",
+      "error_m": 30.989180013737904,
+      "position": [
+        119.08953899791169,
+        -79.54760030283664,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": -0.10988032887549082,
+      "score": 5.284944750625415,
+      "seconds": 0.0835375840542838,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 21.152365660225698
+    },
+    {
+      "scenario": "overhead",
+      "seed": 1,
+      "method": "robust-ridge-atmosphere",
+      "error_m": 31.270277749863887,
+      "position": [
+        118.9796750318191,
+        -79.81105282619903,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": -0.08573287616423841,
+      "score": 5.284922219019802,
+      "seconds": 0.09794675000011921,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 21.161887083698193
+    },
+    {
+      "scenario": "overhead",
+      "seed": 2,
+      "method": "brightness-grid",
+      "error_m": 128.43175028558846,
+      "position": [
+        200.0,
+        0.0,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 0.0,
+      "score": 4.982119305571051,
+      "seconds": 0.40380554203875363,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "overhead",
+      "seed": 2,
+      "method": "brightness-continuous",
+      "error_m": 3.547067391203681,
+      "position": [
+        116.39597032414315,
+        -102.09012355391431,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 0.05229678173863235,
+      "score": 5.444480304225539,
+      "seconds": 0.5788807079661638,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "overhead",
+      "seed": 2,
+      "method": "contrast-grid",
+      "error_m": 128.43175028558846,
+      "position": [
+        200.0,
+        0.0,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 0.0,
+      "score": 4.8355746406321005,
+      "seconds": 0.8184039590414613,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "overhead",
+      "seed": 2,
+      "method": "contrast-continuous",
+      "error_m": 1.556317147335214,
+      "position": [
+        117.60532689197669,
+        -100.49181438003612,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 0.06187511031177894,
+      "score": 5.297092667235169,
+      "seconds": 2.1134899590397254,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "overhead",
+      "seed": 2,
+      "method": "robust-ridge",
+      "error_m": 18.11261338989586,
+      "position": [
+        136.4160097613012,
+        -99.69072563744834,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 0.14434329190953757,
+      "score": 5.282215063435221,
+      "seconds": 0.08669216698035598,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 19.104686459318238
+    },
+    {
+      "scenario": "overhead",
+      "seed": 2,
+      "method": "robust-ridge-drift",
+      "error_m": 33.52072728376511,
+      "position": [
+        149.2698075435261,
+        -86.24848575564585,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 0.29984363352865795,
+      "score": 5.282876593337252,
+      "seconds": 0.09459087497089058,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 21.27738068968521
+    },
+    {
+      "scenario": "overhead",
+      "seed": 2,
+      "method": "robust-ridge-atmosphere",
+      "error_m": 33.548800179430934,
+      "position": [
+        149.27243401399983,
+        -86.18176164198725,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 0.2911232773429538,
+      "score": 5.282993637873829,
+      "seconds": 0.09938841708935797,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 21.26680710075074
+    },
+    {
+      "scenario": "sound_speed_error",
+      "seed": 0,
+      "method": "brightness-grid",
+      "error_m": 115.30305455735872,
+      "position": [
+        200.0,
+        0.0,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": 0.0,
+      "score": 3.4971203052569266,
+      "seconds": 0.40397808398120105,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "sound_speed_error",
+      "seed": 0,
+      "method": "brightness-continuous",
+      "error_m": 91.16841692965842,
+      "position": [
+        186.9747955273939,
+        -20.39949158847231,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": 0.05760177296588795,
+      "score": 3.643890809051203,
+      "seconds": 0.82432183297351,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "sound_speed_error",
+      "seed": 0,
+      "method": "contrast-grid",
+      "error_m": 115.30305455735872,
+      "position": [
+        200.0,
+        0.0,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": 0.0,
+      "score": 3.3522959066432443,
+      "seconds": 0.9087282920954749,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "sound_speed_error",
+      "seed": 0,
+      "method": "contrast-continuous",
+      "error_m": 91.85360903112668,
+      "position": [
+        188.11111657478293,
+        -20.227573425883104,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": 0.04586189211678826,
+      "score": 3.4951998630588275,
+      "seconds": 0.7413835830520838,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "sound_speed_error",
+      "seed": 0,
+      "method": "robust-ridge",
+      "error_m": 62.68871153110058,
+      "position": [
+        120.97961590304155,
+        -43.04126173652422,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": -0.09583648045892654,
+      "score": 2.921644048705456,
+      "seconds": 0.05805491702631116,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 2.397438050714301
+    },
+    {
+      "scenario": "sound_speed_error",
+      "seed": 0,
+      "method": "robust-ridge-drift",
+      "error_m": 17.23317947247275,
+      "position": [
+        149.23011975202135,
+        -84.51894053103315,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": -0.12989576615834356,
+      "score": 4.869760129948282,
+      "seconds": 0.10131366702262312,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 3.4980345341738612
+    },
+    {
+      "scenario": "sound_speed_error",
+      "seed": 0,
+      "method": "robust-ridge-atmosphere",
+      "error_m": 1.1620786299385675,
+      "position": [
+        143.602457282791,
+        -101.73175731240234,
+        0.0
+      ],
+      "truth": [
+        144.5873181125018,
+        -101.11493003652907,
+        0.0
+      ],
+      "clock_error_s": -0.007926039570901386,
+      "score": 5.298528838711483,
+      "seconds": 0.11562024999875575,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 2.9900101056038766
+    },
+    {
+      "scenario": "sound_speed_error",
+      "seed": 1,
+      "method": "brightness-grid",
+      "error_m": 83.52775564019488,
+      "position": [
+        200.0,
+        0.0,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": 0.0,
+      "score": 3.3800494569014394,
+      "seconds": 0.3877119170501828,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "sound_speed_error",
+      "seed": 1,
+      "method": "brightness-continuous",
+      "error_m": 90.4854409990244,
+      "position": [
+        176.80913020819156,
+        27.205391896022768,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": 0.04900165442503679,
+      "score": 3.6174191361208887,
+      "seconds": 0.7000774999614805,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "sound_speed_error",
+      "seed": 1,
+      "method": "contrast-grid",
+      "error_m": 83.52775564019488,
+      "position": [
+        200.0,
+        0.0,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": 0.0,
+      "score": 3.233397002170884,
+      "seconds": 0.9426153749227524,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "sound_speed_error",
+      "seed": 1,
+      "method": "contrast-continuous",
+      "error_m": 89.82500762847152,
+      "position": [
+        176.74771346488436,
+        26.495382957927603,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": 0.054568804105035826,
+      "score": 3.471372602981031,
+      "seconds": 0.7549690420273691,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "sound_speed_error",
+      "seed": 1,
+      "method": "robust-ridge",
+      "error_m": 63.080188596552624,
+      "position": [
+        113.25468850050193,
+        5.4355805156002965,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": -0.09041310239048857,
+      "score": 2.858214917877105,
+      "seconds": 0.08625245909206569,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 2.1309625750332013
+    },
+    {
+      "scenario": "sound_speed_error",
+      "seed": 1,
+      "method": "robust-ridge-drift",
+      "error_m": 19.847055086443685,
+      "position": [
+        141.7357301512851,
+        -34.520283558193285,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": -0.1313121010453686,
+      "score": 4.857105908671168,
+      "seconds": 0.12297583394683897,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 3.3457998244145783
+    },
+    {
+      "scenario": "sound_speed_error",
+      "seed": 1,
+      "method": "robust-ridge-atmosphere",
+      "error_m": 1.9078896307868458,
+      "position": [
+        136.9515371578021,
+        -51.92591413793412,
+        0.0
+      ],
+      "truth": [
+        135.82751372901797,
+        -53.46754125718453,
+        0.0
+      ],
+      "clock_error_s": -0.002668133416871351,
+      "score": 5.280731278836254,
+      "seconds": 0.14215554110705853,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 2.970015727116288
+    },
+    {
+      "scenario": "sound_speed_error",
+      "seed": 2,
+      "method": "brightness-grid",
+      "error_m": 128.43175028558846,
+      "position": [
+        200.0,
+        0.0,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 1.0,
+      "score": 3.2390861439795846,
+      "seconds": 0.39904799999203533,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "sound_speed_error",
+      "seed": 2,
+      "method": "brightness-continuous",
+      "error_m": 94.28117532652784,
+      "position": [
+        162.07469128735545,
+        -15.596092268929517,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 0.08454223385670545,
+      "score": 3.6282121906040135,
+      "seconds": 0.8126387920929119,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "sound_speed_error",
+      "seed": 2,
+      "method": "contrast-grid",
+      "error_m": 128.43175028558846,
+      "position": [
+        200.0,
+        0.0,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 1.0,
+      "score": 3.0964820667955983,
+      "seconds": 0.7874191669980064,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "sound_speed_error",
+      "seed": 2,
+      "method": "contrast-continuous",
+      "error_m": 93.75253001270838,
+      "position": [
+        162.5425882244913,
+        -16.442042207107633,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 0.09265130204782812,
+      "score": 3.487146980164114,
+      "seconds": 1.6747313330415636,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": null
+    },
+    {
+      "scenario": "sound_speed_error",
+      "seed": 2,
+      "method": "robust-ridge",
+      "error_m": 65.13898682952205,
+      "position": [
+        99.52604789075802,
+        -36.73460350044114,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": -0.04116885273583115,
+      "score": 2.8977845726743077,
+      "seconds": 0.08670458302367479,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 2.1987545313909327
+    },
+    {
+      "scenario": "sound_speed_error",
+      "seed": 2,
+      "method": "robust-ridge-drift",
+      "error_m": 19.404538069904355,
+      "position": [
+        126.10921132175125,
+        -81.33618444798208,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": -0.10074545963647741,
+      "score": 4.847881772503623,
+      "seconds": 0.0974145419895649,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 3.5008692928200245
+    },
+    {
+      "scenario": "sound_speed_error",
+      "seed": 2,
+      "method": "robust-ridge-atmosphere",
+      "error_m": 3.060117578039712,
+      "position": [
+        121.36886188939376,
+        -99.26407260543371,
+        0.0
+      ],
+      "truth": [
+        118.31284939745214,
+        -99.10561996101137,
+        0.0
+      ],
+      "clock_error_s": 0.03707768464836425,
+      "score": 5.288392087717026,
+      "seconds": 0.14323720894753933,
+      "success": true,
+      "at_bounds": false,
+      "geometry_condition": 2.9694802695094227
+    }
+  ]
+}

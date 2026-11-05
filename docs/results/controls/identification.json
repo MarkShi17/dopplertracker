@@ -1,0 +1,540 @@
+{
+  "validation": "synthetic regional ranking; known truth used only for evaluation",
+  "scenarios": [
+    "clean",
+    "curved_accelerating",
+    "low_snr",
+    "noise_only"
+  ],
+  "seeds": [
+    100,
+    101,
+    102
+  ],
+  "distractors": 6,
+  "trials": [
+    {
+      "scenario": "clean",
+      "seed": 100,
+      "method": "brightness",
+      "signal_present": true,
+      "correct_pair_rank": 1,
+      "top1": true,
+      "top3": true,
+      "search_error_m": 58.20238074145422,
+      "runner_up_margin": 1.3435309036920549,
+      "runtime_s": 1.5801447499543428,
+      "candidates": 7,
+      "winner_flights": [
+        "stress-0",
+        "stress-1"
+      ],
+      "correct_pair_score": 4.291013557129201,
+      "accepted": true,
+      "false_accept": null,
+      "failure": null
+    },
+    {
+      "scenario": "clean",
+      "seed": 100,
+      "method": "contrast",
+      "signal_present": true,
+      "correct_pair_rank": 1,
+      "top1": true,
+      "top3": true,
+      "search_error_m": 58.20238074145422,
+      "runner_up_margin": 1.3060644228930065,
+      "runtime_s": 3.5400327499955893,
+      "candidates": 7,
+      "winner_flights": [
+        "stress-0",
+        "stress-1"
+      ],
+      "correct_pair_score": 4.098851107165263,
+      "accepted": true,
+      "false_accept": null,
+      "failure": null
+    },
+    {
+      "scenario": "clean",
+      "seed": 101,
+      "method": "brightness",
+      "signal_present": true,
+      "correct_pair_rank": 1,
+      "top1": true,
+      "top3": true,
+      "search_error_m": 271.1644787938796,
+      "runner_up_margin": 1.623901475398097,
+      "runtime_s": 1.2046165000647306,
+      "candidates": 7,
+      "winner_flights": [
+        "stress-0",
+        "stress-1"
+      ],
+      "correct_pair_score": 4.208445969223364,
+      "accepted": true,
+      "false_accept": null,
+      "failure": null
+    },
+    {
+      "scenario": "clean",
+      "seed": 101,
+      "method": "contrast",
+      "signal_present": true,
+      "correct_pair_rank": 1,
+      "top1": true,
+      "top3": true,
+      "search_error_m": 271.1644787938796,
+      "runner_up_margin": 1.6075784526957873,
+      "runtime_s": 2.6602949160151184,
+      "candidates": 7,
+      "winner_flights": [
+        "stress-0",
+        "stress-1"
+      ],
+      "correct_pair_score": 4.022453213746616,
+      "accepted": true,
+      "false_accept": null,
+      "failure": null
+    },
+    {
+      "scenario": "clean",
+      "seed": 102,
+      "method": "brightness",
+      "signal_present": true,
+      "correct_pair_rank": 1,
+      "top1": true,
+      "top3": true,
+      "search_error_m": 52.40521257952249,
+      "runner_up_margin": 1.7740030055282228,
+      "runtime_s": 1.827274665934965,
+      "candidates": 9,
+      "winner_flights": [
+        "stress-0",
+        "stress-1"
+      ],
+      "correct_pair_score": 4.7670954395936445,
+      "accepted": true,
+      "false_accept": null,
+      "failure": null
+    },
+    {
+      "scenario": "clean",
+      "seed": 102,
+      "method": "contrast",
+      "signal_present": true,
+      "correct_pair_rank": 1,
+      "top1": true,
+      "top3": true,
+      "search_error_m": 52.40521257952249,
+      "runner_up_margin": 1.7313857553208991,
+      "runtime_s": 3.8626376249594614,
+      "candidates": 9,
+      "winner_flights": [
+        "stress-0",
+        "stress-1"
+      ],
+      "correct_pair_score": 4.559784939996788,
+      "accepted": true,
+      "false_accept": null,
+      "failure": null
+    },
+    {
+      "scenario": "curved_accelerating",
+      "seed": 100,
+      "method": "brightness",
+      "signal_present": true,
+      "correct_pair_rank": 1,
+      "top1": true,
+      "top3": true,
+      "search_error_m": 58.20238074145422,
+      "runner_up_margin": 1.6443131639758075,
+      "runtime_s": 1.37830700003542,
+      "candidates": 8,
+      "winner_flights": [
+        "stress-0",
+        "stress-1"
+      ],
+      "correct_pair_score": 4.356113320488924,
+      "accepted": true,
+      "false_accept": null,
+      "failure": null
+    },
+    {
+      "scenario": "curved_accelerating",
+      "seed": 100,
+      "method": "contrast",
+      "signal_present": true,
+      "correct_pair_rank": 1,
+      "top1": true,
+      "top3": true,
+      "search_error_m": 58.20238074145422,
+      "runner_up_margin": 1.6024994439708218,
+      "runtime_s": 2.877168042003177,
+      "candidates": 8,
+      "winner_flights": [
+        "stress-0",
+        "stress-1"
+      ],
+      "correct_pair_score": 4.15180658638054,
+      "accepted": true,
+      "false_accept": null,
+      "failure": null
+    },
+    {
+      "scenario": "curved_accelerating",
+      "seed": 101,
+      "method": "brightness",
+      "signal_present": true,
+      "correct_pair_rank": 1,
+      "top1": true,
+      "top3": true,
+      "search_error_m": 271.1644787938796,
+      "runner_up_margin": 0.549699596622307,
+      "runtime_s": 2.422263583051972,
+      "candidates": 12,
+      "winner_flights": [
+        "stress-0",
+        "stress-1"
+      ],
+      "correct_pair_score": 3.7196144829553592,
+      "accepted": false,
+      "false_accept": null,
+      "failure": null
+    },
+    {
+      "scenario": "curved_accelerating",
+      "seed": 101,
+      "method": "contrast",
+      "signal_present": true,
+      "correct_pair_rank": 1,
+      "top1": true,
+      "top3": true,
+      "search_error_m": 271.1644787938796,
+      "runner_up_margin": 0.547428838124246,
+      "runtime_s": 4.959476292016916,
+      "candidates": 12,
+      "winner_flights": [
+        "stress-0",
+        "stress-1"
+      ],
+      "correct_pair_score": 3.5322851549338443,
+      "accepted": false,
+      "false_accept": null,
+      "failure": null
+    },
+    {
+      "scenario": "curved_accelerating",
+      "seed": 102,
+      "method": "brightness",
+      "signal_present": true,
+      "correct_pair_rank": 1,
+      "top1": true,
+      "top3": true,
+      "search_error_m": 52.40521257952249,
+      "runner_up_margin": 2.2823357919979275,
+      "runtime_s": 1.0869122920557857,
+      "candidates": 7,
+      "winner_flights": [
+        "stress-0",
+        "stress-1"
+      ],
+      "correct_pair_score": 4.7099041826178905,
+      "accepted": true,
+      "false_accept": null,
+      "failure": null
+    },
+    {
+      "scenario": "curved_accelerating",
+      "seed": 102,
+      "method": "contrast",
+      "signal_present": true,
+      "correct_pair_rank": 1,
+      "top1": true,
+      "top3": true,
+      "search_error_m": 52.40521257952249,
+      "runner_up_margin": 2.242923194629642,
+      "runtime_s": 2.5092306670267135,
+      "candidates": 7,
+      "winner_flights": [
+        "stress-0",
+        "stress-1"
+      ],
+      "correct_pair_score": 4.4984200571967925,
+      "accepted": true,
+      "false_accept": null,
+      "failure": null
+    },
+    {
+      "scenario": "low_snr",
+      "seed": 100,
+      "method": "brightness",
+      "signal_present": true,
+      "correct_pair_rank": 1,
+      "top1": true,
+      "top3": true,
+      "search_error_m": 58.20238074145422,
+      "runner_up_margin": 0.2463240073411106,
+      "runtime_s": 1.706658749957569,
+      "candidates": 11,
+      "winner_flights": [
+        "stress-0",
+        "stress-1"
+      ],
+      "correct_pair_score": 1.0145111995342613,
+      "accepted": true,
+      "false_accept": null,
+      "failure": null
+    },
+    {
+      "scenario": "low_snr",
+      "seed": 100,
+      "method": "contrast",
+      "signal_present": true,
+      "correct_pair_rank": 1,
+      "top1": true,
+      "top3": true,
+      "search_error_m": 58.20238074145422,
+      "runner_up_margin": 0.2200669377183022,
+      "runtime_s": 3.6400719579542056,
+      "candidates": 11,
+      "winner_flights": [
+        "stress-0",
+        "stress-1"
+      ],
+      "correct_pair_score": 0.8266668723656014,
+      "accepted": true,
+      "false_accept": null,
+      "failure": null
+    },
+    {
+      "scenario": "low_snr",
+      "seed": 101,
+      "method": "brightness",
+      "signal_present": true,
+      "correct_pair_rank": 1,
+      "top1": true,
+      "top3": true,
+      "search_error_m": 271.1644787938796,
+      "runner_up_margin": 0.32806010388768314,
+      "runtime_s": 1.2474050000309944,
+      "candidates": 8,
+      "winner_flights": [
+        "stress-0",
+        "stress-1"
+      ],
+      "correct_pair_score": 0.9984663347132532,
+      "accepted": true,
+      "false_accept": null,
+      "failure": null
+    },
+    {
+      "scenario": "low_snr",
+      "seed": 101,
+      "method": "contrast",
+      "signal_present": true,
+      "correct_pair_rank": 1,
+      "top1": true,
+      "top3": true,
+      "search_error_m": 271.1644787938796,
+      "runner_up_margin": 0.3038585774101866,
+      "runtime_s": 2.881993499933742,
+      "candidates": 8,
+      "winner_flights": [
+        "stress-0",
+        "stress-1"
+      ],
+      "correct_pair_score": 0.817553574799661,
+      "accepted": true,
+      "false_accept": null,
+      "failure": null
+    },
+    {
+      "scenario": "low_snr",
+      "seed": 102,
+      "method": "brightness",
+      "signal_present": true,
+      "correct_pair_rank": 1,
+      "top1": true,
+      "top3": true,
+      "search_error_m": 52.40521257952249,
+      "runner_up_margin": 0.4276855588182753,
+      "runtime_s": 1.110677000018768,
+      "candidates": 6,
+      "winner_flights": [
+        "stress-0",
+        "stress-1"
+      ],
+      "correct_pair_score": 1.117900070111077,
+      "accepted": true,
+      "false_accept": null,
+      "failure": null
+    },
+    {
+      "scenario": "low_snr",
+      "seed": 102,
+      "method": "contrast",
+      "signal_present": true,
+      "correct_pair_rank": 1,
+      "top1": true,
+      "top3": true,
+      "search_error_m": 52.40521257952249,
+      "runner_up_margin": 0.3858329501551535,
+      "runtime_s": 2.4354200420202687,
+      "candidates": 6,
+      "winner_flights": [
+        "stress-0",
+        "stress-1"
+      ],
+      "correct_pair_score": 0.9126003503457619,
+      "accepted": true,
+      "false_accept": null,
+      "failure": null
+    },
+    {
+      "scenario": "noise_only",
+      "seed": 100,
+      "method": "brightness",
+      "signal_present": false,
+      "correct_pair_rank": null,
+      "top1": null,
+      "top3": null,
+      "search_error_m": null,
+      "runner_up_margin": 0.0002337293199608792,
+      "runtime_s": 1.340841667028144,
+      "candidates": 7,
+      "winner_flights": [
+        "stress-0",
+        "decoy-1"
+      ],
+      "correct_pair_score": null,
+      "accepted": false,
+      "false_accept": false,
+      "failure": null
+    },
+    {
+      "scenario": "noise_only",
+      "seed": 100,
+      "method": "contrast",
+      "signal_present": false,
+      "correct_pair_rank": null,
+      "top1": null,
+      "top3": null,
+      "search_error_m": null,
+      "runner_up_margin": 0.0001631407043860833,
+      "runtime_s": 2.8732223339611664,
+      "candidates": 7,
+      "winner_flights": [
+        "stress-0",
+        "stress-1"
+      ],
+      "correct_pair_score": null,
+      "accepted": false,
+      "false_accept": false,
+      "failure": null
+    },
+    {
+      "scenario": "noise_only",
+      "seed": 101,
+      "method": "brightness",
+      "signal_present": false,
+      "correct_pair_rank": null,
+      "top1": null,
+      "top3": null,
+      "search_error_m": null,
+      "runner_up_margin": 0.0006945097360354646,
+      "runtime_s": 1.2462040840182453,
+      "candidates": 5,
+      "winner_flights": [
+        "decoy-4",
+        "stress-1"
+      ],
+      "correct_pair_score": null,
+      "accepted": false,
+      "false_accept": false,
+      "failure": null
+    },
+    {
+      "scenario": "noise_only",
+      "seed": 101,
+      "method": "contrast",
+      "signal_present": false,
+      "correct_pair_rank": null,
+      "top1": null,
+      "top3": null,
+      "search_error_m": null,
+      "runner_up_margin": 0.0004690018829232312,
+      "runtime_s": 2.7021542919101194,
+      "candidates": 5,
+      "winner_flights": [
+        "decoy-0",
+        "stress-1"
+      ],
+      "correct_pair_score": null,
+      "accepted": false,
+      "false_accept": false,
+      "failure": null
+    },
+    {
+      "scenario": "noise_only",
+      "seed": 102,
+      "method": "brightness",
+      "signal_present": false,
+      "correct_pair_rank": null,
+      "top1": null,
+      "top3": null,
+      "search_error_m": null,
+      "runner_up_margin": 0.004471539421452703,
+      "runtime_s": 0.9546688330592588,
+      "candidates": 4,
+      "winner_flights": [
+        "decoy-0",
+        "decoy-1"
+      ],
+      "correct_pair_score": null,
+      "accepted": false,
+      "false_accept": false,
+      "failure": null
+    },
+    {
+      "scenario": "noise_only",
+      "seed": 102,
+      "method": "contrast",
+      "signal_present": false,
+      "correct_pair_rank": null,
+      "top1": null,
+      "top3": null,
+      "search_error_m": null,
+      "runner_up_margin": 0.0012783425401165505,
+      "runtime_s": 2.1575729169417173,
+      "candidates": 4,
+      "winner_flights": [
+        "stress-0",
+        "stress-1"
+      ],
+      "correct_pair_score": null,
+      "accepted": false,
+      "false_accept": false,
+      "failure": null
+    }
+  ],
+  "summaries": {
+    "brightness": {
+      "positive_trials": 9,
+      "top1_fraction": 1.0,
+      "top3_fraction": 1.0,
+      "negative_trials": 3,
+      "false_accepts": 0,
+      "exceptions": 0
+    },
+    "contrast": {
+      "positive_trials": 9,
+      "top1_fraction": 1.0,
+      "top3_fraction": 1.0,
+      "negative_trials": 3,
+      "false_accepts": 0,
+      "exceptions": 0
+    }
+  },
+  "failures": 0
+}
