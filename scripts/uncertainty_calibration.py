@@ -33,7 +33,7 @@ from dopplertracker.stress_scenes import (
     STRESS_SCENARIOS,
     stress_scene,
 )
-from dopplertracker.uncertainty import CHI2_2, GROUPS, evaluate, mahalanobis
+from dopplertracker.uncertainty import CHI2_2, GROUPS, block_bootstrap, evaluate, mahalanobis
 
 METHODS = {
     "spline-linear": (ModelOptions(degree=1, smoothing="spline"), None),
@@ -226,6 +226,28 @@ def report(rows, output):
     print("\n".join(text))
 
 
+def bootstrap(scenarios, seeds, resamples, output):
+    """Moving-block bootstrap (10 s blocks) vs the linearised measurement part; no truth used."""
+    options = METHODS["spline-linear"][0]
+    rows = []
+    for scenario in scenarios:
+        for seed in seeds:
+            scene = stress_scene(scenario, seed)
+            args = (scene["spectrogram"], scene["events"], scene["tracks"], scene["candidate"], options)
+            result = fit_projected(*args, keep_observations=True, uncertainty=True)
+            boot = block_bootstrap(result, scene["events"], scene["tracks"], resamples=resamples)
+            linear = result["uncertainty"]["measurement_ellipses"]["90"]
+            b = boot["ellipses"]["90"]
+            rows.append({"scenario": scenario, "seed": seed, "linear_90": linear, "bootstrap_90": b})
+            print(
+                f"{scenario} {seed}: bootstrap 90 % {b['semi_major_m']:.2f} x {b['semi_minor_m']:.2f} m at "
+                f"{b['major_axis_bearing_deg']:.0f} deg; linearised measurement {linear['semi_major_m']:.2f} x "
+                f"{linear['semi_minor_m']:.2f} m at {linear['major_axis_bearing_deg']:.0f} deg",
+                flush=True,
+            )
+    (output / "bootstrap.json").write_text(json.dumps(rows, indent=2, allow_nan=False))
+
+
 def main():
     parser = argparse.ArgumentParser(
         description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
@@ -235,11 +257,20 @@ def main():
     parser.add_argument("--scenarios", nargs="+", choices=SCENARIOS, default=list(SCENARIOS))
     parser.add_argument("--methods", nargs="+", choices=list(METHODS), default=list(METHODS))
     parser.add_argument("--summary", action="store_true", help="Only summarise an existing trials.jsonl")
+    parser.add_argument(
+        "--bootstrap",
+        action="store_true",
+        help="Instead: block-bootstrap the measurement part (spline-linear) for the given scenes",
+    )
+    parser.add_argument("--resamples", type=int, default=100)
     args = parser.parse_args()
     if any(seed >= 100 or seed < 0 for seed in args.seeds):
         raise SystemExit("development calibration uses seeds 0-99 only")
     output = Path(args.out)
     output.mkdir(parents=True, exist_ok=True)
+    if args.bootstrap:
+        bootstrap(args.scenarios, args.seeds, args.resamples, output)
+        return
     log = output / "trials.jsonl"
     if not args.summary:
         done = set()
