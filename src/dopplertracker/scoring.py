@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from .physics import Atmosphere, predict
+from .physics import Atmosphere, _medium, predict
 
 
 def score_curve(spec, times, frequency, method="brightness", harmonics=1):
@@ -107,6 +107,23 @@ def slope_weights(times, frequency, f0, slope_scale=0.002):
     return np.where(np.isfinite(weight), weight, 0.0)
 
 
+def subsonic(track, atmosphere=Atmosphere()):
+    """Whether the propagator accepts ``track``: no velocity sample at or above the sound speed.
+
+    Glitched positions can give an otherwise ordinary flight a supersonic
+    interpolated velocity.  This mirrors the guard at the top of ``predict``,
+    which raises for such tracks.
+    """
+    medium = _medium(atmosphere, track)
+    if isinstance(medium, Atmosphere):
+        wind = np.asarray(medium.wind)
+        return not (
+            track.max_speed + np.linalg.norm(wind) >= medium.c
+            and np.any(np.linalg.norm(track.velocity_samples - wind, axis=1) >= medium.c)
+        )
+    return track.max_speed + medium.max_wind_speed < medium.min_sound_speed
+
+
 def joint_score(
     spec,
     events,
@@ -120,8 +137,15 @@ def joint_score(
     frequency_radius=2.0,
     frequency_steps=9,
 ):
-    """clock is UTC recording start. ONE shift is shared by every event."""
+    """clock is UTC recording start. ONE shift is shared by every event.
+
+    A combination containing a track the propagator cannot model (see
+    ``subsonic``) scores ``-inf`` with no fitted frequencies, so a search skips
+    it instead of aborting.
+    """
     best = (-np.inf, clock, [], [])
+    if not all(subsonic(track, atmosphere) for track in tracks):
+        return best
     for shift in np.linspace(-shift_radius, shift_radius, shift_steps):
         scores, fitted = [], []
         for event, track in zip(events, tracks, strict=True):

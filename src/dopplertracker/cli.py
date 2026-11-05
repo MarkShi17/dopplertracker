@@ -26,7 +26,7 @@ from .geo import LocalFrame, ground_grid, validate_bbox
 from .physics import Atmosphere, closest_approaches
 from .refine import refine_candidate, refine_spectral
 from .scoring import joint_score
-from .search import distinct_candidates, save_results, search
+from .search import distinct_candidates, fast_search, save_results, search
 from .signal import Spectrogram, decode
 from .stress_benchmark import METHODS, run_stress_benchmark
 from .stress_scenes import STRESS_SCENARIOS
@@ -147,6 +147,21 @@ def parser():
             )
             p.add_argument("--method", choices=["brightness", "contrast"], default="brightness")
             p.add_argument("--max-candidates", type=int, default=100000)
+            p.add_argument(
+                "--fast",
+                action="store_true",
+                help="Vectorised regional search (fast_search); --max-candidates is ignored",
+            )
+            p.add_argument(
+                "--per-combination",
+                type=int,
+                default=48,
+                help="Fast search: spatially thinned candidates scored per flight combination; 0 scores all",
+            )
+            p.add_argument(
+                "--jet-types",
+                help="JSON list of ICAO type designators to drop before searching; unknown types are kept",
+            )
         p.add_argument("--events", nargs="+", required=True)
         p.add_argument("--traces", required=True)
         p.add_argument("--out", required=True)
@@ -456,11 +471,18 @@ def execute(args):
                 )
             print(line)
         return 0
-    tracks, frame = load_tracks(args.traces)
+    searching = args.command in ("search", "search-single")
+    if searching and args.per_combination < 0:
+        raise ValueError("--per-combination must be nonnegative")
+    jets = json.loads(Path(args.jet_types).read_text()) if searching and args.jet_types else ()
+    # Dropping jets while loading avoids building their interpolators at all.
+    tracks, frame = load_tracks(args.traces, exclude_types=jets)
+    if jets:
+        note(f"{len(tracks)} flight segments after removing {len(set(jets))} jet types")
     events = load_events(args.events)
     atmosphere = Atmosphere(args.sound_speed, tuple(args.wind))
     elevation = _terrain(args)
-    if args.command in ("search", "search-single"):
+    if searching:
         if args.command == "search-single" and len(events) != 1:
             raise ValueError("search-single needs exactly one event")
         if args.point:
@@ -471,20 +493,41 @@ def execute(args):
         else:
             raise ValueError("supply --bbox or --point")
         note(f"{len(points)} ground points, {len(tracks)} flight segments, {len(events)} events")
-        results = search(
-            spec,
-            events,
-            tracks,
-            points,
-            atmosphere,
-            args.method,
-            args.recording_start,
-            args.clock_tolerance,
-            args.offset_tolerance,
-            args.silence_radius,
-            args.max_candidates,
-            progress=lambda phase, i, n: note(f"{phase}: {i}" + (f"/{n}" if n else "")),
-        )
+        if args.fast:
+            results, summary = fast_search(
+                spec,
+                events,
+                tracks,
+                points,
+                atmosphere,
+                args.method,
+                args.recording_start,
+                args.clock_tolerance,
+                args.offset_tolerance,
+                args.silence_radius,
+                per_combination=args.per_combination or None,
+                progress=lambda phase, i, n: note(f"{phase}: {i}" + (f"/{n}" if n else "")),
+            )
+            note(
+                f"{summary['candidates']} candidates in {summary['combinations']} flight combinations; "
+                f"{summary['scored']} scored, {summary['skipped_supersonic']} skipped as supersonic, "
+                f"{summary['seconds']:.0f} s"
+            )
+        else:
+            results = search(
+                spec,
+                events,
+                tracks,
+                points,
+                atmosphere,
+                args.method,
+                args.recording_start,
+                args.clock_tolerance,
+                args.offset_tolerance,
+                args.silence_radius,
+                args.max_candidates,
+                progress=lambda phase, i, n: note(f"{phase}: {i}" + (f"/{n}" if n else "")),
+            )
     else:
         payload = json.loads(Path(args.results).read_text())
         if payload.get("frame") is not None and not np.allclose(

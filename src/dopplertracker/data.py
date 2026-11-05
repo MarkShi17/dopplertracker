@@ -316,7 +316,10 @@ def save_tracks(path, tracks, frame):
     np.savez_compressed(path, **arrays)
 
 
-def load_tracks(path):
+def load_tracks(path, exclude_types=()):
+    """Load saved segments; ``exclude_types`` drops known ICAO type designators (e.g. jets)
+    before their interpolators are built.  Segments of unknown type are retained."""
+    exclude_types = set(exclude_types)
     with np.load(path, allow_pickle=False) as z:
         frame = LocalFrame(*z["frame"])
         metadata = json.loads(str(z["metadata"]))
@@ -331,6 +334,7 @@ def load_tracks(path):
                 velocities=z[f"v{i}"] if f"v{i}" in names else None,
             )
             for i, item in enumerate(metadata)
+            if item.get("type") not in exclude_types
         ]
     if not tracks:
         raise ValueError("trace file contains no flight segments")
