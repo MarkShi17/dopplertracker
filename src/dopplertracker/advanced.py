@@ -12,7 +12,7 @@ from scipy.interpolate import UnivariateSpline
 from scipy.optimize import least_squares, lsq_linear
 
 from .atmosphere import atmosphere_from_result
-from .demod import demodulate, stationary_lines
+from .demod import demodulate, remove_lines, stationary_lines
 from .physics import Atmosphere, Trajectory, predict
 from .refine import extract_ridge
 from .scoring import score_curve
@@ -47,12 +47,16 @@ class ModelOptions:
     #   and averages them as Doppler ratios with inverse-variance weights.
     # max_harmonic: highest harmonic searched (0 uses each event's harmonic count).
     # ridge="demod" measures from raw audio (fit_projected(..., audio=...)).
+    # hum (demod only): "mask" skips frames where a stationary line falls near the
+    #   tone; "subtract" or "notch" removes the lines from the audio first
+    #   (demod.remove_lines) and masks nothing.
     max_frames: int | None = 140
     reextract: int = 0
     noise: str = "fixed"
     harmonic_mode: str = "sum"
     max_harmonic: int = 0
     demod_window: float = 2.0
+    hum: str = "mask"
 
     def __post_init__(self):
         if self.degree not in (0, 1, 2) or self.ridge not in ("peak", "viterbi", "demod"):
@@ -64,8 +68,11 @@ class ModelOptions:
             or self.harmonic_mode not in ("sum", "ratio")
             or self.max_harmonic not in (0, 1, 2, 3, 4)
             or not 0.5 <= self.demod_window <= 8.0
+            or self.hum not in ("mask", "subtract", "notch")
         ):
             raise ValueError("unsupported measurement options")
+        if self.hum != "mask" and self.ridge != "demod":
+            raise ValueError("hum line removal applies to demodulation ridges only")
         if self.ridge == "viterbi" and (
             self.harmonic_mode != "sum" or self.noise == "snr" or self.max_harmonic
         ):
@@ -588,7 +595,9 @@ def _observations(
             guide = guides[i] if guides is not None else _start_guide(track, candidate, i, atmosphere)
             half_band = 7.0 if half_bands is None else half_bands[i]
             line_list = lines[i] if lines is not None else ()
-            ridge, valid, sigma = _measure(spec, event, times, guide, options, audio, line_list, half_band)
+            # A list holds one (line-removed) recording per event.
+            source = audio[i] if isinstance(audio, list) else audio
+            ridge, valid, sigma = _measure(spec, event, times, guide, options, source, line_list, half_band)
             center = np.median(sigma[valid]) if valid.any() else 0.3
             if options.noise == "snr":
                 # Bounded influence: no frame counts for more than 9x the event median.
@@ -699,6 +708,10 @@ def fit_projected(
     if options.ridge == "demod":
         # Hum is persistent; +/-300 s is long enough that an aircraft tone is not.
         lines = [stationary_lines(audio, (e.window[0] - 300, e.window[1] + 300)) for e in events]
+    found = lines
+    if options.hum != "mask":
+        audio = [remove_lines(audio, f, e.window, options.hum) for f, e in zip(lines, events, strict=True)]
+        lines = [()] * len(events)
     measured = _observations(spec, events, local, candidate, options, atmosphere, audio=audio, lines=lines)
 
     def blocked(observations):
@@ -961,7 +974,7 @@ def fit_projected(
             "median_sigma_hz": [
                 float(np.median(0.3 / np.sqrt(o[3][o[2]]))) if o[2].any() else None for o in observations
             ],
-            "stationary_lines_hz": None if lines is None else [[float(f) for f in x] for x in lines],
+            "stationary_lines_hz": None if found is None else [[float(f) for f in x] for x in found],
         }
     if keep_observations:
         result["observations"] = [

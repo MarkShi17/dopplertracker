@@ -12,7 +12,8 @@ Its uncertainty follows the Cramér-Rao bound for one tone in white noise.  With
 a Hann window, rho = (peak power / mean noise power per bin) - 1 gives
 sigma = sqrt(8 / rho) / (2 pi T) Hz for analysis length T.  Stationary hum lines,
 which are moving chirps after demodulation, are masked so that the estimate
-cannot lock onto them.
+cannot lock onto them.  Alternatively ``remove_lines`` subtracts them from the
+audio first, so that frames where the tone crosses a line stay usable.
 """
 
 from dataclasses import dataclass
@@ -20,7 +21,7 @@ from dataclasses import dataclass
 import numpy as np
 from scipy.fft import fft, fftfreq, next_fast_len, rfft, rfftfreq
 from scipy.ndimage import median_filter
-from scipy.signal import resample_poly
+from scipy.signal import filtfilt, iirnotch, resample_poly
 
 BASEBAND_RATE = 128.0
 # A noise-only bin exceeds 9x its mean power with probability exp(-9) ~ 1e-4, so
@@ -67,6 +68,97 @@ def stationary_lines(audio, span, band=(20.0, 1000.0), segment_seconds=8.0, thre
     index = np.flatnonzero(peak) + 1
     keep = (frequencies[index] >= band[0]) & (frequencies[index] <= band[1])
     return frequencies[index[keep]]
+
+
+def _segments(samples, length, hop):
+    starts = np.arange(0, len(samples) - length + 1, hop)
+    return starts, samples[starts[:, None] + np.arange(length)]
+
+
+def _line_amplitudes(segments, starts, frequencies, fs, ridge=1e-3):
+    """Joint weighted least-squares complex amplitude of every line in every segment.
+
+    The model is x(t) = sum_k a_k exp(i w_k t) + c.c. with t the audio sample
+    time; negative-frequency images are ignored (lines lie well above 0 Hz).
+    Returns a (segments, lines) array of a_k on that global time base.
+    """
+    length = segments.shape[1]
+    taper = np.hanning(length + 2)[1:-1]
+    local = np.arange(length) / fs
+    omega = 2 * np.pi * np.asarray(frequencies, dtype=float)
+    exponentials = np.exp(1j * local[:, None] * omega[None, :])
+    basis = taper[:, None] * np.conj(exponentials)
+    projection = segments @ basis
+    # On segment-local time the Gram matrix is the same for every segment; the
+    # ridge keeps nearly coincident lines (one line found in two bins) solvable.
+    gram = basis.T @ exponentials
+    gram = gram + ridge * np.mean(np.real(np.diag(gram))) * np.eye(len(omega))
+    amplitude = np.linalg.solve(gram, projection.T).T
+    return amplitude * np.exp(-1j * omega[None, :] * (starts[:, None] / fs))
+
+
+def remove_lines(
+    audio,
+    lines,
+    span,
+    method="subtract",
+    segment_seconds=4.0,
+    median_segments=11,
+    notch_width=0.3,
+    margin=30.0,
+):
+    """Copy of ``audio`` over ``span`` (audio seconds, plus ``margin``) without stationary lines.
+
+    ``subtract`` estimates each line's slowly varying complex amplitude by joint
+    least squares on Hann segments (half-overlapping, ``segment_seconds`` long),
+    refines its frequency from the median phase advance between segments, takes
+    a running median over ``median_segments`` segments (so that a tone crossing
+    the line for a few segments does not enter the estimate) and subtracts the
+    interpolated line.  ``notch`` applies a zero-phase notch ``notch_width`` Hz
+    wide at each line.  The returned ``Audio`` keeps the original clock.
+    """
+    if method not in ("subtract", "notch"):
+        raise ValueError("line removal method must be subtract or notch")
+    fs = audio.sample_rate
+    first = max(0, int(np.floor((span[0] - margin - audio.start) * fs)))
+    last = min(len(audio.samples), int(np.ceil((span[1] + margin - audio.start) * fs)))
+    samples = np.asarray(audio.samples[first:last], dtype=float)
+    lines = np.asarray(lines, dtype=float)
+    lines = lines[(lines > 0) & (lines < 0.5 * fs - 1.0)]
+    start = audio.start + first / fs
+    if not len(lines) or not len(samples):
+        return Audio(samples, fs, start)
+    if method == "notch":
+        cleaned = samples.copy()
+        for frequency in lines:
+            b, a = iirnotch(frequency, frequency / notch_width, fs)
+            cleaned = filtfilt(b, a, cleaned)
+        return Audio(cleaned, fs, start)
+    length = int(round(segment_seconds * fs))
+    hop = max(1, length // 2)
+    if len(samples) < length + 2 * hop:
+        return Audio(samples, fs, start)
+    starts, segments = _segments(samples, length, hop)
+    frequencies = lines.copy()
+    for _ in range(2):
+        amplitude = _line_amplitudes(segments, starts, frequencies, fs)
+        # A frequency error df rotates the amplitude by 2 pi df hop / fs per segment.
+        advance = np.angle(amplitude[1:] * np.conj(amplitude[:-1]))
+        frequencies = frequencies + np.median(advance, axis=0) * fs / (2 * np.pi * hop)
+    amplitude = _line_amplitudes(segments, starts, frequencies, fs)
+    size = (min(int(median_segments), len(starts)) // 2) * 2 + 1
+    smooth = median_filter(amplitude.real, size=(size, 1), mode="nearest") + 1j * median_filter(
+        amplitude.imag, size=(size, 1), mode="nearest"
+    )
+    centres = (starts + 0.5 * (length - 1)) / fs
+    times = np.arange(len(samples)) / fs
+    cleaned = samples.copy()
+    for k, frequency in enumerate(frequencies):
+        value = np.interp(times, centres, smooth[:, k].real) + 1j * np.interp(
+            times, centres, smooth[:, k].imag
+        )
+        cleaned -= 2 * np.real(value * np.exp(2j * np.pi * frequency * times))
+    return Audio(cleaned, fs, start)
 
 
 def _fill(values):
