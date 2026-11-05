@@ -88,32 +88,48 @@ def from_samples(samples, sample_rate=2048, window_seconds=4.0, hop_seconds=0.5,
     return Spectrogram((starts + n / 2) / sample_rate, frequencies[keep], power)
 
 
+def decode_samples(path, sample_rate=2048):
+    """Mono float32 samples at ``sample_rate``; sample k is at audio time k / sample_rate.
+
+    The same ffmpeg conversion as ``decode``, so the samples align with its spectrogram times.
+    One hour at 2048 Hz is about 30 MB.
+    """
+    with tempfile.TemporaryDirectory(prefix="doppler-audio-") as directory:
+        pcm = directory + "/audio.f32"
+        _ffmpeg_pcm(path, pcm, sample_rate)
+        return np.fromfile(pcm, dtype="<f4").astype(np.float32)
+
+
+def _ffmpeg_pcm(path, pcm, sample_rate):
+    command = [
+        "ffmpeg",
+        "-nostdin",
+        "-v",
+        "error",
+        "-i",
+        str(path),
+        "-vn",
+        "-ac",
+        "1",
+        "-ar",
+        str(sample_rate),
+        "-f",
+        "f32le",
+        "-y",
+        pcm,
+    ]
+    try:
+        subprocess.run(command, check=True, capture_output=True)
+    except FileNotFoundError as exc:
+        raise ValueError("ffmpeg is required to decode audio/video") from exc
+    except subprocess.CalledProcessError as exc:
+        raise ValueError(exc.stderr.decode(errors="replace")[:1000]) from exc
+
+
 def decode(path, sample_rate=2048, window_seconds=4.0, hop_seconds=0.5, band=(40, 450)):
     with tempfile.TemporaryDirectory(prefix="doppler-audio-") as directory:
         pcm = directory + "/audio.f32"
-        command = [
-            "ffmpeg",
-            "-nostdin",
-            "-v",
-            "error",
-            "-i",
-            str(path),
-            "-vn",
-            "-ac",
-            "1",
-            "-ar",
-            str(sample_rate),
-            "-f",
-            "f32le",
-            "-y",
-            pcm,
-        ]
-        try:
-            subprocess.run(command, check=True, capture_output=True)
-        except FileNotFoundError as exc:
-            raise ValueError("ffmpeg is required to decode audio/video") from exc
-        except subprocess.CalledProcessError as exc:
-            raise ValueError(exc.stderr.decode(errors="replace")[:1000]) from exc
+        _ffmpeg_pcm(path, pcm, sample_rate)
         samples = np.memmap(pcm, dtype="<f4", mode="r")
         try:
             return from_samples(samples, sample_rate, window_seconds, hop_seconds, band)
