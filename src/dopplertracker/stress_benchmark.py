@@ -317,3 +317,131 @@ rows.sort((a,b)=>(a[1].median_error_m??Infinity)-(b[1].median_error_m??Infinity)
 document.getElementById('rows').innerHTML=rows.map(([m,r])=>`<tr><td>${{m}}</td><td>${{fmt(r.median_error_m)}}</td><td>${{fmt(r.p90_error_m)}}</td><td>${{pct(r.within_100m_fraction)}}</td><td>${{pct(r.accepted_within_100m_fraction)}}</td><td>${{pct(r.rejected_signal_fraction)}}</td><td>${{r.exceptions}}/${{r.attempts}}</td><td>${{r.nonconverged}}/${{r.attempts}}</td><td>${{r.false_accepts}}/${{r.negative_trials}}</td><td>${{r.median_seconds.toFixed(2)}}</td></tr>`).join('');}}
 document.getElementById('scenario').onchange=draw;document.getElementById('filter').oninput=draw;draw();</script></html>"""
     Path(path).write_text(text)
+
+
+# ----- Extended layered-atmosphere matrix (not part of METHODS / STRESS_SCENARIOS) ---------------
+
+from .stress_scenes import EXTENDED_SCENARIOS  # noqa: E402
+
+_SPLINE = ModelOptions(degree=1, smoothing="spline")
+_SPLINE_C = ModelOptions(degree=1, smoothing="spline", fit_sound_speed=True)
+_SPLINE_C_WIND = ModelOptions(degree=1, smoothing="spline", fit_sound_speed=True, fit_wind=True)
+# name -> (options, scene atmosphere key or None for the homogeneous 343 m/s default).
+# "atmosphere_profile" is the generator's true profile (an oracle);
+# "atmosphere_forecast" is biased +1.5 K with a 3 m/s wind error, like a reanalysis.
+LAYERED_METHODS = {
+    "spline-linear": (_SPLINE, None),
+    "spline-linear-fit-c": (_SPLINE_C, None),
+    "spline-linear-true-profile": (_SPLINE, "atmosphere_profile"),
+    "spline-linear-forecast-profile": (_SPLINE, "atmosphere_forecast"),
+    "spline-linear-forecast-fit-c": (_SPLINE_C, "atmosphere_forecast"),
+    "spline-linear-forecast-fit-c-wind": (_SPLINE_C_WIND, "atmosphere_forecast"),
+}
+
+
+def _run_layered_scene(job):
+    scenario, seed, methods = job
+    scene = stress_scene(scenario, seed)
+    rows = []
+    for method in methods:
+        options, key = LAYERED_METHODS[method]
+        start = time.perf_counter()
+        row = {
+            "scenario": scenario,
+            "seed": seed,
+            "method": method,
+            "error_m": None,
+            "success": False,
+            "accepted": False,
+            "exception": None,
+            "at_bounds": False,
+            "position": None,
+            "signal_present": True,
+        }
+        try:
+            extra = {} if key is None else {"atmosphere": scene[key]}
+            spec, events, tracks = scene["spectrogram"], scene["events"], scene["tracks"]
+            result = fit_projected(spec, events, tracks, scene["candidate"], options, **extra)
+            evidence = assess_candidate(spec, events, tracks, result)
+            row.update(
+                position=result["position"],
+                success=result["success"],
+                accepted=evidence["accepted"],
+                at_bounds=result["at_bounds"],
+                clock_error_s=result["clock"] - scene["clock"],
+                median_residual_hz=float(np.median(result["event_residual_hz"])),
+                sound_speed_m_s=result["sound_speed_m_s"],
+                sound_speed_offset_m_s=result.get("atmosphere", {}).get("sound_speed_offset_m_s"),
+                nfev=result["nfev"],
+                error_m=float(np.linalg.norm(np.asarray(result["position"])[:2] - scene["truth"][:2])),
+            )
+        except Exception as exc:
+            row["exception"] = f"{type(exc).__name__}: {exc}"
+        row["seconds"] = time.perf_counter() - start
+        rows.append(row)
+    return rows
+
+
+def run_layered_benchmark(
+    directory,
+    seeds=(0, 1, 2, 3, 4),
+    scenarios=EXTENDED_SCENARIOS,
+    methods=tuple(LAYERED_METHODS),
+    split="development",
+    workers=1,
+    progress=None,
+):
+    """Spline-linear with a constant, fitted, true or forecast-like layered atmosphere."""
+    if not seeds or not scenarios or not methods or workers < 1:
+        raise ValueError("seeds, scenarios, methods and a positive worker count are required")
+    if any(m not in LAYERED_METHODS for m in methods) or any(s not in EXTENDED_SCENARIOS for s in scenarios):
+        raise ValueError("unknown layered benchmark method or scenario")
+    if split not in ("development", "held-out"):
+        raise ValueError("split must be development or held-out")
+    if any((seed >= 100) != (split == "held-out") for seed in seeds):
+        raise ValueError("development uses seeds <100; held-out evaluation uses seeds >=100")
+    seeds, scenarios, methods = list(seeds), list(scenarios), list(methods)
+    directory = Path(directory)
+    directory.mkdir(parents=True, exist_ok=True)
+    jobs = [(scenario, seed, list(methods)) for scenario in scenarios for seed in seeds]
+    started = time.perf_counter()
+    rows = []
+    if workers == 1:
+        batches = map(_run_layered_scene, jobs)
+        pool = None
+    else:
+        pool = ProcessPoolExecutor(max_workers=workers, mp_context=multiprocessing.get_context("spawn"))
+        batches = (f.result() for f in as_completed([pool.submit(_run_layered_scene, job) for job in jobs]))
+    try:
+        for batch in batches:
+            rows.extend(batch)
+            if progress:
+                progress(len(rows), len(jobs) * len(methods), batch[0]["scenario"], batch[0]["seed"])
+    finally:
+        if pool is not None:
+            pool.shutdown(wait=True, cancel_futures=True)
+    rows.sort(
+        key=lambda r: (scenarios.index(r["scenario"]), seeds.index(r["seed"]), methods.index(r["method"]))
+    )
+    report = {
+        "validation": "synthetic layered-atmosphere localization; arrival times from an independent ray tracer",
+        "split": split,
+        "seeds": list(seeds),
+        "scenarios": list(scenarios),
+        "methods": list(methods),
+        "method_options": {name: vars(LAYERED_METHODS[name][0]) for name in methods},
+        "method_atmosphere": {name: LAYERED_METHODS[name][1] or "homogeneous 343 m/s" for name in methods},
+        "seconds": time.perf_counter() - started,
+        "workers": workers,
+        "summary": summarize_trials(rows),
+        "by_scenario": {s: summarize_trials([r for r in rows if r["scenario"] == s]) for s in scenarios},
+        "trials": rows,
+        "limitations": [
+            "Independent synthetic generator, not field validation.",
+            "spline-linear-true-profile is an oracle: it is given the generator's exact profile.",
+            "The forecast profile has one fixed error model (+1.5 K, constant 3 m/s wind vector).",
+        ],
+    }
+    (directory / "results.json").write_text(json.dumps(report, indent=2, allow_nan=False))
+    write_report(report, directory / "report.html")
+    return report

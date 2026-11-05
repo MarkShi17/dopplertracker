@@ -9,6 +9,7 @@ from pathlib import Path
 import numpy as np
 
 from .advanced import ModelOptions, fit_consensus, fit_projected, select_model
+from .atmosphere import WeatherSeries, fetch_open_meteo
 from .benchmark import SCENARIOS, run_benchmark, write_demo
 from .data import extract_archive, fetch_day, load_tracks, save_tracks
 from .detection import detect, fit_event, load_events, save_events
@@ -106,6 +107,11 @@ def parser():
             p.add_argument("--fit-altitude", action="store_true")
             p.add_argument("--fit-clock-rate", action="store_true")
             p.add_argument("--loss", choices=["linear", "soft_l1", "huber", "cauchy"], default="soft_l1")
+            p.add_argument(
+                "--weather",
+                help="Weather file from fetch-weather: layered sound speed and wind, interpolated to each "
+                "event; replaces --sound-speed/--wind, and --fit-sound-speed/--fit-wind become offsets",
+            )
         else:
             p.add_argument("--bbox", nargs=4, type=float, metavar=("S", "N", "W", "E"))
             p.add_argument("--point", nargs=2, type=float, metavar=("LAT", "LON"))
@@ -170,6 +176,23 @@ def parser():
     p.add_argument("--traces", required=True)
     p.add_argument("--out", required=True)
     p.add_argument("--raw-score", action="store_true")
+    p.add_argument(
+        "--weather",
+        help="Weather file for candidates that do not record their own layered atmosphere",
+    )
+    p = commands.add_parser(
+        "fetch-weather", help="Download hourly Open-Meteo sound-speed and wind profiles for one UTC day"
+    )
+    p.add_argument("date", help="YYYY-MM-DD (UTC)")
+    p.add_argument("output", help="Derived profile JSON; the raw response is saved beside it (.raw.json)")
+    p.add_argument("--lat", type=float, required=True, help="Query point, e.g. the search region centre")
+    p.add_argument("--lon", type=float, required=True)
+    p.add_argument(
+        "--geoid-offset",
+        type=float,
+        default=0.0,
+        help="Geoid undulation N at the query point: ellipsoid height = MSL + N",
+    )
     return root
 
 
@@ -243,9 +266,32 @@ def execute(args):
             raise ValueError(
                 "--fit-drift and --fit-sound-speed require a ridge or projected refinement method"
             )
+        if args.weather and (args.sound_speed != 343.0 or any(args.wind)):
+            raise ValueError("--weather replaces --sound-speed and --wind; do not combine them")
+        if args.weather and args.fit_sound_speed and args.method == "robust-ridge":
+            raise ValueError(
+                "--fit-sound-speed with --weather requires --method projected, auto or consensus"
+            )
     output = getattr(args, "out", getattr(args, "output", None))
     if output:
         Path(output).parent.mkdir(parents=True, exist_ok=True)
+    if args.command == "fetch-weather":
+        if args.geoid_offset == 0:
+            note("Geoid offset is 0 m: profile heights stay MSL, while tracks use ellipsoid heights.")
+        url, raw = fetch_open_meteo(args.date, args.lat, args.lon)
+        destination = Path(args.output)
+        raw_path = destination.with_name(destination.stem + ".raw.json")
+        raw_path.write_text(json.dumps(raw, indent=2))
+        series = WeatherSeries.from_open_meteo(raw, args.geoid_offset)
+        series.metadata.update(
+            url=url,
+            raw_response=raw_path.name,
+            fetched_utc=datetime.now(timezone.utc).isoformat(),
+        )
+        series.save(destination)
+        levels = series.metadata["pressure_levels_hpa"]
+        print(f"{len(series.times)} hourly profiles, {len(levels)} pressure levels -> {destination}")
+        return 0
     if args.command == "demo":
         print(json.dumps(write_demo(args.out, args.scenario, args.seed), indent=2))
         return 0
@@ -337,9 +383,11 @@ def execute(args):
             payload["frame"], [frame.lat, frame.lon], rtol=0, atol=1e-9
         ):
             raise ValueError("results and traces have different coordinate frames")
+        weather = WeatherSeries.load(args.weather) if args.weather else None
         for candidate in payload["candidates"]:
             chosen = [lookup[id] for id in candidate["flights"]]
-            candidate["evidence"] = assess_candidate(spec, events, chosen, candidate)
+            medium = weather.for_events(events, chosen, candidate["clock"]) if weather else Atmosphere()
+            candidate["evidence"] = assess_candidate(spec, events, chosen, candidate, medium)
         Path(args.out).write_text(json.dumps(payload, indent=2, allow_nan=False))
         print(
             f"{sum(r['evidence']['accepted'] for r in payload['candidates'])}/{len(payload['candidates'])} candidates pass heuristic evidence checks"
@@ -402,13 +450,20 @@ def execute(args):
             raise ValueError("results and flight traces use different coordinate frames")
         lookup = {t.id: t for t in tracks}
         extra = load_events(args.extra) if args.extra else []
+        weather = WeatherSeries.load(args.weather) if args.weather else None
         results = []
         for candidate in distinct_candidates(payload["candidates"], args.top):
             try:
                 chosen = [lookup[id] for id in candidate["flights"]]
+                medium = atmosphere
+                if weather is not None:
+                    # One profile to match extra events, then one per event at its heard CPA.
+                    medium = weather.at(candidate["clock"] + float(np.mean([e.cpa for e in events])))
                 active_events, chosen, prepared = _extra_events(
-                    spec, events, chosen, candidate, extra, tracks, atmosphere
+                    spec, events, chosen, candidate, extra, tracks, medium
                 )
+                if weather is not None:
+                    medium = weather.for_events(active_events, chosen, prepared["clock"])
                 if args.method in ("projected", "auto", "consensus"):
                     options = ModelOptions(
                         degree=max(args.source_degree, 1 if args.fit_drift else 0),
@@ -429,13 +484,13 @@ def execute(args):
                             chosen,
                             prepared,
                             [replace(options, degree=d) for d in (0, 1, 2)],
-                            atmosphere,
+                            medium,
                             frame=frame,
                             elevation=elevation,
                         )
                     elif args.method == "consensus":
                         result = fit_consensus(
-                            spec, active_events, chosen, prepared, options, atmosphere, frame, elevation
+                            spec, active_events, chosen, prepared, options, medium, frame, elevation
                         )
                     else:
                         result = fit_projected(
@@ -444,7 +499,7 @@ def execute(args):
                             chosen,
                             prepared,
                             options,
-                            atmosphere,
+                            medium,
                             frame=frame,
                             elevation=elevation,
                         )
@@ -454,7 +509,7 @@ def execute(args):
                         active_events,
                         chosen,
                         prepared,
-                        atmosphere,
+                        medium,
                         args.radius,
                         args.fit_drift,
                         args.fit_sound_speed,
@@ -468,12 +523,14 @@ def execute(args):
                         chosen,
                         prepared,
                         args.method,
-                        atmosphere,
+                        medium,
                         args.radius,
                         frame,
                         elevation,
                     )
-                result["evidence"] = assess_candidate(spec, active_events, chosen, result, atmosphere)
+                if weather is not None:
+                    result.setdefault("atmosphere", medium.to_record())
+                result["evidence"] = assess_candidate(spec, active_events, chosen, result, medium)
                 results.append(result)
             except (ValueError, KeyError) as exc:
                 note(f"Candidate could not be refined: {exc}")
