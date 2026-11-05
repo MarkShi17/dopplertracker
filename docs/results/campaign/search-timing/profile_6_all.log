@@ -1,0 +1,23 @@
+         697254430 function calls (697254420 primitive calls) in 300.010 seconds
+
+   Ordered by: cumulative time
+   List reduced from 117 to 14 due to restriction <14>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    7.613    7.613  300.010  300.010 src/dopplertracker/search.py:13(search)
+   302332    7.882    0.000  278.424    0.001 src/dopplertracker/physics.py:146(closest_approaches)
+   787852    2.259    0.000  231.556    0.000 .venv/lib/python3.12/site-packages/scipy/optimize/_minimize.py:831(minimize_scalar)
+   787852   27.187    0.000  227.356    0.000 .venv/lib/python3.12/site-packages/scipy/optimize/_optimize.py:2289(_minimize_scalar_bounded)
+  8032227    7.332    0.000  198.171    0.000 src/dopplertracker/physics.py:167(<lambda>)
+  9001435   13.709    0.000  128.478    0.000 src/dopplertracker/physics.py:75(at)
+ 18002870   10.935    0.000  112.618    0.000 .venv/lib/python3.12/site-packages/scipy/interpolate/_interpolate.py:1508(__call__)
+  9303767   62.968    0.000   96.051    0.000 src/dopplertracker/physics.py:88(travel_time)
+ 18002870   24.721    0.000   62.849    0.000 .venv/lib/python3.12/site-packages/scipy/interpolate/_interpolate.py:753(__call__)
+ 36005740   12.049    0.000   38.834    0.000 .venv/lib/python3.12/site-packages/scipy/_external/array_api_compat/numpy/_aliases.py:70(asarray)
+ 18002870   16.789    0.000   20.221    0.000 .venv/lib/python3.12/site-packages/scipy/interpolate/_interpolate.py:781(_evaluate)
+ 36005742   11.315    0.000   17.943    0.000 {built-in method numpy.array}
+  9303767    4.331    0.000   16.632    0.000 .venv/lib/python3.12/site-packages/numpy/_core/fromnumeric.py:2342(sum)
+  9303769    5.375    0.000   11.381    0.000 .venv/lib/python3.12/site-packages/numpy/_core/fromnumeric.py:66(_wrapreduction)
+
+
+PROFILE STOPPED EARLY; scored so far 0

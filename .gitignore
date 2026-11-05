@@ -3,9 +3,10 @@ __pycache__/
 .pytest_cache/
 .ruff_cache/
 *.egg-info/
-data/
-outputs/
+data
+outputs
 .cache/
 dist/
 docs/superpowers/
 
+.claude/

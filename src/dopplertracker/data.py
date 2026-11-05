@@ -18,10 +18,95 @@ def open_url(url):
     return urlopen(Request(url, headers={"User-Agent": "dopplertracker/0.1"}), timeout=90)
 
 
+KNOT = 1852.0 / 3600.0
+FPM = 0.3048 / 60.0
+# Ground speed and track from these sources are the aircraft's own (GNSS-derived)
+# airborne-velocity reports.  MLAT and TIS-B velocities are ground-side estimates
+# from positions, so they would only repeat differenced positions with extra lag.
+REPORTED_VELOCITY_SOURCES = frozenset({"adsb_icao", "adsb_icao_nt", "adsr_icao", "adsb_other", "adsr_other"})
+
+
+def _number(value):
+    return isinstance(value, (int, float)) and not isinstance(value, bool) and np.isfinite(value)
+
+
+def _reported_velocity(row, flags, extra, source):
+    """Return aircraft-local (east, north, up) m/s, NaN when missing, and the vertical source."""
+    east = north = up = np.nan
+    if source in REPORTED_VELOCITY_SOURCES:
+        speed, track = row[4], row[5]
+        if _number(speed) and _number(track) and speed >= 0:
+            angle = np.deg2rad(track)
+            east, north = speed * KNOT * np.sin(angle), speed * KNOT * np.cos(angle)
+    vertical = "none"
+    if source in REPORTED_VELOCITY_SOURCES:
+        rate = row[11] if len(row) > 11 else None
+        if _number(rate):
+            vertical = "geometric"
+        elif flags & 4 and _number(row[7]):
+            rate, vertical = row[7], "geometric"
+        elif _number(extra.get("geom_rate")):
+            rate, vertical = extra["geom_rate"], "geometric"
+        elif _number(row[7]):
+            # Pressure-altitude rate differs from geometric rate by the
+            # temperature ratio (a few percent) and is noisier; it is flagged.
+            rate, vertical = row[7], "baro"
+        if vertical != "none":
+            up = rate * FPM
+    return (east, north, up), vertical
+
+
+def local_to_frame_velocity(frame, latlon, velocities):
+    """Rotate per-point aircraft-local ENU velocity into ``frame`` axes through ECEF.
+
+    Local north at the aircraft differs from frame north by the meridian
+    convergence (about 1 degree per 100 km of longitude at 40 N); a plain copy of
+    east/north components would turn that into a velocity direction error.
+    """
+    latlon, velocities = np.asarray(latlon, dtype=float), np.asarray(velocities, dtype=float)
+    lat, lon = np.deg2rad(latlon[:, 0]), np.deg2rad(latlon[:, 1])
+    east = np.column_stack((-np.sin(lon), np.cos(lon), np.zeros_like(lon)))
+    north = np.column_stack((-np.sin(lat) * np.cos(lon), -np.sin(lat) * np.sin(lon), np.cos(lat)))
+    up = np.column_stack((np.cos(lat) * np.cos(lon), np.cos(lat) * np.sin(lon), np.sin(lat)))
+    known = np.nan_to_num(velocities)
+    world = known[:, :1] * east + known[:, 1:2] * north + known[:, 2:3] * up
+    result = world @ frame.rotation.T
+    # A missing component leaks only about sin(convergence) into the other
+    # axes; keep horizontal-only reports usable and mark the unknown axis NaN.
+    result[~np.isfinite(velocities[:, :2]).all(axis=1), :2] = np.nan
+    result[~np.isfinite(velocities[:, 2]), 2] = np.nan
+    return result
+
+
+def _runs(labels):
+    runs = []
+    for label in labels:
+        if runs and runs[-1][0] == label:
+            runs[-1][1] += 1
+        else:
+            runs.append([label, 1])
+    return runs
+
+
+def subset_runs(runs, mask):
+    """Run-length per-point labels (e.g. ``vertical_rate_source_runs``) restricted to ``mask``."""
+    labels = [label for label, count in runs for _ in range(count)]
+    if len(labels) != len(mask):
+        raise ValueError("run lengths do not match the mask")
+    return _runs([label for label, keep in zip(labels, mask, strict=True) if keep])
+
+
 def parse_trace(
     document, frame, jet_types=frozenset(), allow_baro=False, baro_offset=0.0, geoid_offset=0.0, max_gap=30.0
 ):
-    """Prefer geometric feet. Optional corrected pressure altitude is marked approximate."""
+    """Prefer geometric feet. Optional corrected pressure altitude is marked approximate.
+
+    Each segment also carries the aircraft-reported velocity per point
+    (``Trajectory.velocities``, frame ENU m/s, NaN where not reported or where
+    the source is not the aircraft itself, e.g. MLAT or TIS-B).  Positions and
+    segmentation are unaffected by velocity fields.  Per-point position source
+    types and vertical-rate sources are kept as run-length lists in metadata.
+    """
     if not isinstance(document, dict):
         raise TypeError("trace document must be an object")
     if not np.isfinite(max_gap) or max_gap <= 0:
@@ -29,10 +114,13 @@ def parse_trace(
     if document.get("t") in jet_types:
         return []
     segments, current, sources = [], [], set()
+    # Parallel per-point lists: local velocity, position source, vertical-rate source.
+    velocity, point_sources, vertical_sources = [], [], []
 
     def finish():
         if len(current) >= 3:
             a = np.array(current)
+            reported = local_to_frame_velocity(frame, a[:, 1:3], velocity)
             segments.append(
                 Trajectory(
                     f"{document.get('icao', 'unknown')}:{a[0, 0]:.3f}",
@@ -45,11 +133,17 @@ def parse_trace(
                         "altitude_sources": sorted(sources),
                         "baro_offset_m": baro_offset,
                         "geoid_offset_m": geoid_offset,
+                        "position_source_runs": _runs(point_sources),
+                        "vertical_rate_source_runs": _runs(vertical_sources),
                     },
+                    velocities=reported,
                 )
             )
         current.clear()
         sources.clear()
+        velocity.clear()
+        point_sources.clear()
+        vertical_sources.clear()
 
     for row in document.get("trace", []):
         if len(row) < 8:
@@ -102,6 +196,11 @@ def parse_trace(
                 finish()
         current.append(values)
         sources.add(source)
+        kind = row[9] if len(row) > 9 and isinstance(row[9], str) else None
+        local, vertical = _reported_velocity(row, flags, extra, kind)
+        velocity.append(local)
+        point_sources.append(kind or "unknown")
+        vertical_sources.append(vertical)
     finish()
     return segments
 
@@ -211,16 +310,31 @@ def save_tracks(path, tracks, frame):
     }
     for i, track in enumerate(tracks):
         arrays[f"t{i}"], arrays[f"p{i}"] = track.times, track.positions
+        if track.velocities is not None:
+            # Optional; files written before velocity support simply lack v{i}.
+            arrays[f"v{i}"] = track.velocities
     np.savez_compressed(path, **arrays)
 
 
-def load_tracks(path):
+def load_tracks(path, exclude_types=()):
+    """Load saved segments; ``exclude_types`` drops known ICAO type designators (e.g. jets)
+    before their interpolators are built.  Segments of unknown type are retained."""
+    exclude_types = set(exclude_types)
     with np.load(path, allow_pickle=False) as z:
         frame = LocalFrame(*z["frame"])
         metadata = json.loads(str(z["metadata"]))
+        names = set(z.files)
         tracks = [
-            Trajectory(item["id"], z[f"t{i}"], z[f"p{i}"], item.get("max_gap", 30.0), item)
+            Trajectory(
+                item["id"],
+                z[f"t{i}"],
+                z[f"p{i}"],
+                item.get("max_gap", 30.0),
+                item,
+                velocities=z[f"v{i}"] if f"v{i}" in names else None,
+            )
             for i, item in enumerate(metadata)
+            if item.get("type") not in exclude_types
         ]
     if not tracks:
         raise ValueError("trace file contains no flight segments")

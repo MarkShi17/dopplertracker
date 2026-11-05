@@ -1,0 +1,557 @@
+{
+  "purpose": "final held-out synthetic evaluation",
+  "git_commit": "9c28ef7e806deb097cbbffc0695e501f2f35d7de",
+  "git_dirty": [
+    "?? uv.lock"
+  ],
+  "seeds": [
+    300,
+    301,
+    302,
+    303,
+    304
+  ],
+  "detection_seeds": [
+    300,
+    301,
+    302,
+    303,
+    304,
+    305,
+    306,
+    307
+  ],
+  "workers": 1,
+  "A": {
+    "harness": "stress_benchmark.run_stress_benchmark",
+    "scenarios": [
+      "clean",
+      "curved_accelerating",
+      "rpm_drift",
+      "nonlinear_rpm",
+      "wind",
+      "sound_speed",
+      "adsb_noise",
+      "altitude_bias",
+      "clock_drift",
+      "gaps",
+      "low_snr",
+      "broadband_interference",
+      "crossing_ridge",
+      "missing_harmonic",
+      "corrupted_event",
+      "overhead",
+      "combined_errors",
+      "noise_only",
+      "parallel_tracks",
+      "mismeasured_event"
+    ],
+    "methods": [
+      "brightness",
+      "spline-linear",
+      "kalman-velocity-linear"
+    ],
+    "options": {
+      "spline-linear": {
+        "degree": 1,
+        "ridge": "peak",
+        "loss": "soft_l1",
+        "smoothing": "spline",
+        "fit_sound_speed": false,
+        "fit_wind": false,
+        "fit_altitude": false,
+        "fit_clock_rate": false,
+        "robust_source": true,
+        "radius": 1200.0,
+        "max_nfev": 130,
+        "velocity": "differenced",
+        "fit_track_offsets": false,
+        "max_frames": 140,
+        "reextract": 0,
+        "noise": "fixed",
+        "harmonic_mode": "sum",
+        "max_harmonic": 0,
+        "demod_window": 2.0,
+        "hum": "mask"
+      },
+      "kalman-velocity-linear": {
+        "degree": 1,
+        "ridge": "peak",
+        "loss": "soft_l1",
+        "smoothing": "none",
+        "fit_sound_speed": false,
+        "fit_wind": false,
+        "fit_altitude": false,
+        "fit_clock_rate": false,
+        "robust_source": true,
+        "radius": 1200.0,
+        "max_nfev": 130,
+        "velocity": "fused",
+        "fit_track_offsets": false,
+        "max_frames": 140,
+        "reextract": 0,
+        "noise": "fixed",
+        "harmonic_mode": "sum",
+        "max_harmonic": 0,
+        "demod_window": 2.0,
+        "hum": "mask"
+      }
+    }
+  },
+  "B": {
+    "harness": "stress_benchmark.run_layered_benchmark",
+    "layered_scenarios": [
+      "layered_atmosphere",
+      "high_altitude_layered",
+      "realistic_combined"
+    ],
+    "layered_methods": [
+      "spline-linear",
+      "spline-linear-forecast-profile",
+      "kalman-velocity-linear",
+      "kalman-velocity-forecast-profile",
+      "kalman-velocity-forecast-fit-c-wind"
+    ],
+    "velocity_scenarios": [
+      "irregular_cadence",
+      "adsb_noise_velocity",
+      "turning_sparse",
+      "adsb_latency"
+    ],
+    "velocity_methods": [
+      "spline-linear",
+      "kalman-velocity-linear"
+    ],
+    "options": {
+      "spline-linear": {
+        "options": {
+          "degree": 1,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "spline",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130,
+          "velocity": "differenced",
+          "fit_track_offsets": false,
+          "max_frames": 140,
+          "reextract": 0,
+          "noise": "fixed",
+          "harmonic_mode": "sum",
+          "max_harmonic": 0,
+          "demod_window": 2.0,
+          "hum": "mask"
+        },
+        "atmosphere": "343 m/s"
+      },
+      "spline-linear-forecast-profile": {
+        "options": {
+          "degree": 1,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "spline",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130,
+          "velocity": "differenced",
+          "fit_track_offsets": false,
+          "max_frames": 140,
+          "reextract": 0,
+          "noise": "fixed",
+          "harmonic_mode": "sum",
+          "max_harmonic": 0,
+          "demod_window": 2.0,
+          "hum": "mask"
+        },
+        "atmosphere": "atmosphere_forecast"
+      },
+      "kalman-velocity-linear": {
+        "options": {
+          "degree": 1,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "none",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130,
+          "velocity": "fused",
+          "fit_track_offsets": false,
+          "max_frames": 140,
+          "reextract": 0,
+          "noise": "fixed",
+          "harmonic_mode": "sum",
+          "max_harmonic": 0,
+          "demod_window": 2.0,
+          "hum": "mask"
+        },
+        "atmosphere": "343 m/s"
+      },
+      "kalman-velocity-forecast-profile": {
+        "options": {
+          "degree": 1,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "none",
+          "fit_sound_speed": false,
+          "fit_wind": false,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130,
+          "velocity": "fused",
+          "fit_track_offsets": false,
+          "max_frames": 140,
+          "reextract": 0,
+          "noise": "fixed",
+          "harmonic_mode": "sum",
+          "max_harmonic": 0,
+          "demod_window": 2.0,
+          "hum": "mask"
+        },
+        "atmosphere": "atmosphere_forecast"
+      },
+      "kalman-velocity-forecast-fit-c-wind": {
+        "options": {
+          "degree": 1,
+          "ridge": "peak",
+          "loss": "soft_l1",
+          "smoothing": "none",
+          "fit_sound_speed": true,
+          "fit_wind": true,
+          "fit_altitude": false,
+          "fit_clock_rate": false,
+          "robust_source": true,
+          "radius": 1200.0,
+          "max_nfev": 130,
+          "velocity": "fused",
+          "fit_track_offsets": false,
+          "max_frames": 140,
+          "reextract": 0,
+          "noise": "fixed",
+          "harmonic_mode": "sum",
+          "max_harmonic": 0,
+          "demod_window": 2.0,
+          "hum": "mask"
+        },
+        "atmosphere": "atmosphere_forecast"
+      }
+    },
+    "labels": {
+      "brightness": "brightness (old baseline)",
+      "spline-linear": "spline-linear, 343",
+      "spline-linear-forecast-profile": "+ forecast profile",
+      "kalman-velocity-linear": "fused velocity only",
+      "kalman-velocity-forecast-profile": "fused + forecast",
+      "kalman-velocity-forecast-fit-c-wind": "+ fit c and wind"
+    }
+  },
+  "C": {
+    "harness": "fit_projected(..., uncertainty=True) + uncertainty.evaluate, default InputPriors",
+    "scenarios": [
+      "clean",
+      "curved_accelerating",
+      "rpm_drift",
+      "nonlinear_rpm",
+      "wind",
+      "sound_speed",
+      "adsb_noise",
+      "altitude_bias",
+      "clock_drift",
+      "gaps",
+      "low_snr",
+      "broadband_interference",
+      "crossing_ridge",
+      "missing_harmonic",
+      "corrupted_event",
+      "overhead",
+      "combined_errors",
+      "parallel_tracks",
+      "mismeasured_event",
+      "layered_atmosphere",
+      "high_altitude_layered",
+      "irregular_cadence",
+      "adsb_noise_velocity",
+      "turning_sparse",
+      "adsb_latency",
+      "realistic_combined"
+    ],
+    "methods": {
+      "spline-linear": {
+        "degree": 1,
+        "ridge": "peak",
+        "loss": "soft_l1",
+        "smoothing": "spline",
+        "fit_sound_speed": false,
+        "fit_wind": false,
+        "fit_altitude": false,
+        "fit_clock_rate": false,
+        "robust_source": true,
+        "radius": 1200.0,
+        "max_nfev": 130,
+        "velocity": "differenced",
+        "fit_track_offsets": false,
+        "max_frames": 140,
+        "reextract": 0,
+        "noise": "fixed",
+        "harmonic_mode": "sum",
+        "max_harmonic": 0,
+        "demod_window": 2.0,
+        "hum": "mask"
+      },
+      "kalman-velocity-linear": {
+        "degree": 1,
+        "ridge": "peak",
+        "loss": "soft_l1",
+        "smoothing": "none",
+        "fit_sound_speed": false,
+        "fit_wind": false,
+        "fit_altitude": false,
+        "fit_clock_rate": false,
+        "robust_source": true,
+        "radius": 1200.0,
+        "max_nfev": 130,
+        "velocity": "fused",
+        "fit_track_offsets": false,
+        "max_frames": 140,
+        "reextract": 0,
+        "noise": "fixed",
+        "harmonic_mode": "sum",
+        "max_harmonic": 0,
+        "demod_window": 2.0,
+        "hum": "mask"
+      }
+    }
+  },
+  "D": {
+    "harness": "detection_benchmark.run_detection_benchmark",
+    "scenarios": [
+      "clean",
+      "low_snr",
+      "broadband_interference",
+      "noise_only"
+    ],
+    "methods": [
+      [
+        "whitened-two-harmonics",
+        true,
+        2,
+        "legacy"
+      ],
+      [
+        "calibrated-two-harmonics",
+        true,
+        2,
+        "calibrated"
+      ]
+    ],
+    "calibrated_options": {
+      "band": [
+        60.0,
+        300.0
+      ],
+      "harmonics": 2,
+      "span": 120.0,
+      "sidebands": [
+        0.03,
+        0.06
+      ],
+      "clip": [
+        -1.0,
+        4.0
+      ],
+      "slope_scale": 0.002,
+      "min_sweep": 0.08,
+      "tone_seconds": 60.0,
+      "speeds": [
+        45.0,
+        60.0,
+        75.0,
+        90.0,
+        105.0,
+        120.0,
+        140.0,
+        160.0
+      ],
+      "time_scales": [
+        5.0,
+        7.0,
+        10.0,
+        14.0,
+        20.0,
+        28.0,
+        40.0,
+        56.0,
+        80.0
+      ],
+      "speed_bounds": [
+        30.0,
+        180.0
+      ],
+      "distance_bounds": [
+        300.0,
+        12000.0
+      ],
+      "log_step": 0.002,
+      "time_step": 1.0,
+      "candidates": 24,
+      "starts": 3,
+      "patience": 8,
+      "overlap": 0.5,
+      "shared": 0.5,
+      "min_z": 12.0,
+      "max_fragment": 0.7,
+      "range_sigma": 2.0,
+      "speed_margin": 0.15,
+      "distance_margin": 0.3
+    }
+  },
+  "E": {
+    "harness": "discovery_benchmark.run_discovery_benchmark",
+    "scenarios": [
+      "clean",
+      "curved_accelerating",
+      "rpm_drift",
+      "wind",
+      "adsb_noise",
+      "low_snr",
+      "gaps",
+      "crossing_ridge",
+      "broadband_interference",
+      "combined_errors",
+      "noise_only"
+    ],
+    "distractors": 8,
+    "options": {
+      "band": [
+        60.0,
+        300.0
+      ],
+      "harmonics": 2,
+      "max_distance": 10000.0,
+      "ground_range": 6000.0,
+      "half_window": null,
+      "window_factor": 1.5,
+      "min_half_window": 30.0,
+      "max_half_window": 75.0,
+      "min_sweep": 0.03,
+      "min_coverage": 0.5,
+      "f0_step": 0.1,
+      "drift_radius": 0.0,
+      "drift_steps": 1,
+      "background_hz": 3.0,
+      "null_shifts": [
+        -120.0,
+        -110.0,
+        -100.0,
+        -90.0,
+        -80.0,
+        -70.0,
+        -60.0,
+        -50.0,
+        -40.0,
+        -30.0,
+        -20.0,
+        20.0,
+        30.0,
+        40.0,
+        50.0,
+        60.0,
+        70.0,
+        80.0,
+        90.0,
+        100.0,
+        110.0,
+        120.0
+      ],
+      "mirror_shifts": [
+        0.0,
+        -60.0,
+        -30.0,
+        30.0,
+        60.0
+      ],
+      "min_nulls": 8,
+      "threshold": 8.0,
+      "shadow_hz": 1.0,
+      "smoothing": "spline"
+    },
+    "final_evaluation": true
+  },
+  "F": {
+    "harness": "audio_benchmark.run_measurement_benchmark (window 4 s)",
+    "scenarios": [
+      "fast_chirp",
+      "low_snr_audio",
+      "clean_audio",
+      "noisy_audio"
+    ],
+    "methods": {
+      "stft-peak": "ModelOptions(degree=1, ridge='peak', loss='soft_l1', smoothing='none', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=900.0, max_nfev=130, velocity='differenced', fit_track_offsets=False, max_frames=140, reextract=0, noise='fixed', harmonic_mode='sum', max_harmonic=0, demod_window=2.0, hum='mask')",
+      "demod-snr": "ModelOptions(degree=1, ridge='demod', loss='soft_l1', smoothing='none', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=900.0, max_nfev=130, velocity='differenced', fit_track_offsets=False, max_frames=140, reextract=2, noise='snr', harmonic_mode='sum', max_harmonic=0, demod_window=2.0, hum='mask')"
+    },
+    "hum_scenarios": [
+      "hum_crossing"
+    ],
+    "hum_methods": {
+      "demod-snr-mask": "ModelOptions(degree=1, ridge='demod', loss='soft_l1', smoothing='none', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=900.0, max_nfev=130, velocity='differenced', fit_track_offsets=False, max_frames=140, reextract=2, noise='snr', harmonic_mode='sum', max_harmonic=0, demod_window=2.0, hum='mask')",
+      "demod-snr-subtract": "ModelOptions(degree=1, ridge='demod', loss='soft_l1', smoothing='none', fit_sound_speed=False, fit_wind=False, fit_altitude=False, fit_clock_rate=False, robust_source=True, radius=900.0, max_nfev=130, velocity='differenced', fit_track_offsets=False, max_frames=140, reextract=2, noise='snr', harmonic_mode='sum', max_harmonic=0, demod_window=2.0, hum='subtract')"
+    }
+  },
+  "source_hashes": {
+    "__init__.py": "3daa9057b0628eb5915aa00a80e975258472096a170b0eed441638227c84ecb0",
+    "__main__.py": "307299fda7b77d22c64cb51430ec75e5f59d78e9c948786afb3b2544fe45e4b7",
+    "advanced.py": "4d07cc34e56dfa2e2ac26d46cf446b1e7636dad6cecb88e150d69b098c72d701",
+    "atmosphere.py": "2b1985cdf2ebe5249b021620e91bfe278895a72ef3b75bcda1ed81e5c3851e3d",
+    "audio_benchmark.py": "58146d6e9ad3907e0e88920919844e8926329fe14d6b4d3af551ae07ea31ba41",
+    "benchmark.py": "a03ec844d67b20f051877db7065a541f4a41d3174fe9bf113c24e3b56716e79b",
+    "cli.py": "42a2e5b2cafb6169619d0f72bd6df8be0546cd35db9dd18ccadfc2b9b4d2f63b",
+    "data.py": "e3afed8f4c78fd311ddcf1bef0cd0b9798eda532325812445a8d30600ce28544",
+    "demod.py": "50a464b7f53c99b1e98650c025ea106b13d6a7043d0145716f1a0bd411d96f10",
+    "detection.py": "6f417e5829305a1d9e830698b4a4d46ee5bc3d83bc8ab9bb7f543da6022aaa38",
+    "detection_benchmark.py": "b88a64f25d577c518fdffff5e88fa11b08cc9043820a731000acf086a71cc95e",
+    "discovery.py": "ad273b4e175e6f8f0fe6c48d2bd7ca7b12857c5c31b9c06c031402ea97168321",
+    "discovery_benchmark.py": "34ddf9bb9ee7cff71a77ee4b43f16a2eb7b85415414b2ce368dc2633c8df22c9",
+    "download.py": "4c014b33ea98721318d370d235fbbd7014cb6c4e88b578ad0e5b633bb5dfb91e",
+    "evidence.py": "c311c13fe4f02ecdf875f3ae552044a455b8613f4beb0d854d4f53ab790493bd",
+    "evidence_controls.py": "ec021baf7daa049cdbbe71ebf9e53f3e36a2747e2bf475b5e3a9dd248e193ea2",
+    "geo.py": "eb34c3bd77db460e422793330fbb74dd704351e0b93b47855a71174a3acdc6c7",
+    "identification.py": "72f27f947df247013b92e5063ffc9c9fcbb6f6a1ef8eeefa2421f79eea8939c7",
+    "physics.py": "d8cd9c7b51056c9477f7345580f5fe37c547daec1223737138ea2248976b73b0",
+    "refine.py": "5dec596ef23dd182a0144fbdf7fa71539111d1d7574fe12361da3f54c6c2cbab",
+    "scoring.py": "defa3d7830951706458229b8bf890a84e56f6aaed40d468068fce11660e40a20",
+    "search.py": "1f5b11eefcb1d267907f4f07d83f333c2da0ccce147325dcaa099141d42c4e95",
+    "signal.py": "99cdd632aa09752540a3d454475cd77c8de63a036a30ef03825794efca4256b2",
+    "stress_benchmark.py": "e5d322b9f9ff4a12aea2afa95f275c7695fd16ecc91ce4d7ea24d16eaee36e65",
+    "stress_scenes.py": "a256b11ed2949b7f08bb9aa3aa7744de1102c2cfc83e088b0329a496be0ef284",
+    "terrain.py": "93130d81e03ac7d5649a5fbc0081663f4f8762c8b8783640ae8950d325ea9c20",
+    "uncertainty.py": "251598c0b5221e921dd7826645337b3a3bc62f2eee3bd67a152f620121cd0dea",
+    "final_heldout_evaluation.py": "034165b87c8ee4a7e435ad2a464ac92878837c98c9099436f863b31d07539b39"
+  },
+  "versions": {
+    "python": "3.12.13",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "pillow": "13.0.0"
+  },
+  "parts": [
+    "A",
+    "B",
+    "C",
+    "F",
+    "D",
+    "E"
+  ]
+}

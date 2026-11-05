@@ -17,41 +17,45 @@ relative to the true camera position.*
 
 ## Results
 
-**Real recording** (one hour of audio, Oyster Bay, NY):
+**Real recordings**
 
-| Method | Error from true location |
-|---|---:|
-| Brightness baseline (this repo) | 102.4 m |
-| Published result of the original [dopplertrack](https://github.com/mjshiggins/dopplertrack) (not rerun here) | 43.3 m |
-| **Spline trajectory + linear source (this repo)** | **39.6 m** |
+| Recording | What happened |
+|---|---|
+| Oyster Bay, NY (one hour; used for development) | From raw audio with no hints: three flyovers detected, a 100 × 150 km region searched in 5–20 minutes, the correct three aircraft ranked first, 16–22 m from the true spot after refinement. |
+| Same recording, ten model variants | Error from 11 m to 220 m, median about 70 m. The tool's own 90% error region is 100–270 m. |
+| SW Florida eagle cam (unseen until the final test) | 771–1,107 m off with every method. Both aircraft pass nearly overhead, and the tool's evidence check rejected all of its own fits. |
 
-The spline method also ranks the correct pair of flights first out of 311
-candidates. The brightness baseline ranks it second.
+For comparison, the original [dopplertrack](https://github.com/mjshiggins/dopplertrack)
+publishes 43 m for Oyster Bay and, for the eagle cam, 1.7 km with two flyovers and
+592 m with five. Its code was not rerun here.
 
-**Synthetic held-out benchmark** (95 scenes across 20 conditions such as noise,
-wind, engine RPM drift, track gaps and interference):
+**Synthetic tests on seeds never used in development**
 
-| Metric | Brightness baseline | Spline + linear source |
+| Metric | Previous method | New option |
 |---|---:|---:|
-| Estimates within 100 m | 81.1% | **94.7%** |
-| 90th-percentile error | 232.7 m | **45.5 m** |
-| Median error | **1.6 m** | 3.9 m |
-| Median fit time | 2.13 s | **0.17 s** |
+| Flyovers found automatically | 66% | 100% |
+| Detections that are real | 50% | 100% |
+| Median error, scenes with realistic flight tracks | 19.3 m | 6.3 m |
+| Median error, scenes with a layered atmosphere | 16.2 m | 6.7 m |
+| Estimates within 100 m, original 20 scenarios | 95% | 96% |
+| Regional search, full region | about 32 h | 5–20 min |
 
 How to read these numbers:
 
-- **One real recording.** It was also used for debugging, and the test starts from
-  the original project's published event windows and candidate shortlist. It is not
-  a blind search.
-- **The edge over 43.3 m is not meaningful.** The spline result moves between
-  39.6 m and 86.0 m depending on the assumed microphone height and sound speed.
-- **The gain is in the bad cases.** The spline method cuts large errors, but the
-  baseline has the better median, and the spline method does worse when the
-  flyover measurements it starts from are wrong.
+- **Real accuracy is tens of metres to about a kilometre, depending on geometry.**
+  Aircraft passing to the side at different bearings locate the microphone well;
+  aircraft passing overhead do not.
+- **Any single error figure is one draw.** On Oyster Bay the answer moves by more than
+  100 m between reasonable model choices that fit the audio equally well.
+- **The accuracy options are unproven on real audio.** Reported aircraft velocity and
+  a measured atmosphere help clearly on synthetic data. On two real recordings neither
+  showed a reliable gain.
+- **Synthetic scores are optimistic.** The scenes have simpler physics than real air
+  and real flight data.
 
-Details: [real-recording study](docs/oyster-bay-results.md) ·
-[synthetic study](docs/accuracy-expansion.md) ·
-[interactive report](docs/results/stress/report.html) (download and open locally)
+Details: [what was tried and what each change did](docs/campaign-results.md) ·
+[real-recording study](docs/oyster-bay-results.md) ·
+[synthetic study](docs/accuracy-expansion.md)
 
 ## Quick start
 
@@ -74,13 +78,13 @@ uv run dopplertrack demo --scenario rpm_drift --out outputs/demo
 uv run dopplertrack search outputs/demo/spectrogram.npz \
   --events outputs/demo/events.json --traces outputs/demo/traces.npz \
   --bbox 39.995 40.005 -73.006 -72.994 --spacing 200 \
-  --elevation 0 --raw-score --out outputs/demo/search.json
+  --elevation 0 --raw-score --fast --out outputs/demo/search.json
 
-# 3. Refine the best candidates
+# 3. Refine the best candidates and report an error region
 uv run dopplertrack refine outputs/demo/spectrogram.npz outputs/demo/search.json \
   --events outputs/demo/events.json --traces outputs/demo/traces.npz \
   --elevation 0 --raw-score --method projected --smooth spline --source-degree 1 \
-  --out outputs/demo/refined.json
+  --uncertainty --out outputs/demo/refined.json
 ```
 
 The refined position lands about 1 m from the true one in `outputs/demo/truth.json`.
@@ -95,8 +99,8 @@ That file is written for scoring only; search and refine never read it.
 3. **Get flight tracks.** Download public ADS-B history for that day and region.
 4. **Search.** Score candidate locations and flights against the audio, with every
    flyover locked to one shared recording clock.
-5. **Refine and validate.** Fit the location continuously, then check that the
-   match is supported by the audio rather than by noise.
+5. **Refine and validate.** Fit the location continuously, estimate an error region,
+   and check that the match is supported by the audio rather than by noise.
 
 Sound takes time to arrive, so the model solves *reception time = emission time +
 travel time* and uses the aircraft's velocity at the moment the sound was emitted.
@@ -108,8 +112,10 @@ travel time* and uses the aircraft's velocity at the moment the sound was emitte
 | `spectrogram` | Decode audio or video into a spectrogram |
 | `detect`, `fit` | Find flyovers automatically, or fit one known window |
 | `fetch-day`, `extract-region` | Download or extract regional ADS-B flight tracks |
+| `fetch-weather` | Download the day's temperature and wind profile |
 | `search`, `search-single` | Score candidate locations against real flight tracks |
 | `refine` | Continuously refine the best candidates |
+| `discover` | Look for further flyovers that a fitted location predicts |
 | `validate` | Check a saved candidate against frequency-shifted null curves |
 | `demo` | Write synthetic inputs for the quick start |
 | `benchmark`, `stress-benchmark`, `controls-benchmark` | Reproduce the method comparisons |
@@ -120,54 +126,57 @@ Run `uv run dopplertrack <command> --help` for options.
 
 ```bash
 uv run dopplertrack spectrogram recording.mp4 data/recording.npz
-uv run dopplertrack detect data/recording.npz --band 60 300 --top 2 --out data/events.json
+uv run dopplertrack detect data/recording.npz --detector calibrated --out data/events.json
 uv run dopplertrack fetch-day 2026-09-08 data/traces.npz --bbox 40.4 41.3 -74.4 -72.6
 uv run dopplertrack search data/recording.npz --events data/events.json \
   --traces data/traces.npz --bbox 40.4 41.3 -74.4 -72.6 --spacing 200 \
-  --terrain --geoid-offset -30 --out outputs/search.json
+  --terrain --geoid-offset -30 --fast --out outputs/search.json
 uv run dopplertrack refine data/recording.npz outputs/search.json \
   --events data/events.json --traces data/traces.npz \
   --terrain --geoid-offset -30 --method projected --smooth spline --source-degree 1 \
-  --out outputs/refined.json
+  --uncertainty --out outputs/refined.json
 ```
 
 A daily flight archive is several GB. Check the detected flyovers before a large
-search, and replace `-30` with your local geoid offset. The
-[usage guide](docs/usage.md) covers each step, the options and the file formats.
+search, aim for three or more of them, and replace `-30` with your local geoid offset.
+The [usage guide](docs/usage.md) covers each step, the optional accuracy settings and
+the file formats.
 
 ## Reproduce the benchmarks
 
 ```bash
-# Synthetic held-out study: 27 methods x 20 conditions x 5 seeds (about 7 minutes)
+# Original synthetic study: 27 methods x 20 conditions x 5 seeds (about 7 minutes)
 uv run dopplertrack stress-benchmark --split held-out --workers 4 \
   --seeds 100 101 102 103 104 --out outputs/stress
 
-# Detection, flight ranking, audio and false-match controls
-uv run dopplertrack controls-benchmark --out outputs/controls
+# Final evaluation of the newer methods on unseen seeds (about 40 minutes)
+uv run python scripts/final_heldout_evaluation.py
 
 # Tests
 uv run pytest
 ```
 
-The real-recording study needs the audio and a 3.9 GB flight archive. See
-[how to reproduce it](docs/oyster-bay-results.md#reproduce).
+The real-recording studies need the audio and multi-GB flight archives. See
+[how to reproduce them](docs/campaign-results.md#reproduce).
 
 ## Limitations
 
-- **Not a blind search yet.** The benchmarks supply the flights and approximate
-  flyover windows. Automatic detection and large-region search are not validated
-  on real recordings.
-- **One real recording.** Field accuracy needs more recordings with known answers.
+- **Two real recordings.** One was used for development; the other gave errors near
+  1 km. Field accuracy is not established.
+- **Geometry decides accuracy.** Overhead passes and single flyovers constrain the
+  location poorly. The error region reports this, but it is too confident when the
+  tone fits badly.
+- **Propeller aircraft only.** Jets have no steady tone to track, and twin-engine
+  aircraft may produce two close tones that the tracker does not model.
 - **Stationary microphone.** Moving recorders are not supported.
-- **Simple atmosphere.** Constant sound speed and uniform wind, with no refraction
-  or echoes.
-- **No guarantee of a correct match.** The evidence check is a heuristic, not a
-  calibrated probability.
+- **No guarantee of a correct match.** The evidence check and detection scores are
+  heuristics, not calibrated probabilities.
 
 ## Documentation
 
 - [Usage guide](docs/usage.md): full workflow, options and file formats
-- [Real-recording study](docs/oyster-bay-results.md): Oyster Bay results and failed experiments
+- [Improvement campaign](docs/campaign-results.md): nine changes, what each did, and what failed
+- [Real-recording study](docs/oyster-bay-results.md): the first Oyster Bay results and failed experiments
 - [Synthetic accuracy study](docs/accuracy-expansion.md): 27 methods, 20 conditions
 - [Original experiments](docs/experiments.md): the first seven-method comparison
 - [Design notes](docs/design.md): physics and modelling choices
@@ -182,6 +191,8 @@ fork, and its file formats are not compatible with that project. The 43 m and
 
 - Flight data: [adsb.lol historical archive](https://github.com/adsblol/globe_history_2024),
   under the ODbL. Follow its terms when redistributing data.
+- Weather profiles: [Open-Meteo](https://open-meteo.com/). Geoid heights: NOAA GEOID18.
+- Aircraft type list: the OpenSky mirror of ICAO Doc 8643.
 - [readsb trace format](https://github.com/wiedehopf/readsb/blob/dev/README-json.md#trace-jsons)
 - [Terrarium elevation tiles](https://github.com/tilezen/joerd/blob/master/docs/formats.md)
 - [SciPy robust least squares](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html)

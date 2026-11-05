@@ -1,0 +1,622 @@
+{
+ "6km-capped": {
+  "search_seconds": 442.6704623330006,
+  "search_peak_rss_gb": 1.128677376,
+  "search_results": 1182,
+  "fast_seconds": 2.3205911250006466,
+  "fast_peak_rss_gb": 1.173405696,
+  "fast_scored": 395,
+  "fast_candidates": 1244,
+  "same_winner": true,
+  "search_combinations": 7,
+  "fast_combinations": 7,
+  "fast_only_combinations": [],
+  "table": [
+   {
+    "rank": 1,
+    "flights": [
+     "a1dfeb",
+     "ace391"
+    ],
+    "search_score": 1.5254455373555738,
+    "fast_score": 1.5254455373555738,
+    "fast_rank": 1,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 2,
+    "flights": [
+     "ab1162",
+     "ab050a"
+    ],
+    "search_score": 0.8551933600468894,
+    "fast_score": 0.8551933600468894,
+    "fast_rank": 2,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 3,
+    "flights": [
+     "a1c209",
+     "ab050a"
+    ],
+    "search_score": 0.660975342895269,
+    "fast_score": 0.6609754277521394,
+    "fast_rank": 3,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 4,
+    "flights": [
+     "a99f31",
+     "ab67f6"
+    ],
+    "search_score": 0.5519466042604241,
+    "fast_score": 0.5519467819812245,
+    "fast_rank": 4,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 5,
+    "flights": [
+     "a9b3df",
+     "a2733d"
+    ],
+    "search_score": 0.5425316004024707,
+    "fast_score": 0.5427615596986796,
+    "fast_rank": 5,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 6,
+    "flights": [
+     "c07572",
+     "c07d20"
+    ],
+    "search_score": 0.49109249032452745,
+    "fast_score": 0.49109185642039366,
+    "fast_rank": 6,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 7,
+    "flights": [
+     "a27aab",
+     "c013c3"
+    ],
+    "search_score": 0.4875422133803086,
+    "fast_score": 0.4875422433843529,
+    "fast_rank": 7,
+    "best_position_difference_m": 0.0
+   }
+  ]
+ },
+ "6km-exhaustive": {
+  "search_seconds": 442.6704623330006,
+  "search_peak_rss_gb": 1.128677376,
+  "search_results": 1182,
+  "fast_seconds": 3.49065929200151,
+  "fast_peak_rss_gb": 1.174470656,
+  "fast_scored": 1182,
+  "fast_candidates": 1244,
+  "same_winner": true,
+  "search_combinations": 7,
+  "fast_combinations": 7,
+  "fast_only_combinations": [],
+  "table": [
+   {
+    "rank": 1,
+    "flights": [
+     "a1dfeb",
+     "ace391"
+    ],
+    "search_score": 1.5254455373555738,
+    "fast_score": 1.5254455373555738,
+    "fast_rank": 1,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 2,
+    "flights": [
+     "ab1162",
+     "ab050a"
+    ],
+    "search_score": 0.8551933600468894,
+    "fast_score": 0.8551933600468894,
+    "fast_rank": 2,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 3,
+    "flights": [
+     "a1c209",
+     "ab050a"
+    ],
+    "search_score": 0.660975342895269,
+    "fast_score": 0.6609754277521394,
+    "fast_rank": 3,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 4,
+    "flights": [
+     "a99f31",
+     "ab67f6"
+    ],
+    "search_score": 0.5519466042604241,
+    "fast_score": 0.5519467819812245,
+    "fast_rank": 4,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 5,
+    "flights": [
+     "a9b3df",
+     "a2733d"
+    ],
+    "search_score": 0.5425316004024707,
+    "fast_score": 0.5427615596986796,
+    "fast_rank": 5,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 6,
+    "flights": [
+     "c07572",
+     "c07d20"
+    ],
+    "search_score": 0.49109249032452745,
+    "fast_score": 0.49109185642039366,
+    "fast_rank": 6,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 7,
+    "flights": [
+     "a27aab",
+     "c013c3"
+    ],
+    "search_score": 0.4875422133803086,
+    "fast_score": 0.4875422433843529,
+    "fast_rank": 7,
+    "best_position_difference_m": 0.0
+   }
+  ]
+ },
+ "12km-capped": {
+  "search_seconds": 2010.0220540830014,
+  "search_peak_rss_gb": 1.120452608,
+  "search_results": 2643,
+  "fast_seconds": 5.272089042002335,
+  "fast_peak_rss_gb": 1.243693056,
+  "fast_scored": 765,
+  "fast_candidates": 2991,
+  "same_winner": true,
+  "search_combinations": 18,
+  "fast_combinations": 18,
+  "fast_only_combinations": [
+   [
+    "a4d375",
+    "aad6b8"
+   ]
+  ],
+  "table": [
+   {
+    "rank": 1,
+    "flights": [
+     "a1dfeb",
+     "ace391"
+    ],
+    "search_score": 1.5254455373690408,
+    "fast_score": 1.5254455373690408,
+    "fast_rank": 1,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 2,
+    "flights": [
+     "a1c209",
+     "ab050a"
+    ],
+    "search_score": 1.134800160055046,
+    "fast_score": 1.1347999266884214,
+    "fast_rank": 2,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 3,
+    "flights": [
+     "ab1162",
+     "ab050a"
+    ],
+    "search_score": 1.0844943223281884,
+    "fast_score": 1.0844943223281884,
+    "fast_rank": 3,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 4,
+    "flights": [
+     "a2733d",
+     "c013c3"
+    ],
+    "search_score": 0.966079405467346,
+    "fast_score": 0.966079405467346,
+    "fast_rank": 4,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 5,
+    "flights": [
+     "ac647b",
+     "a1dfeb"
+    ],
+    "search_score": 0.8813210659553348,
+    "fast_score": 0.8813209745940109,
+    "fast_rank": 5,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 6,
+    "flights": [
+     "a27aab",
+     "abb40e"
+    ],
+    "search_score": 0.7306958425337047,
+    "fast_score": 0.7306946726232085,
+    "fast_rank": 6,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 7,
+    "flights": [
+     "a99f31",
+     "ab67f6"
+    ],
+    "search_score": 0.7107714031006063,
+    "fast_score": 0.7107714031006063,
+    "fast_rank": 7,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 8,
+    "flights": [
+     "a1b9b5",
+     "a2c21b"
+    ],
+    "search_score": 0.701285990411752,
+    "fast_score": 0.7012854731793352,
+    "fast_rank": 8,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 9,
+    "flights": [
+     "ae0630",
+     "c0015c"
+    ],
+    "search_score": 0.5908454160549388,
+    "fast_score": 0.5908454810703945,
+    "fast_rank": 9,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 10,
+    "flights": [
+     "abb40e",
+     "a60e95"
+    ],
+    "search_score": 0.5620234220404492,
+    "fast_score": 0.5620211803519048,
+    "fast_rank": 10,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 11,
+    "flights": [
+     "a9b3df",
+     "a2733d"
+    ],
+    "search_score": 0.5470704226209542,
+    "fast_score": 0.546982152424158,
+    "fast_rank": 11,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 12,
+    "flights": [
+     "a2c21b",
+     "ad5e1d"
+    ],
+    "search_score": 0.517486873613574,
+    "fast_score": 0.5174869589330151,
+    "fast_rank": 13,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 13,
+    "flights": [
+     "a77707",
+     "acf88c"
+    ],
+    "search_score": 0.5150712729089724,
+    "fast_score": null,
+    "fast_rank": null,
+    "best_position_difference_m": null
+   },
+   {
+    "rank": 14,
+    "flights": [
+     "a43418",
+     "ac118a"
+    ],
+    "search_score": 0.5034094770587302,
+    "fast_score": 0.5034092209688443,
+    "fast_rank": 14,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 15,
+    "flights": [
+     "c07572",
+     "c07d20"
+    ],
+    "search_score": 0.49109249032575614,
+    "fast_score": 0.49109185649918596,
+    "fast_rank": 15,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 16,
+    "flights": [
+     "a27aab",
+     "c013c3"
+    ],
+    "search_score": 0.4875422133341921,
+    "fast_score": 0.48754224348861414,
+    "fast_rank": 16,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 17,
+    "flights": [
+     "a6a23b",
+     "a2c21b"
+    ],
+    "search_score": 0.4424888308688808,
+    "fast_score": 0.44014093621155975,
+    "fast_rank": 17,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 18,
+    "flights": [
+     "a9d7ad",
+     "ab050a"
+    ],
+    "search_score": 0.3450350780472047,
+    "fast_score": 0.3011039238261248,
+    "fast_rank": 18,
+    "best_position_difference_m": 6584.075751671081
+   }
+  ]
+ },
+ "12km-exhaustive": {
+  "search_seconds": 2010.0220540830014,
+  "search_peak_rss_gb": 1.120452608,
+  "search_results": 2643,
+  "fast_seconds": 13.40046141700077,
+  "fast_peak_rss_gb": 1.22298368,
+  "fast_scored": 2633,
+  "fast_candidates": 2991,
+  "same_winner": true,
+  "search_combinations": 18,
+  "fast_combinations": 18,
+  "fast_only_combinations": [
+   [
+    "a4d375",
+    "aad6b8"
+   ]
+  ],
+  "table": [
+   {
+    "rank": 1,
+    "flights": [
+     "a1dfeb",
+     "ace391"
+    ],
+    "search_score": 1.5254455373690408,
+    "fast_score": 1.5254455373690408,
+    "fast_rank": 1,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 2,
+    "flights": [
+     "a1c209",
+     "ab050a"
+    ],
+    "search_score": 1.134800160055046,
+    "fast_score": 1.1347999266884214,
+    "fast_rank": 2,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 3,
+    "flights": [
+     "ab1162",
+     "ab050a"
+    ],
+    "search_score": 1.0844943223281884,
+    "fast_score": 1.0844943223281884,
+    "fast_rank": 3,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 4,
+    "flights": [
+     "a2733d",
+     "c013c3"
+    ],
+    "search_score": 0.966079405467346,
+    "fast_score": 0.966079405467346,
+    "fast_rank": 4,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 5,
+    "flights": [
+     "ac647b",
+     "a1dfeb"
+    ],
+    "search_score": 0.8813210659553348,
+    "fast_score": 0.8813209745940109,
+    "fast_rank": 5,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 6,
+    "flights": [
+     "a27aab",
+     "abb40e"
+    ],
+    "search_score": 0.7306958425337047,
+    "fast_score": 0.7306946726232085,
+    "fast_rank": 6,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 7,
+    "flights": [
+     "a99f31",
+     "ab67f6"
+    ],
+    "search_score": 0.7107714031006063,
+    "fast_score": 0.7107714031006063,
+    "fast_rank": 7,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 8,
+    "flights": [
+     "a1b9b5",
+     "a2c21b"
+    ],
+    "search_score": 0.701285990411752,
+    "fast_score": 0.7012854731793352,
+    "fast_rank": 8,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 9,
+    "flights": [
+     "ae0630",
+     "c0015c"
+    ],
+    "search_score": 0.5908454160549388,
+    "fast_score": 0.5908454810703945,
+    "fast_rank": 9,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 10,
+    "flights": [
+     "abb40e",
+     "a60e95"
+    ],
+    "search_score": 0.5620234220404492,
+    "fast_score": 0.5620211803519048,
+    "fast_rank": 10,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 11,
+    "flights": [
+     "a9b3df",
+     "a2733d"
+    ],
+    "search_score": 0.5470704226209542,
+    "fast_score": 0.546982152424158,
+    "fast_rank": 11,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 12,
+    "flights": [
+     "a2c21b",
+     "ad5e1d"
+    ],
+    "search_score": 0.517486873613574,
+    "fast_score": 0.5174869589330151,
+    "fast_rank": 13,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 13,
+    "flights": [
+     "a77707",
+     "acf88c"
+    ],
+    "search_score": 0.5150712729089724,
+    "fast_score": null,
+    "fast_rank": null,
+    "best_position_difference_m": null
+   },
+   {
+    "rank": 14,
+    "flights": [
+     "a43418",
+     "ac118a"
+    ],
+    "search_score": 0.5034094770587302,
+    "fast_score": 0.5034092209688443,
+    "fast_rank": 14,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 15,
+    "flights": [
+     "c07572",
+     "c07d20"
+    ],
+    "search_score": 0.49109249032575614,
+    "fast_score": 0.49109185649918596,
+    "fast_rank": 15,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 16,
+    "flights": [
+     "a27aab",
+     "c013c3"
+    ],
+    "search_score": 0.4875422133341921,
+    "fast_score": 0.48754224348861414,
+    "fast_rank": 16,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 17,
+    "flights": [
+     "a6a23b",
+     "a2c21b"
+    ],
+    "search_score": 0.4424888308688808,
+    "fast_score": 0.44014093621155975,
+    "fast_rank": 17,
+    "best_position_difference_m": 0.0
+   },
+   {
+    "rank": 18,
+    "flights": [
+     "a9d7ad",
+     "ab050a"
+    ],
+    "search_score": 0.3450350780472047,
+    "fast_score": 0.3011039238261248,
+    "fast_rank": 18,
+    "best_position_difference_m": 6584.075751671081
+   }
+  ]
+ }
+}

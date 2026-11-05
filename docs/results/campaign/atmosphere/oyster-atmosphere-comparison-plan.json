@@ -1,0 +1,304 @@
+{
+  "validation": "Real recording, conditional refinement with published flight identities and coarse candidate; not a blind search.",
+  "conditions": {
+    "original": {
+      "height_m": -30.0
+    },
+    "layered": {
+      "height_m": -28.854
+    },
+    "homog-336.3": {
+      "height_m": -28.854
+    },
+    "homog-344.3": {
+      "height_m": -28.854
+    }
+  },
+  "methods": [
+    "brightness",
+    "contrast",
+    "legacy-ridge",
+    "legacy-drift",
+    "projected-constant",
+    "projected-linear",
+    "spline-linear",
+    "kalman-linear",
+    "spline-cv"
+  ],
+  "weather_file": "data/oyster-bay/weather/open-meteo-2026-09-08.json",
+  "weather_metadata": {
+    "source": "open-meteo historical forecast",
+    "latitude": 40.862343,
+    "longitude": -73.498215,
+    "model_elevation_m": 93.0,
+    "geoid_offset_m": -30.854,
+    "height_reference": "ellipsoid (geopotential height taken as MSL, plus geoid offset)",
+    "pressure_levels_hpa": [
+      1000,
+      975,
+      950,
+      925,
+      900,
+      850,
+      800,
+      700,
+      600,
+      500,
+      400,
+      300
+    ],
+    "surface_level": true,
+    "url": "https://historical-forecast-api.open-meteo.com/v1/forecast?latitude=40.8500&longitude=-73.5000&start_date=2026-09-08&end_date=2026-09-08&hourly=temperature_1000hPa,relative_humidity_1000hPa,wind_speed_1000hPa,wind_direction_1000hPa,geopotential_height_1000hPa,temperature_975hPa,relative_humidity_975hPa,wind_speed_975hPa,wind_direction_975hPa,geopotential_height_975hPa,temperature_950hPa,relative_humidity_950hPa,wind_speed_950hPa,wind_direction_950hPa,geopotential_height_950hPa,temperature_925hPa,relative_humidity_925hPa,wind_speed_925hPa,wind_direction_925hPa,geopotential_height_925hPa,temperature_900hPa,relative_humidity_900hPa,wind_speed_900hPa,wind_direction_900hPa,geopotential_height_900hPa,temperature_850hPa,relative_humidity_850hPa,wind_speed_850hPa,wind_direction_850hPa,geopotential_height_850hPa,temperature_800hPa,relative_humidity_800hPa,wind_speed_800hPa,wind_direction_800hPa,geopotential_height_800hPa,temperature_700hPa,relative_humidity_700hPa,wind_speed_700hPa,wind_direction_700hPa,geopotential_height_700hPa,temperature_600hPa,relative_humidity_600hPa,wind_speed_600hPa,wind_direction_600hPa,geopotential_height_600hPa,temperature_500hPa,relative_humidity_500hPa,wind_speed_500hPa,wind_direction_500hPa,geopotential_height_500hPa,temperature_400hPa,relative_humidity_400hPa,wind_speed_400hPa,wind_direction_400hPa,geopotential_height_400hPa,temperature_300hPa,relative_humidity_300hPa,wind_speed_300hPa,wind_direction_300hPa,geopotential_height_300hPa,temperature_2m,relative_humidity_2m,wind_speed_10m,wind_direction_10m,surface_pressure&wind_speed_unit=ms&timezone=UTC",
+    "raw_response": "open-meteo-2026-09-08.raw.json",
+    "fetched_utc": "2026-11-05T06:36:57.015596+00:00"
+  },
+  "layered_profiles": {
+    "type": "per_flight",
+    "flights": {
+      "a1dfeb:1788899524.900": {
+        "type": "layered",
+        "heights_m": [
+          64.146,
+          163.2558105023967,
+          384.2558105023967,
+          608.2558105023966,
+          836.2558105023966,
+          1069.2558105023968,
+          1552.0361894976031,
+          2059.0361894976036,
+          3162.0361894976036,
+          4405.9263789952065,
+          5834.81656849281,
+          7522.65230417724,
+          9594.971551505201
+        ],
+        "sound_speed_m_s": [
+          347.3839374139946,
+          346.0197843625268,
+          344.7603380441921,
+          343.5709321486827,
+          342.3951446332546,
+          341.27566588698255,
+          339.6829384468949,
+          338.3307216026499,
+          335.0653916002256,
+          330.7337661066862,
+          325.429482163615,
+          319.3205122172307,
+          309.35702586810686
+        ],
+        "wind_east_m_s": [
+          0.6221790457561223,
+          0.7415160340710141,
+          1.3062850723321036,
+          1.9979384320003208,
+          2.5710955195437784,
+          3.0381853973525317,
+          3.2853407236767973,
+          0.9743935596510614,
+          7.730268505862671,
+          9.159857993107234,
+          11.617122640892845,
+          9.99262942710345,
+          17.272887729052044
+        ],
+        "wind_north_m_s": [
+          -1.3735184715450908,
+          -1.0323421963659083,
+          -1.1488926421857644,
+          -1.268402475612342,
+          -1.133786842192284,
+          -1.1286871810440586,
+          -2.9468902973791558,
+          -7.46883528425315,
+          -7.9189583413951,
+          -10.457300312918242,
+          -12.360513106330849,
+          -15.66914950365964,
+          -21.49350304702044
+        ],
+        "sound_speed_offset_m_s": 0.0,
+        "wind_offset_en_m_s": [
+          0.0,
+          0.0
+        ],
+        "height_reference": "ellipsoid",
+        "description": "open-meteo historical forecast interpolated to 2026-09-08T20:53:24.682191+00:00"
+      },
+      "ace391:1788901235.390": {
+        "type": "layered",
+        "heights_m": [
+          64.146,
+          163.4363667415513,
+          384.5815501123269,
+          608.5815501123268,
+          836.7267334831024,
+          1069.7267334831024,
+          1552.7267334831024,
+          2059.7267334831026,
+          3163.017100224654,
+          4407.017100224653,
+          5835.871916853877,
+          7524.361781397684,
+          9597.268687514555
+        ],
+        "sound_speed_m_s": [
+          347.25101938206257,
+          346.05802187353066,
+          344.8199388095814,
+          343.62548351074196,
+          342.44971125996153,
+          341.33534075233575,
+          339.70225588316225,
+          338.3271261353304,
+          335.1311335215419,
+          330.7551458870228,
+          325.435706223455,
+          319.362141208141,
+          309.3956761071015
+        ],
+        "wind_east_m_s": [
+          0.49322934364682885,
+          0.6468335651569995,
+          1.226111180304373,
+          1.927476786230985,
+          2.5477456606338396,
+          3.02613817041071,
+          3.153072022974423,
+          0.6967982349154426,
+          8.086112862620427,
+          9.24780053780416,
+          11.396635662324266,
+          9.971529398197564,
+          17.46196448203458
+        ],
+        "wind_north_m_s": [
+          -1.3115881007658245,
+          -1.0971337481713133,
+          -1.2193004868286001,
+          -1.2977522431814967,
+          -1.0849268445068612,
+          -1.0120991536203847,
+          -2.807751723269905,
+          -7.433389388538894,
+          -7.997689668934639,
+          -10.526392247411941,
+          -12.340934245619247,
+          -15.274557372356798,
+          -21.050003768147626
+        ],
+        "sound_speed_offset_m_s": 0.0,
+        "wind_offset_en_m_s": [
+          0.0,
+          0.0
+        ],
+        "height_reference": "ellipsoid",
+        "description": "open-meteo historical forecast interpolated to 2026-09-08T21:08:42.660135+00:00"
+      }
+    },
+    "default": {
+      "type": "layered",
+      "heights_m": [
+        64.146,
+        163.18137286837896,
+        384.19905930256846,
+        608.1990593025685,
+        836.2167457367578,
+        1069.2167457367577,
+        1552.2167457367577,
+        2059.216745736758,
+        3162.2521186051367,
+        4406.252118605137,
+        5835.234432170947,
+        7523.5751252989485,
+        9596.651602341479
+      ],
+      "sound_speed_m_s": [
+        347.33707191048217,
+        346.01468991102143,
+        344.7781933071978,
+        343.5930423746117,
+        342.42100121554347,
+        341.3110127740414,
+        339.7172034245243,
+        338.33247247712865,
+        335.09000613715153,
+        330.7507697174688,
+        325.47016455479235,
+        319.362141208141,
+        309.394109600687
+      ],
+      "wind_east_m_s": [
+        0.5535431332503096,
+        0.739509126124464,
+        1.3064515840823814,
+        2.00376097815744,
+        2.5983647304811077,
+        3.0755378148592194,
+        3.2686650151162087,
+        0.7834423004951592,
+        7.946090925214749,
+        9.152168407339838,
+        11.52201901535878,
+        10.020070930716978,
+        17.419224175499
+      ],
+      "wind_north_m_s": [
+        -1.3811290316567295,
+        -1.043044972810012,
+        -1.1194464824683061,
+        -1.2209882173175555,
+        -1.056577202929777,
+        -1.0553521129473094,
+        -2.9393077649719643,
+        -7.551875214947233,
+        -7.935319092410534,
+        -10.514723189614227,
+        -12.370415041689295,
+        -15.41977982928149,
+        -21.44836754551563
+      ],
+      "sound_speed_offset_m_s": 0.0,
+      "wind_offset_en_m_s": [
+        0.0,
+        0.0
+      ],
+      "height_reference": "ellipsoid",
+      "description": "open-meteo historical forecast interpolated to 2026-09-08T21:01:03.671163+00:00"
+    }
+  },
+  "initial_latlon": [
+    40.876104922746144,
+    -73.52356936754546
+  ],
+  "initial_clock": 1788898648.7235358,
+  "flights": [
+    "a1dfeb:1788899524.900",
+    "ace391:1788901235.390"
+  ],
+  "source_hashes": {
+    "geo.py": "eb34c3bd77db460e422793330fbb74dd704351e0b93b47855a71174a3acdc6c7",
+    "advanced.py": "39b8f91ddddad5c11fdf836eb6742614ee5383367ed43a85faaa01af859efbe5",
+    "detection.py": "15faf6744059246b6cef859f110d83297020ba9726417013468c51546990bae8",
+    "signal.py": "e5058a832b40daac44cafb36dc440af0b01c0a3f95209d02addfd45a332d553b",
+    "benchmark.py": "a03ec844d67b20f051877db7065a541f4a41d3174fe9bf113c24e3b56716e79b",
+    "stress_benchmark.py": "50bae6152ff176b799df213c154e7b675166479a1ac0fa1850723c52d67aca77",
+    "audio_benchmark.py": "5cd0bd1ac006ddd4f0a0f0d82b7d5d9a854cd467acc439a8f9f909043d8e2ac9",
+    "scoring.py": "53d676639efa30762309146725b83aa2f7f6d342d856cd7ab907a6f2d6ca70fc",
+    "download.py": "4c014b33ea98721318d370d235fbbd7014cb6c4e88b578ad0e5b633bb5dfb91e",
+    "terrain.py": "93130d81e03ac7d5649a5fbc0081663f4f8762c8b8783640ae8950d325ea9c20",
+    "refine.py": "5dec596ef23dd182a0144fbdf7fa71539111d1d7574fe12361da3f54c6c2cbab",
+    "__init__.py": "3daa9057b0628eb5915aa00a80e975258472096a170b0eed441638227c84ecb0",
+    "evidence_controls.py": "ec021baf7daa049cdbbe71ebf9e53f3e36a2747e2bf475b5e3a9dd248e193ea2",
+    "physics.py": "fbf75219bb215c238aa3657ece0872ef2562380f470031664ffd128f1b7f7ea7",
+    "cli.py": "e12d336906ad4cddb9036a293df8b9d8e7e0598f979714a6b63ef533e8b2047a",
+    "stress_scenes.py": "7586cc182c3c11bf1fc37556452d6e38104995ae1bd4a879b875803370b943f8",
+    "search.py": "1f5b11eefcb1d267907f4f07d83f333c2da0ccce147325dcaa099141d42c4e95",
+    "detection_benchmark.py": "86791d2ea16032f8bcc72ae5fba8f848149c42b3f4ba99c49f479cac31c405be",
+    "identification.py": "72f27f947df247013b92e5063ffc9c9fcbb6f6a1ef8eeefa2421f79eea8939c7",
+    "atmosphere.py": "2b1985cdf2ebe5249b021620e91bfe278895a72ef3b75bcda1ed81e5c3851e3d",
+    "evidence.py": "b423c3ee375876f4c5f167e54767cad6aced7a78e3b1aed2d7044a686ebbf54c",
+    "__main__.py": "307299fda7b77d22c64cb51430ec75e5f59d78e9c948786afb3b2544fe45e4b7",
+    "data.py": "98862903f9f1cb92135cfd3575f43c044df8ea9535a33d48297f2164ced3c298"
+  }
+}

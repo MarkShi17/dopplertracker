@@ -60,3 +60,14 @@ def test_report_is_json_safe_and_detects_a_real_small_scene():
         "whitened-two-harmonics",
     }
     assert all(np.isfinite(row["runtime_s"]) and row["runtime_s"] >= 0 for row in report["trials"])
+    # The default run stays legacy-only, but now also scores matched f0 and ranges.
+    assert report["detector"]["calibrated_options"] is None
+    for row in report["trials"]:
+        assert len(row["matched_f0_errors_hz"]) == row["matched"]
+        assert len(row["matched_ranges_cover_truth"]) == row["matched"]
+        assert row["proposal_z"] == [None] * len(row["proposal_cpas_s"])
+
+
+def test_matching_reports_the_matched_pairs():
+    result = match_cpa_proposals([98, 300, 202], [event(100), event(201)], tolerance_s=5)
+    assert sorted(result["pairs"]) == [(0, 0), (2, 1)]

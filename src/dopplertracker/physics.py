@@ -1,4 +1,8 @@
-"""Retarded-time acoustics in a homogeneous, optionally moving atmosphere."""
+"""Retarded-time acoustics in a homogeneous, optionally moving atmosphere.
+
+Stratified media (``atmosphere.LayeredAtmosphere``) supply their own travel time;
+the emission-time solve and Doppler identity below are unchanged.
+"""
 
 from dataclasses import dataclass
 
@@ -24,7 +28,19 @@ class Atmosphere:
 
 
 class Trajectory:
-    def __init__(self, id, times, positions, max_gap=30.0, metadata=None):
+    """Piecewise cubic Hermite flight path in local ENU metres and UTC seconds.
+
+    ``velocities`` optionally holds per-point reported ENU velocity (m/s, the same
+    axes as ``positions``), NaN where a component was not reported.  Reported
+    values become the Hermite derivatives only when ``use_velocities`` is true;
+    missing components then fall back to the differenced-position slope.
+    Without that flag, or without velocities, the path is exactly the
+    differenced-position interpolant.
+    """
+
+    def __init__(
+        self, id, times, positions, max_gap=30.0, metadata=None, velocities=None, use_velocities=False
+    ):
         self.id = str(id)
         self.times = np.asarray(times, dtype=float)
         self.positions = np.asarray(positions, dtype=float)
@@ -39,6 +55,12 @@ class Trajectory:
             or max_gap <= 0
         ):
             raise ValueError("trajectory requires finite positions and strictly increasing times")
+        if velocities is not None:
+            velocities = np.asarray(velocities, dtype=float)
+            if velocities.shape != self.positions.shape or np.isinf(velocities).any():
+                raise ValueError("velocities must match positions and be finite or NaN")
+        self.velocities = velocities
+        self.use_velocities = bool(use_velocities)
         self.max_gap = max_gap
         self.metadata = metadata or {}
         # Separate interpolators prevent samples beyond a gap from altering endpoint velocities.
@@ -56,6 +78,9 @@ class Trajectory:
             # contrast, independent component-wise PCHIP slopes can change when a
             # physically identical trajectory is expressed in a rotated frame.
             derivatives = np.gradient(self.positions[idx], relative_times, axis=0)
+            if self.use_velocities and self.velocities is not None:
+                reported = self.velocities[idx]
+                derivatives = np.where(np.isfinite(reported), reported, derivatives)
             spline = CubicHermiteSpline(
                 relative_times, self.positions[idx], derivatives, axis=0, extrapolate=False
             )
@@ -64,6 +89,18 @@ class Trajectory:
             velocity_samples.append(spline.derivative()(sample_times))
         self.velocity_samples = np.concatenate(velocity_samples) if velocity_samples else np.empty((0, 3))
         self.max_speed = np.max(np.linalg.norm(self.velocity_samples, axis=1), initial=0.0)
+
+    def relative_to(self, origin):
+        """The same path on a clock whose zero is ``origin``; keeps velocity data."""
+        return Trajectory(
+            self.id,
+            self.times - origin,
+            self.positions,
+            self.max_gap,
+            self.metadata,
+            self.velocities,
+            self.use_velocities,
+        )
 
     def valid(self, t):
         t = np.asarray(t)
@@ -85,7 +122,21 @@ class Trajectory:
         return position, velocity
 
 
-def travel_time(source_minus_observer, atmosphere=Atmosphere()):
+def _medium(atmosphere, track):
+    """Per-flight atmospheres (``atmosphere.FlightAtmospheres``) resolve by track id."""
+    return atmosphere.for_flight(track.id) if hasattr(atmosphere, "for_flight") else atmosphere
+
+
+def travel_time(source_minus_observer, atmosphere=Atmosphere(), observer=None):
+    """Travel time and its gradient with respect to source position.
+
+    A stratified medium (``atmosphere.LayeredAtmosphere``) also needs the
+    absolute ``observer`` position, because its profile depends on height.
+    """
+    if not isinstance(atmosphere, Atmosphere):
+        if observer is None:
+            raise ValueError("a layered atmosphere needs the observer position")
+        return atmosphere.travel_time(source_minus_observer, np.asarray(observer, dtype=float)[2])
     r = np.asarray(source_minus_observer, dtype=float)
     w = np.asarray(atmosphere.wind)
     a = atmosphere.c**2 - np.dot(w, w)
@@ -103,32 +154,37 @@ def predict(track, observer, receive_times, f0=1.0, atmosphere=Atmosphere(), dri
     """Return observed Hz and emission time; NaN outside measured track coverage.
 
     drift is source Hz per emission second relative to reference (absolute UTC).
+    atmosphere may be homogeneous, layered, or per-flight layered.
     """
-    if track.max_speed + np.linalg.norm(atmosphere.wind) >= atmosphere.c and np.any(
-        np.linalg.norm(track.velocity_samples - np.array(atmosphere.wind), axis=1) >= atmosphere.c
-    ):
+    atmosphere = _medium(atmosphere, track)
+    if isinstance(atmosphere, Atmosphere):
+        if track.max_speed + np.linalg.norm(atmosphere.wind) >= atmosphere.c and np.any(
+            np.linalg.norm(track.velocity_samples - np.array(atmosphere.wind), axis=1) >= atmosphere.c
+        ):
+            raise ValueError("propagator requires subsonic aircraft motion relative to the medium")
+    elif track.max_speed + atmosphere.max_wind_speed >= atmosphere.min_sound_speed:
         raise ValueError("propagator requires subsonic aircraft motion relative to the medium")
     receive = np.asarray(receive_times, dtype=float)
     low = np.full(receive.shape, track.times[0])
     high = low.copy()
     eligible = np.zeros(receive.shape, dtype=bool)
     for start, end, spline, _ in track.pieces:
-        first = start + travel_time(spline(0) - observer, atmosphere)[0]
-        last = end + travel_time(spline(end - start) - observer, atmosphere)[0]
+        first = start + travel_time(spline(0) - observer, atmosphere, observer)[0]
+        last = end + travel_time(spline(end - start) - observer, atmosphere, observer)[0]
         mask = (receive >= first) & (receive <= last)
         low, high = np.where(mask, start, low), np.where(mask, end, high)
         eligible |= mask
     emit = np.clip(receive, low, high)
     for _ in range(16):
         pos, vel = track.at(emit)
-        tau, grad = travel_time(pos - observer, atmosphere)
+        tau, grad = travel_time(pos - observer, atmosphere, observer)
         denom = 1 + np.sum(grad * vel, axis=-1)
         step = (emit + tau - receive) / np.maximum(denom, 0.1)
         emit = np.clip(emit - step, low, high)
         if np.max(np.abs(step), initial=0) < 1e-7:
             break
     pos, vel = track.at(emit)
-    tau, grad = travel_time(pos - observer, atmosphere)
+    tau, grad = travel_time(pos - observer, atmosphere, observer)
     denom = 1 + np.sum(grad * vel, axis=-1)
     ref = track.times[0] if reference is None else reference
     source_hz = f0 + drift * (emit - ref)
@@ -150,9 +206,10 @@ def closest_approaches(track, observer, atmosphere=Atmosphere()):
     is where the source frequency is unshifted. Reception time itself is monotone
     for a subsonic source and must NOT be minimized.
     """
+    atmosphere = _medium(atmosphere, track)
     results = []
     for idx in track.segments:
-        delays, _ = travel_time(track.positions[idx] - observer, atmosphere)
+        delays, _ = travel_time(track.positions[idx] - observer, atmosphere, observer)
         minima = list(np.flatnonzero((delays[1:-1] <= delays[:-2]) & (delays[1:-1] <= delays[2:])) + 1)
         if delays[0] <= delays[1]:
             minima.insert(0, 0)
@@ -164,13 +221,13 @@ def closest_approaches(track, observer, atmosphere=Atmosphere()):
                 emission = base
             else:
                 fit = minimize_scalar(
-                    lambda dt: float(travel_time(track.at(base + dt)[0] - observer, atmosphere)[0]),
+                    lambda dt: float(travel_time(track.at(base + dt)[0] - observer, atmosphere, observer)[0]),
                     bounds=(track.times[idx[i - 1]] - base, track.times[idx[i + 1]] - base),
                     method="bounded",
                 )
                 emission = base + fit.x
             pos, vel = track.at(emission)
-            delay, _ = travel_time(pos - observer, atmosphere)
+            delay, _ = travel_time(pos - observer, atmosphere, observer)
             hit = (float(emission + delay), float(np.linalg.norm(pos - observer)), float(np.linalg.norm(vel)))
             if not results or abs(hit[0] - results[-1][0]) > 0.01:
                 results.append(hit)

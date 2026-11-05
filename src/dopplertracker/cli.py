@@ -9,15 +9,25 @@ from pathlib import Path
 import numpy as np
 
 from .advanced import ModelOptions, fit_consensus, fit_projected, select_model
+from .atmosphere import WeatherSeries, fetch_open_meteo
 from .benchmark import SCENARIOS, run_benchmark, write_demo
 from .data import extract_archive, fetch_day, load_tracks, save_tracks
-from .detection import detect, fit_event, load_events, save_events
+from .detection import (
+    FlyoverOptions,
+    detect,
+    detect_flyovers,
+    fit_event,
+    fit_flyover,
+    load_events,
+    save_events,
+)
+from .discovery import DiscoveryOptions, TraceIndex, discover, discover_and_refit
 from .evidence import assess_candidate
 from .geo import LocalFrame, ground_grid, validate_bbox
 from .physics import Atmosphere, closest_approaches
 from .refine import refine_candidate, refine_spectral
 from .scoring import joint_score
-from .search import distinct_candidates, save_results, search
+from .search import distinct_candidates, fast_search, save_results, search
 from .signal import Spectrogram, decode
 from .stress_benchmark import METHODS, run_stress_benchmark
 from .stress_scenes import STRESS_SCENARIOS
@@ -54,15 +64,27 @@ def parser():
         )
         p.add_argument("spectrogram")
         p.add_argument("--band", nargs=2, type=float, default=(60, 300))
-        p.add_argument("--harmonics", type=int, default=1)
+        p.add_argument("--harmonics", type=int, help="Harmonics scored (default 1 legacy, 2 calibrated)")
         p.add_argument("--out", required=True)
         p.add_argument("--raw-score", action="store_true", help="Skip robust spectral whitening")
+        p.add_argument(
+            "--detector",
+            choices=["legacy", "calibrated"],
+            default="legacy",
+            help="legacy: original brightness fit; calibrated: contrast bank with null z-scores",
+        )
         if name == "fit":
             p.add_argument("--window", nargs=2, type=float, required=True)
         else:
-            p.add_argument("--window-seconds", type=float, default=120.0)
-            p.add_argument("--stride", type=float, default=60.0)
+            p.add_argument("--window-seconds", type=float, default=120.0, help="Legacy detector only")
+            p.add_argument("--stride", type=float, default=60.0, help="Legacy detector only")
             p.add_argument("--top", type=int, default=10)
+            p.add_argument(
+                "--min-z",
+                type=float,
+                default=FlyoverOptions.min_z,
+                help="Calibrated detector abstains below this null z-score",
+            )
     for name in ("fetch-day", "extract-region"):
         p = commands.add_parser(name, help="Stream ADS-B archives and retain a padded region")
         p.add_argument("source", help="YYYY-MM-DD" if name == "fetch-day" else "Local TAR archive")
@@ -106,6 +128,25 @@ def parser():
             p.add_argument("--fit-altitude", action="store_true")
             p.add_argument("--fit-clock-rate", action="store_true")
             p.add_argument("--loss", choices=["linear", "soft_l1", "huber", "cauchy"], default="soft_l1")
+            p.add_argument(
+                "--velocity",
+                choices=["differenced", "reported", "fused"],
+                default="differenced",
+                help="Aircraft velocity source: differenced positions (default), the reported ADS-B velocity, "
+                "or both fused by a Kalman smoother; needs traces that carry reported velocities",
+            )
+            p.add_argument(
+                "--weather",
+                help="Weather file from fetch-weather: layered sound speed and wind, interpolated to each "
+                "event; replaces --sound-speed/--wind, and --fit-sound-speed/--fit-wind become offsets",
+            )
+            p.add_argument(
+                "--uncertainty",
+                action="store_true",
+                help="Add a linearised 50%%/90%% error ellipse with a variance breakdown by cause "
+                "(measurement, atmosphere, ADS-B timing, altitude, observer height, velocity); "
+                "requires --method projected",
+            )
         else:
             p.add_argument("--bbox", nargs=4, type=float, metavar=("S", "N", "W", "E"))
             p.add_argument("--point", nargs=2, type=float, metavar=("LAT", "LON"))
@@ -121,6 +162,21 @@ def parser():
             )
             p.add_argument("--method", choices=["brightness", "contrast"], default="brightness")
             p.add_argument("--max-candidates", type=int, default=100000)
+            p.add_argument(
+                "--fast",
+                action="store_true",
+                help="Vectorised regional search (fast_search); --max-candidates is ignored",
+            )
+            p.add_argument(
+                "--per-combination",
+                type=int,
+                default=48,
+                help="Fast search: spatially thinned candidates scored per flight combination; 0 scores all",
+            )
+            p.add_argument(
+                "--jet-types",
+                help="JSON list of ICAO type designators to drop before searching; unknown types are kept",
+            )
         p.add_argument("--events", nargs="+", required=True)
         p.add_argument("--traces", required=True)
         p.add_argument("--out", required=True)
@@ -170,6 +226,61 @@ def parser():
     p.add_argument("--traces", required=True)
     p.add_argument("--out", required=True)
     p.add_argument("--raw-score", action="store_true")
+    p.add_argument(
+        "--weather",
+        help="Weather file for candidates that do not record their own layered atmosphere",
+    )
+    p = commands.add_parser(
+        "fetch-weather", help="Download hourly Open-Meteo sound-speed and wind profiles for one UTC day"
+    )
+    p.add_argument("date", help="YYYY-MM-DD (UTC)")
+    p.add_argument("output", help="Derived profile JSON; the raw response is saved beside it (.raw.json)")
+    p.add_argument("--lat", type=float, required=True, help="Query point, e.g. the search region centre")
+    p.add_argument("--lon", type=float, required=True)
+    p.add_argument(
+        "--geoid-offset",
+        type=float,
+        default=0.0,
+        help="Geoid undulation N at the query point: ellipsoid height = MSL + N",
+    )
+    p = commands.add_parser(
+        "discover",
+        help="Find and score every audible flyover a frozen candidate predicts; optional joint refit",
+        description=(
+            "Two-step use: 'discover SPEC FIT --traces T --out found.json --confirmation c.json', then "
+            "'refine SPEC FIT --events EVENTS --extra found.json --method projected ...'. "
+            "Or add --refit (with --events and a terrain option) to refit and rediscover in one step."
+        ),
+    )
+    p.add_argument("spectrogram")
+    p.add_argument("results", help="Result JSON: a single candidate or a file with a 'candidates' list")
+    p.add_argument("--candidate", type=int, default=0, help="Index into 'candidates'")
+    p.add_argument("--traces", required=True)
+    p.add_argument("--out", required=True, help="Discovered independent events JSON")
+    p.add_argument("--confirmation", required=True, help="Confirmation summary JSON")
+    p.add_argument("--events", nargs="+", help="Events used to fit the candidate (required with --refit)")
+    p.add_argument("--raw-score", action="store_true")
+    p.add_argument("--sound-speed", type=float, help="Default: candidate value, else 343 m/s")
+    p.add_argument("--wind", nargs=3, type=float, metavar=("EAST", "NORTH", "UP"))
+    defaults = DiscoveryOptions()
+    p.add_argument("--band", nargs=2, type=float, default=defaults.band)
+    p.add_argument("--harmonics", type=int, default=defaults.harmonics)
+    p.add_argument("--max-distance", type=float, default=defaults.max_distance)
+    p.add_argument("--ground-range", type=float, default=defaults.ground_range)
+    p.add_argument("--min-sweep", type=float, default=defaults.min_sweep)
+    p.add_argument("--threshold", type=float, default=defaults.threshold)
+    p.add_argument("--drift-radius", type=float, default=defaults.drift_radius, help="Hz/s")
+    p.add_argument("--drift-steps", type=int, default=defaults.drift_steps)
+    p.add_argument("--refit", action="store_true", help="Joint refit with discovered events, then rediscover")
+    p.add_argument("--refit-out", help="Refined result JSON (with --refit)")
+    p.add_argument("--source-degree", type=int, choices=[0, 1, 2], default=1)
+    p.add_argument("--smooth", choices=["none", "spline", "kalman"], default="spline")
+    p.add_argument("--radius", type=float, default=1200.0)
+    p.add_argument("--geoid-offset", type=float, default=0.0)
+    terrain = p.add_mutually_exclusive_group()
+    terrain.add_argument("--elevation", type=float, help="Explicit constant ground elevation in MSL meters")
+    terrain.add_argument("--dem", help="Local NPZ grid: lat, lon, elevation_m (MSL)")
+    terrain.add_argument("--terrain", action="store_true", help="Download/cache public terrain tiles")
     return root
 
 
@@ -223,6 +334,72 @@ def _extra_events(spec, events, chosen, candidate, extra, all_tracks, atmosphere
     return new_events, new_tracks, {**candidate, "f0": f0, "flights": [t.id for t in new_tracks]}
 
 
+def _discover(args, spec):
+    # Lazy index: a full-day archive would cost gigabytes as interpolating trajectories.
+    tracks = TraceIndex(args.traces)
+    frame = tracks.frame
+    payload = json.loads(Path(args.results).read_text())
+    if payload.get("frame") is not None and not np.allclose(
+        payload["frame"], [frame.lat, frame.lon], atol=1e-9, rtol=0
+    ):
+        raise ValueError("results and flight traces use different coordinate frames")
+    candidate = payload["candidates"][args.candidate] if "candidates" in payload else payload
+    atmosphere = Atmosphere(
+        args.sound_speed if args.sound_speed is not None else candidate.get("sound_speed_m_s", 343.0),
+        tuple(args.wind if args.wind is not None else candidate.get("wind_enu_m_s", (0.0, 0.0, 0.0))),
+    )
+    options = DiscoveryOptions(
+        band=tuple(args.band),
+        harmonics=args.harmonics,
+        max_distance=args.max_distance,
+        ground_range=args.ground_range,
+        min_sweep=args.min_sweep,
+        threshold=args.threshold,
+        drift_radius=args.drift_radius,
+        drift_steps=args.drift_steps,
+    )
+
+    def progress(done, total):
+        if done == total or done % 10 == 0:
+            note(f"Passes scanned {done}/{total}")
+
+    if not args.refit:
+        found = discover(spec, tracks, candidate, atmosphere, options, progress=progress)
+        report = found["summary"]
+        events = found["events"]
+    else:
+        fitted = [tracks.track(id) for id in candidate["flights"]]
+        model = ModelOptions(degree=args.source_degree, smoothing=args.smooth, radius=args.radius)
+        pipeline = discover_and_refit(
+            spec,
+            load_events(args.events),
+            fitted,
+            tracks,
+            candidate,
+            model,
+            atmosphere,
+            options,
+            frame=frame,
+            elevation=_terrain(args),
+            progress=progress,
+        )
+        report = {"first": pipeline["first"], "second": pipeline["second"]}
+        original = {track.id for track in fitted}
+        events = [
+            e for e, t in zip(pipeline["events"], pipeline["tracks"], strict=True) if t.id not in original
+        ]
+        save_results(args.refit_out, [pipeline["result"]], frame)
+    save_events(events, args.out)
+    Path(args.confirmation).parent.mkdir(parents=True, exist_ok=True)
+    Path(args.confirmation).write_text(json.dumps(report, indent=2, allow_nan=False))
+    summary = report.get("second", report)
+    print(
+        f"{len(events)} discovered events -> {args.out}; {summary['confirmed_independent']} independent "
+        f"confirmations (z sum {summary['z_sum']:.1f}): {', '.join(summary['confirmed_flights']) or 'none'}"
+    )
+    return 0
+
+
 def execute(args):
     if args.command == "refine":
         if args.top < 1:
@@ -234,6 +411,7 @@ def execute(args):
             or args.fit_altitude
             or args.fit_clock_rate
             or args.loss != "soft_l1"
+            or args.velocity != "differenced"
         )
         if advanced and args.method not in ("projected", "auto", "consensus"):
             raise ValueError(
@@ -243,9 +421,44 @@ def execute(args):
             raise ValueError(
                 "--fit-drift and --fit-sound-speed require a ridge or projected refinement method"
             )
+        if args.weather and (args.sound_speed != 343.0 or any(args.wind)):
+            raise ValueError("--weather replaces --sound-speed and --wind; do not combine them")
+        if args.uncertainty and args.method != "projected":
+            raise ValueError("--uncertainty requires --method projected")
+        if args.weather and args.fit_sound_speed and args.method == "robust-ridge":
+            raise ValueError(
+                "--fit-sound-speed with --weather requires --method projected, auto or consensus"
+            )
+    if (
+        args.command == "discover"
+        and args.refit
+        and (
+            not args.events
+            or not args.refit_out
+            or (args.elevation is None and not args.dem and not args.terrain)
+        )
+    ):
+        raise ValueError("--refit requires --events, --refit-out and --elevation, --dem or --terrain")
     output = getattr(args, "out", getattr(args, "output", None))
     if output:
         Path(output).parent.mkdir(parents=True, exist_ok=True)
+    if args.command == "fetch-weather":
+        if args.geoid_offset == 0:
+            note("Geoid offset is 0 m: profile heights stay MSL, while tracks use ellipsoid heights.")
+        url, raw = fetch_open_meteo(args.date, args.lat, args.lon)
+        destination = Path(args.output)
+        raw_path = destination.with_name(destination.stem + ".raw.json")
+        raw_path.write_text(json.dumps(raw, indent=2))
+        series = WeatherSeries.from_open_meteo(raw, args.geoid_offset)
+        series.metadata.update(
+            url=url,
+            raw_response=raw_path.name,
+            fetched_utc=datetime.now(timezone.utc).isoformat(),
+        )
+        series.save(destination)
+        levels = series.metadata["pressure_levels_hpa"]
+        print(f"{len(series.times)} hourly profiles, {len(levels)} pressure levels -> {destination}")
+        return 0
     if args.command == "demo":
         print(json.dumps(write_demo(args.out, args.scenario, args.seed), indent=2))
         return 0
@@ -337,17 +550,38 @@ def execute(args):
             payload["frame"], [frame.lat, frame.lon], rtol=0, atol=1e-9
         ):
             raise ValueError("results and traces have different coordinate frames")
+        weather = WeatherSeries.load(args.weather) if args.weather else None
         for candidate in payload["candidates"]:
             chosen = [lookup[id] for id in candidate["flights"]]
-            candidate["evidence"] = assess_candidate(spec, events, chosen, candidate)
+            medium = weather.for_events(events, chosen, candidate["clock"]) if weather else Atmosphere()
+            candidate["evidence"] = assess_candidate(spec, events, chosen, candidate, medium)
         Path(args.out).write_text(json.dumps(payload, indent=2, allow_nan=False))
         print(
             f"{sum(r['evidence']['accepted'] for r in payload['candidates'])}/{len(payload['candidates'])} candidates pass heuristic evidence checks"
         )
         return 0
+    if args.command == "discover":
+        return _discover(args, spec)
     if args.command in ("fit", "detect"):
+        calibrated = args.detector == "calibrated"
+        harmonics = args.harmonics or (2 if calibrated else 1)
+        if calibrated:
+            min_z = getattr(args, "min_z", FlyoverOptions.min_z)
+            options = FlyoverOptions(band=tuple(args.band), harmonics=harmonics, min_z=min_z)
         if args.command == "fit":
-            events = [fit_event(spec, args.window, args.band, args.harmonics)]
+            if calibrated:
+                events = [fit_flyover(spec, args.window, options)]
+            else:
+                events = [fit_event(spec, args.window, args.band, harmonics)]
+        elif calibrated:
+            events = detect_flyovers(
+                spec,
+                options,
+                args.top,
+                progress=lambda i, n: note(f"Refined candidates {i}/{n}"),
+            )
+            if not events:
+                note(f"No flyover reached z >= {args.min_z:g}; the detector abstained.")
         else:
             events = detect(
                 spec,
@@ -355,21 +589,34 @@ def execute(args):
                 args.window_seconds,
                 args.stride,
                 args.top,
-                args.harmonics,
+                harmonics,
                 progress=lambda i, n: note(f"Flyover windows {i}/{n}"),
             )
         save_events(events, args.out)
         for event in events:
-            print(
+            line = (
                 f"CPA={event.cpa:.1f}s  f0={event.f0:.2f}Hz  speed={event.speed:.1f}m/s  "
                 f"slant={event.distance:.0f}m  score={event.score:.3f}"
             )
+            if event.z is not None:
+                line += (
+                    f"  z={event.z:.1f}  speed {event.speed_range[0]:.0f}-{event.speed_range[1]:.0f}m/s"
+                    f"  slant {event.distance_range[0]:.0f}-{event.distance_range[1]:.0f}m"
+                )
+            print(line)
         return 0
-    tracks, frame = load_tracks(args.traces)
+    searching = args.command in ("search", "search-single")
+    if searching and args.per_combination < 0:
+        raise ValueError("--per-combination must be nonnegative")
+    jets = json.loads(Path(args.jet_types).read_text()) if searching and args.jet_types else ()
+    # Dropping jets while loading avoids building their interpolators at all.
+    tracks, frame = load_tracks(args.traces, exclude_types=jets)
+    if jets:
+        note(f"{len(tracks)} flight segments after removing {len(set(jets))} jet types")
     events = load_events(args.events)
     atmosphere = Atmosphere(args.sound_speed, tuple(args.wind))
     elevation = _terrain(args)
-    if args.command in ("search", "search-single"):
+    if searching:
         if args.command == "search-single" and len(events) != 1:
             raise ValueError("search-single needs exactly one event")
         if args.point:
@@ -380,20 +627,41 @@ def execute(args):
         else:
             raise ValueError("supply --bbox or --point")
         note(f"{len(points)} ground points, {len(tracks)} flight segments, {len(events)} events")
-        results = search(
-            spec,
-            events,
-            tracks,
-            points,
-            atmosphere,
-            args.method,
-            args.recording_start,
-            args.clock_tolerance,
-            args.offset_tolerance,
-            args.silence_radius,
-            args.max_candidates,
-            progress=lambda phase, i, n: note(f"{phase}: {i}" + (f"/{n}" if n else "")),
-        )
+        if args.fast:
+            results, summary = fast_search(
+                spec,
+                events,
+                tracks,
+                points,
+                atmosphere,
+                args.method,
+                args.recording_start,
+                args.clock_tolerance,
+                args.offset_tolerance,
+                args.silence_radius,
+                per_combination=args.per_combination or None,
+                progress=lambda phase, i, n: note(f"{phase}: {i}" + (f"/{n}" if n else "")),
+            )
+            note(
+                f"{summary['candidates']} candidates in {summary['combinations']} flight combinations; "
+                f"{summary['scored']} scored, {summary['skipped_supersonic']} skipped as supersonic, "
+                f"{summary['seconds']:.0f} s"
+            )
+        else:
+            results = search(
+                spec,
+                events,
+                tracks,
+                points,
+                atmosphere,
+                args.method,
+                args.recording_start,
+                args.clock_tolerance,
+                args.offset_tolerance,
+                args.silence_radius,
+                args.max_candidates,
+                progress=lambda phase, i, n: note(f"{phase}: {i}" + (f"/{n}" if n else "")),
+            )
     else:
         payload = json.loads(Path(args.results).read_text())
         if payload.get("frame") is not None and not np.allclose(
@@ -402,13 +670,20 @@ def execute(args):
             raise ValueError("results and flight traces use different coordinate frames")
         lookup = {t.id: t for t in tracks}
         extra = load_events(args.extra) if args.extra else []
+        weather = WeatherSeries.load(args.weather) if args.weather else None
         results = []
         for candidate in distinct_candidates(payload["candidates"], args.top):
             try:
                 chosen = [lookup[id] for id in candidate["flights"]]
+                medium = atmosphere
+                if weather is not None:
+                    # One profile to match extra events, then one per event at its heard CPA.
+                    medium = weather.at(candidate["clock"] + float(np.mean([e.cpa for e in events])))
                 active_events, chosen, prepared = _extra_events(
-                    spec, events, chosen, candidate, extra, tracks, atmosphere
+                    spec, events, chosen, candidate, extra, tracks, medium
                 )
+                if weather is not None:
+                    medium = weather.for_events(active_events, chosen, prepared["clock"])
                 if args.method in ("projected", "auto", "consensus"):
                     options = ModelOptions(
                         degree=max(args.source_degree, 1 if args.fit_drift else 0),
@@ -419,6 +694,7 @@ def execute(args):
                         fit_clock_rate=args.fit_clock_rate,
                         loss=args.loss,
                         radius=args.radius,
+                        velocity=args.velocity,
                     )
                     if args.method == "auto":
                         from dataclasses import replace
@@ -429,13 +705,13 @@ def execute(args):
                             chosen,
                             prepared,
                             [replace(options, degree=d) for d in (0, 1, 2)],
-                            atmosphere,
+                            medium,
                             frame=frame,
                             elevation=elevation,
                         )
                     elif args.method == "consensus":
                         result = fit_consensus(
-                            spec, active_events, chosen, prepared, options, atmosphere, frame, elevation
+                            spec, active_events, chosen, prepared, options, medium, frame, elevation
                         )
                     else:
                         result = fit_projected(
@@ -444,9 +720,10 @@ def execute(args):
                             chosen,
                             prepared,
                             options,
-                            atmosphere,
+                            medium,
                             frame=frame,
                             elevation=elevation,
+                            uncertainty=args.uncertainty,
                         )
                 elif args.method == "robust-ridge":
                     result = refine_candidate(
@@ -454,7 +731,7 @@ def execute(args):
                         active_events,
                         chosen,
                         prepared,
-                        atmosphere,
+                        medium,
                         args.radius,
                         args.fit_drift,
                         args.fit_sound_speed,
@@ -468,12 +745,17 @@ def execute(args):
                         chosen,
                         prepared,
                         args.method,
-                        atmosphere,
+                        medium,
                         args.radius,
                         frame,
                         elevation,
                     )
-                result["evidence"] = assess_candidate(spec, active_events, chosen, result, atmosphere)
+                if weather is not None:
+                    result.setdefault("atmosphere", medium.to_record())
+                result["evidence"] = assess_candidate(spec, active_events, chosen, result, medium)
+                if "uncertainty" in result:
+                    region = result["uncertainty"]
+                    note(f"Candidate {len(results) + 1}: {region.get('summary') or region.get('error')}")
                 results.append(result)
             except (ValueError, KeyError) as exc:
                 note(f"Candidate could not be refined: {exc}")

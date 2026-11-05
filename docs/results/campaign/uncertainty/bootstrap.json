@@ -1,0 +1,50 @@
+[
+  {
+    "scenario": "clean",
+    "seed": 0,
+    "linear_90": {
+      "probability": 0.9,
+      "semi_major_m": 0.5203874829857192,
+      "semi_minor_m": 0.5029365006010961,
+      "major_axis_bearing_deg": 26.55182779269066
+    },
+    "bootstrap_90": {
+      "probability": 0.9,
+      "semi_major_m": 0.6140961204261787,
+      "semi_minor_m": 0.5208166545876388,
+      "major_axis_bearing_deg": 90.97295661365956
+    }
+  },
+  {
+    "scenario": "low_snr",
+    "seed": 0,
+    "linear_90": {
+      "probability": 0.9,
+      "semi_major_m": 2.0233576666252757,
+      "semi_minor_m": 1.6046266403266272,
+      "major_axis_bearing_deg": 76.97435150277983
+    },
+    "bootstrap_90": {
+      "probability": 0.9,
+      "semi_major_m": 2.0954903900885795,
+      "semi_minor_m": 1.410823330175582,
+      "major_axis_bearing_deg": 97.90507443706588
+    }
+  },
+  {
+    "scenario": "adsb_noise",
+    "seed": 0,
+    "linear_90": {
+      "probability": 0.9,
+      "semi_major_m": 38.15294658391367,
+      "semi_minor_m": 21.167655826602186,
+      "major_axis_bearing_deg": 6.558890895619248
+    },
+    "bootstrap_90": {
+      "probability": 0.9,
+      "semi_major_m": 52.74859363539799,
+      "semi_minor_m": 37.12311975265092,
+      "major_axis_bearing_deg": 158.5442099225164
+    }
+  }
+]

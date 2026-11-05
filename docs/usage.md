@@ -162,6 +162,96 @@ uv run dopplertrack validate outputs/demo/spectrogram.npz outputs/demo/projected
   --out outputs/demo/validated.json
 ```
 
+## Newer optional settings
+
+All of these are off by default, so older commands give the same results as before.
+The [improvement campaign](campaign-results.md) reports what each one did on synthetic
+and real data. In short: the detector and the fast search are recommended; the
+accuracy settings help on synthetic data and are unproven on real recordings.
+
+**Calibrated detector.** Finds flyovers over the whole recording, scores each against
+null curves, and abstains below `--min-z` (default 12). Slower than the old detector.
+
+```bash
+uv run dopplertrack detect data/recording.npz --detector calibrated --out data/events.json
+```
+
+The score is not a probability; expect an occasional false detection. Three or more
+flyovers identify the aircraft far more reliably than two.
+
+**Fast regional search.** Same candidates and scores as `search`, computed for all grid
+points at once. `--jet-types` takes a JSON list of ICAO type designators to exclude;
+`scripts/experiments/make_jets.py` builds one from the OpenSky copy of ICAO Doc 8643.
+
+```bash
+uv run dopplertrack search data/recording.npz --events data/events.json \
+  --traces data/traces.npz --bbox 40.4 41.3 -74.4 -72.6 --spacing 200 \
+  --terrain --geoid-offset -30 --fast --jet-types data/aircraft-types/jets.json \
+  --out outputs/search.json
+```
+
+**Measured atmosphere.** Downloads the day's temperature, humidity and wind by height
+from Open-Meteo for the region centre, then propagates sound through those layers
+instead of assuming one sound speed. `--weather` replaces `--sound-speed` and `--wind`.
+
+```bash
+uv run dopplertrack fetch-weather 2026-09-08 data/weather.json \
+  --lat 40.85 --lon -73.5 --geoid-offset -30.854
+uv run dopplertrack refine data/recording.npz outputs/search.json \
+  --events data/events.json --traces data/traces.npz --terrain --geoid-offset -30 \
+  --method projected --source-degree 1 --weather data/weather.json \
+  --out outputs/layered.json
+```
+
+Layered fits are about ten times slower. `validate --weather` checks such candidates
+with the same atmosphere.
+
+**Reported aircraft velocity.** `fetch-day` and `extract-region` now keep each
+aircraft's broadcast ground speed, track and vertical rate. `--velocity fused` combines
+them with the positions in a Kalman smoother; `--velocity reported` uses them directly.
+Trace files made by older versions carry no velocities and fall back to positions.
+
+```bash
+uv run dopplertrack refine data/recording.npz outputs/search.json \
+  --events data/events.json --traces data/traces.npz --terrain --geoid-offset -30 \
+  --method projected --source-degree 1 --velocity fused --out outputs/fused.json
+```
+
+**Error region.** `--uncertainty` (with `--method projected`) adds 50% and 90% ellipses
+and a breakdown of what causes the uncertainty: measurement noise, atmosphere, ADS-B
+timing, altitude, observer height and velocity.
+
+```bash
+uv run dopplertrack refine outputs/demo/spectrogram.npz outputs/demo/search.json \
+  --events outputs/demo/events.json --traces outputs/demo/traces.npz \
+  --elevation 0 --raw-score --method projected --smooth spline --source-degree 1 \
+  --uncertainty --out outputs/demo/refined.json
+```
+
+The region is too cautious on clean synthetic scenes and too confident when the tone
+fits poorly. Read it together with the evidence decision.
+
+**Flyover discovery.** Given a fitted candidate, looks for every other aircraft the
+candidate predicts should be audible, and reports which ones appear in the audio.
+
+```bash
+uv run dopplertrack discover data/recording.npz outputs/refined.json \
+  --traces data/traces.npz --out outputs/found.json --confirmation outputs/confirmation.json
+uv run dopplertrack refine data/recording.npz outputs/refined.json \
+  --events data/events.json --extra outputs/found.json --traces data/traces.npz \
+  --terrain --geoid-offset -30 --method projected --out outputs/joint.json
+```
+
+A confirmed flyover is evidence of the right time much more than of the right place,
+and the default 6 km range can miss distant low aircraft (`--max-distance`,
+`--ground-range`).
+
+**Audio demodulation and hum removal.** Available from Python only:
+`ModelOptions(ridge="demod", noise="snr", hum="subtract")` with raw audio passed to
+`fit_projected(..., audio=...)`. `scripts/compare_oyster_bay_measurement.py` is a
+working example. It measures the tone far more precisely on synthetic audio but made
+real locations worse, so it is not exposed in the command line.
+
 ## Physics model
 
 The propagator solves reception time = emission time + travel time. Source velocity

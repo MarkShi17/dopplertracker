@@ -1,0 +1,1614 @@
+{
+ "rows": [
+  {
+   "scenario": "clean",
+   "seed": 0,
+   "search_seconds": 2.3328497920010705,
+   "fastAll": {
+    "seconds": 0.6487777080001251,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -2.6102075167955263e-08,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 481,
+    "candidates": 481
+   },
+   "fast48": {
+    "seconds": 0.4594059160008328,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -2.6102075167955263e-08,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 338,
+    "candidates": 481
+   },
+   "fast8": {
+    "seconds": 0.38650420799967833,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -2.6102075167955263e-08,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 277,
+    "candidates": 481
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "clean",
+   "seed": 1,
+   "search_seconds": 2.507771666998451,
+   "fastAll": {
+    "seconds": 0.6930786250013625,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -3.7979501499307844e-07,
+    "combinations_search": 8,
+    "combinations_fast": 8,
+    "scored": 517,
+    "candidates": 517
+   },
+   "fast48": {
+    "seconds": 0.4106660830002511,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -3.7979501499307844e-07,
+    "combinations_search": 8,
+    "combinations_fast": 8,
+    "scored": 303,
+    "candidates": 517
+   },
+   "fast8": {
+    "seconds": 0.3949207910009136,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -3.7979501499307844e-07,
+    "combinations_search": 8,
+    "combinations_fast": 8,
+    "scored": 285,
+    "candidates": 517
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "clean",
+   "seed": 2,
+   "search_seconds": 0.8938958329999878,
+   "fastAll": {
+    "seconds": 0.22606850000011036,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 2.0992667160157907e-08,
+    "combinations_search": 3,
+    "combinations_fast": 3,
+    "scored": 169,
+    "candidates": 169
+   },
+   "fast48": {
+    "seconds": 0.15544279199821176,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 2.0992667160157907e-08,
+    "combinations_search": 3,
+    "combinations_fast": 3,
+    "scored": 111,
+    "candidates": 169
+   },
+   "fast8": {
+    "seconds": 0.13289091600017855,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 2.0992667160157907e-08,
+    "combinations_search": 3,
+    "combinations_fast": 3,
+    "scored": 94,
+    "candidates": 169
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "clean",
+   "seed": 3,
+   "search_seconds": 1.558081499999389,
+   "fastAll": {
+    "seconds": 0.42168149999997695,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -2.1324847132575542e-07,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 312,
+    "candidates": 312
+   },
+   "fast48": {
+    "seconds": 0.3459580420021666,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -2.1324847132575542e-07,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 258,
+    "candidates": 312
+   },
+   "fast8": {
+    "seconds": 0.29954887500207406,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -2.1324847132575542e-07,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 214,
+    "candidates": 312
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "clean",
+   "seed": 4,
+   "search_seconds": 2.368180333000055,
+   "fastAll": {
+    "seconds": 0.6592025840000133,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 1.5563002087048972e-06,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 489,
+    "candidates": 489
+   },
+   "fast48": {
+    "seconds": 0.4503634169996076,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 1.5563002087048972e-06,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 333,
+    "candidates": 489
+   },
+   "fast8": {
+    "seconds": 0.39341816600062884,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 1.5563002087048972e-06,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 286,
+    "candidates": 489
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "clean",
+   "seed": 5,
+   "search_seconds": 2.262353833000816,
+   "fastAll": {
+    "seconds": 0.6316205840012117,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -2.582014602126037e-10,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 469,
+    "candidates": 469
+   },
+   "fast48": {
+    "seconds": 0.4715412910009036,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -2.582014602126037e-10,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 351,
+    "candidates": 469
+   },
+   "fast8": {
+    "seconds": 0.4009236249985406,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -2.582014602126037e-10,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 292,
+    "candidates": 469
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "clean",
+   "seed": 6,
+   "search_seconds": 2.6669817919973866,
+   "fastAll": {
+    "seconds": 0.7535747080000874,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -1.0443518938529905e-08,
+    "combinations_search": 11,
+    "combinations_fast": 11,
+    "scored": 541,
+    "candidates": 541
+   },
+   "fast48": {
+    "seconds": 0.5781000420029159,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -1.0443518938529905e-08,
+    "combinations_search": 11,
+    "combinations_fast": 11,
+    "scored": 408,
+    "candidates": 541
+   },
+   "fast8": {
+    "seconds": 0.45277550000173505,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -1.0443518938529905e-08,
+    "combinations_search": 11,
+    "combinations_fast": 11,
+    "scored": 318,
+    "candidates": 541
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "clean",
+   "seed": 7,
+   "search_seconds": 2.573395082999923,
+   "fastAll": {
+    "seconds": 0.7081922920006036,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 5.414905057676833e-08,
+    "combinations_search": 10,
+    "combinations_fast": 10,
+    "scored": 537,
+    "candidates": 537
+   },
+   "fast48": {
+    "seconds": 0.4901554159987427,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 5.414905057676833e-08,
+    "combinations_search": 10,
+    "combinations_fast": 10,
+    "scored": 367,
+    "candidates": 537
+   },
+   "fast8": {
+    "seconds": 0.4333672079992539,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 5.414905057676833e-08,
+    "combinations_search": 10,
+    "combinations_fast": 10,
+    "scored": 313,
+    "candidates": 537
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "clean",
+   "seed": 8,
+   "search_seconds": 2.1238821250008186,
+   "fastAll": {
+    "seconds": 0.6055458339978941,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -4.035722867001823e-10,
+    "combinations_search": 9,
+    "combinations_fast": 9,
+    "scored": 420,
+    "candidates": 420
+   },
+   "fast48": {
+    "seconds": 0.4395911249994242,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -4.035722867001823e-10,
+    "combinations_search": 9,
+    "combinations_fast": 9,
+    "scored": 310,
+    "candidates": 420
+   },
+   "fast8": {
+    "seconds": 0.3818664999998873,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 1019.803902718557,
+    "score_difference": -0.7096769716980633,
+    "combinations_search": 9,
+    "combinations_fast": 9,
+    "scored": 262,
+    "candidates": 420
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "clean",
+   "seed": 9,
+   "search_seconds": 2.2588595830020495,
+   "fastAll": {
+    "seconds": 0.6187879169992812,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -1.7609797442474928e-07,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 470,
+    "candidates": 470
+   },
+   "fast48": {
+    "seconds": 0.4663873750032508,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -1.7609797442474928e-07,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 349,
+    "candidates": 470
+   },
+   "fast8": {
+    "seconds": 0.34779941700253403,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 1216.552506059644,
+    "score_difference": -0.16066998381857545,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 257,
+    "candidates": 470
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "curved_accelerating",
+   "seed": 0,
+   "search_seconds": 0.9519721670003491,
+   "fastAll": {
+    "seconds": 0.24464437500137137,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 1.1328427236279026e-06,
+    "combinations_search": 4,
+    "combinations_fast": 4,
+    "scored": 187,
+    "candidates": 187
+   },
+   "fast48": {
+    "seconds": 0.1800368750009511,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 1.1328427236279026e-06,
+    "combinations_search": 4,
+    "combinations_fast": 4,
+    "scored": 138,
+    "candidates": 187
+   },
+   "fast8": {
+    "seconds": 0.1794039580017852,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 1.1328427236279026e-06,
+    "combinations_search": 4,
+    "combinations_fast": 4,
+    "scored": 133,
+    "candidates": 187
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "curved_accelerating",
+   "seed": 1,
+   "search_seconds": 1.7335332090005977,
+   "fastAll": {
+    "seconds": 0.4652968750015134,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -3.3643721586429365e-07,
+    "combinations_search": 9,
+    "combinations_fast": 9,
+    "scored": 355,
+    "candidates": 355
+   },
+   "fast48": {
+    "seconds": 0.34280733299965505,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -3.3643721586429365e-07,
+    "combinations_search": 9,
+    "combinations_fast": 9,
+    "scored": 257,
+    "candidates": 355
+   },
+   "fast8": {
+    "seconds": 0.29842708299838705,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -3.3643721586429365e-07,
+    "combinations_search": 9,
+    "combinations_fast": 9,
+    "scored": 222,
+    "candidates": 355
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "curved_accelerating",
+   "seed": 2,
+   "search_seconds": 2.633339166000951,
+   "fastAll": {
+    "seconds": 0.7431111250007234,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -9.78696538034285e-07,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 552,
+    "candidates": 552
+   },
+   "fast48": {
+    "seconds": 0.576067541998782,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -9.78696538034285e-07,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 434,
+    "candidates": 552
+   },
+   "fast8": {
+    "seconds": 0.47022220799772185,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -9.78696538034285e-07,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 347,
+    "candidates": 552
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "curved_accelerating",
+   "seed": 3,
+   "search_seconds": 2.5369997499983583,
+   "fastAll": {
+    "seconds": 0.7101303339986771,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -3.423917531719667e-07,
+    "combinations_search": 10,
+    "combinations_fast": 10,
+    "scored": 513,
+    "candidates": 513
+   },
+   "fast48": {
+    "seconds": 0.5295889999979408,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -3.423917531719667e-07,
+    "combinations_search": 10,
+    "combinations_fast": 10,
+    "scored": 366,
+    "candidates": 513
+   },
+   "fast8": {
+    "seconds": 0.44561870799952885,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -3.423917531719667e-07,
+    "combinations_search": 10,
+    "combinations_fast": 10,
+    "scored": 313,
+    "candidates": 513
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "curved_accelerating",
+   "seed": 4,
+   "search_seconds": 2.020987915999285,
+   "fastAll": {
+    "seconds": 0.5449059999991732,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 2.208906970224689e-06,
+    "combinations_search": 9,
+    "combinations_fast": 9,
+    "scored": 423,
+    "candidates": 423
+   },
+   "fast48": {
+    "seconds": 0.3734272500005318,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 2.208906970224689e-06,
+    "combinations_search": 9,
+    "combinations_fast": 9,
+    "scored": 286,
+    "candidates": 423
+   },
+   "fast8": {
+    "seconds": 0.3375282500019239,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 2.208906970224689e-06,
+    "combinations_search": 9,
+    "combinations_fast": 9,
+    "scored": 254,
+    "candidates": 423
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "curved_accelerating",
+   "seed": 5,
+   "search_seconds": 2.0460509160002402,
+   "fastAll": {
+    "seconds": 0.5614741669996874,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -2.2869615534659715e-08,
+    "combinations_search": 6,
+    "combinations_fast": 6,
+    "scored": 413,
+    "candidates": 413
+   },
+   "fast48": {
+    "seconds": 0.35958629100059625,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -2.2869615534659715e-08,
+    "combinations_search": 6,
+    "combinations_fast": 6,
+    "scored": 267,
+    "candidates": 413
+   },
+   "fast8": {
+    "seconds": 0.2995948329989915,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -2.2869615534659715e-08,
+    "combinations_search": 6,
+    "combinations_fast": 6,
+    "scored": 218,
+    "candidates": 413
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "curved_accelerating",
+   "seed": 6,
+   "search_seconds": 1.5165194580004027,
+   "fastAll": {
+    "seconds": 0.4121844580004108,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -1.6262697855040642e-08,
+    "combinations_search": 8,
+    "combinations_fast": 8,
+    "scored": 306,
+    "candidates": 306
+   },
+   "fast48": {
+    "seconds": 0.3116447499996866,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -1.6262697855040642e-08,
+    "combinations_search": 8,
+    "combinations_fast": 8,
+    "scored": 230,
+    "candidates": 306
+   },
+   "fast8": {
+    "seconds": 0.27178524999908404,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -1.6262697855040642e-08,
+    "combinations_search": 8,
+    "combinations_fast": 8,
+    "scored": 200,
+    "candidates": 306
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "curved_accelerating",
+   "seed": 7,
+   "search_seconds": 2.084941917000833,
+   "fastAll": {
+    "seconds": 0.5741101669991622,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -2.752206692768766e-06,
+    "combinations_search": 9,
+    "combinations_fast": 9,
+    "scored": 429,
+    "candidates": 429
+   },
+   "fast48": {
+    "seconds": 0.41985279100117623,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -2.752206692768766e-06,
+    "combinations_search": 9,
+    "combinations_fast": 9,
+    "scored": 314,
+    "candidates": 429
+   },
+   "fast8": {
+    "seconds": 0.3618325419993198,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -2.752206692768766e-06,
+    "combinations_search": 9,
+    "combinations_fast": 9,
+    "scored": 264,
+    "candidates": 429
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "curved_accelerating",
+   "seed": 8,
+   "search_seconds": 1.8117707089986652,
+   "fastAll": {
+    "seconds": 0.4929427499992016,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 6.225374971080555e-07,
+    "combinations_search": 8,
+    "combinations_fast": 8,
+    "scored": 376,
+    "candidates": 376
+   },
+   "fast48": {
+    "seconds": 0.37687450000157696,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 6.225374971080555e-07,
+    "combinations_search": 8,
+    "combinations_fast": 8,
+    "scored": 288,
+    "candidates": 376
+   },
+   "fast8": {
+    "seconds": 0.31081633400026476,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 6.225374971080555e-07,
+    "combinations_search": 8,
+    "combinations_fast": 8,
+    "scored": 230,
+    "candidates": 376
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "curved_accelerating",
+   "seed": 9,
+   "search_seconds": 1.2275410420006665,
+   "fastAll": {
+    "seconds": 0.3219383750001725,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 1.2438467189568314e-07,
+    "combinations_search": 7,
+    "combinations_fast": 7,
+    "scored": 244,
+    "candidates": 244
+   },
+   "fast48": {
+    "seconds": 0.23145341599956737,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 1.2438467189568314e-07,
+    "combinations_search": 7,
+    "combinations_fast": 7,
+    "scored": 175,
+    "candidates": 244
+   },
+   "fast8": {
+    "seconds": 0.23826758400173276,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 1.2438467189568314e-07,
+    "combinations_search": 7,
+    "combinations_fast": 7,
+    "scored": 175,
+    "candidates": 244
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "low_snr",
+   "seed": 0,
+   "search_seconds": 2.7164778749975085,
+   "fastAll": {
+    "seconds": 0.7546837499976391,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -3.155887329242546e-09,
+    "combinations_search": 11,
+    "combinations_fast": 11,
+    "scored": 560,
+    "candidates": 560
+   },
+   "fast48": {
+    "seconds": 0.5342773750016931,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -3.155887329242546e-09,
+    "combinations_search": 11,
+    "combinations_fast": 11,
+    "scored": 393,
+    "candidates": 560
+   },
+   "fast8": {
+    "seconds": 0.5138936250004917,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -3.155887329242546e-09,
+    "combinations_search": 11,
+    "combinations_fast": 11,
+    "scored": 373,
+    "candidates": 560
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "low_snr",
+   "seed": 1,
+   "search_seconds": 3.0672886249994917,
+   "fastAll": {
+    "seconds": 0.8471291669993661,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -8.84835587022792e-08,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 648,
+    "candidates": 648
+   },
+   "fast48": {
+    "seconds": 0.563270165999711,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -8.84835587022792e-08,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 432,
+    "candidates": 648
+   },
+   "fast8": {
+    "seconds": 0.5385423340012494,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -8.84835587022792e-08,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 401,
+    "candidates": 648
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "low_snr",
+   "seed": 2,
+   "search_seconds": 2.3904201250006736,
+   "fastAll": {
+    "seconds": 0.6729443750009523,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 1.9668260353711275e-09,
+    "combinations_search": 7,
+    "combinations_fast": 7,
+    "scored": 496,
+    "candidates": 496
+   },
+   "fast48": {
+    "seconds": 0.3687551250004617,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 1.9668260353711275e-09,
+    "combinations_search": 7,
+    "combinations_fast": 7,
+    "scored": 277,
+    "candidates": 496
+   },
+   "fast8": {
+    "seconds": 0.31973262499741395,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 1.9668260353711275e-09,
+    "combinations_search": 7,
+    "combinations_fast": 7,
+    "scored": 234,
+    "candidates": 496
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "low_snr",
+   "seed": 3,
+   "search_seconds": 1.6002333329997782,
+   "fastAll": {
+    "seconds": 0.43506395900112693,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -5.954146242714842e-08,
+    "combinations_search": 6,
+    "combinations_fast": 6,
+    "scored": 314,
+    "candidates": 314
+   },
+   "fast48": {
+    "seconds": 0.2877069999995001,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -5.954146242714842e-08,
+    "combinations_search": 6,
+    "combinations_fast": 6,
+    "scored": 205,
+    "candidates": 314
+   },
+   "fast8": {
+    "seconds": 0.25546154199764715,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -5.954146242714842e-08,
+    "combinations_search": 6,
+    "combinations_fast": 6,
+    "scored": 182,
+    "candidates": 314
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "low_snr",
+   "seed": 4,
+   "search_seconds": 2.0399144170005457,
+   "fastAll": {
+    "seconds": 0.5626129589982156,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 3.381899753573947e-07,
+    "combinations_search": 11,
+    "combinations_fast": 11,
+    "scored": 421,
+    "candidates": 421
+   },
+   "fast48": {
+    "seconds": 0.3984394999970391,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 3.381899753573947e-07,
+    "combinations_search": 11,
+    "combinations_fast": 11,
+    "scored": 300,
+    "candidates": 421
+   },
+   "fast8": {
+    "seconds": 0.3546420409984421,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 3.381899753573947e-07,
+    "combinations_search": 11,
+    "combinations_fast": 11,
+    "scored": 262,
+    "candidates": 421
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "low_snr",
+   "seed": 5,
+   "search_seconds": 3.8892126669998106,
+   "fastAll": {
+    "seconds": 1.1006640420018812,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -1.7061552171071526e-10,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 802,
+    "candidates": 802
+   },
+   "fast48": {
+    "seconds": 0.6658007920013915,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -1.7061552171071526e-10,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 483,
+    "candidates": 802
+   },
+   "fast8": {
+    "seconds": 0.5666988329976448,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -1.7061552171071526e-10,
+    "combinations_search": 12,
+    "combinations_fast": 12,
+    "scored": 404,
+    "candidates": 802
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "low_snr",
+   "seed": 6,
+   "search_seconds": 1.1604788750009902,
+   "fastAll": {
+    "seconds": 0.3084627909993287,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 8.784183269661128e-09,
+    "combinations_search": 4,
+    "combinations_fast": 4,
+    "scored": 224,
+    "candidates": 224
+   },
+   "fast48": {
+    "seconds": 0.20247474999996484,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 8.784183269661128e-09,
+    "combinations_search": 4,
+    "combinations_fast": 4,
+    "scored": 145,
+    "candidates": 224
+   },
+   "fast8": {
+    "seconds": 0.17943045799984247,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 8.784183269661128e-09,
+    "combinations_search": 4,
+    "combinations_fast": 4,
+    "scored": 126,
+    "candidates": 224
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "low_snr",
+   "seed": 7,
+   "search_seconds": 2.2320046669992735,
+   "fastAll": {
+    "seconds": 0.6389930000004824,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 1.4413144455716065e-08,
+    "combinations_search": 10,
+    "combinations_fast": 10,
+    "scored": 432,
+    "candidates": 432
+   },
+   "fast48": {
+    "seconds": 0.49507475000064005,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 1.4413144455716065e-08,
+    "combinations_search": 10,
+    "combinations_fast": 10,
+    "scored": 330,
+    "candidates": 432
+   },
+   "fast8": {
+    "seconds": 0.41255579100106843,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": 1.4413144455716065e-08,
+    "combinations_search": 10,
+    "combinations_fast": 10,
+    "scored": 268,
+    "candidates": 432
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "low_snr",
+   "seed": 8,
+   "search_seconds": 2.6611352090003493,
+   "fastAll": {
+    "seconds": 0.7437865829997463,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -5.976641404004113e-11,
+    "combinations_search": 10,
+    "combinations_fast": 10,
+    "scored": 548,
+    "candidates": 548
+   },
+   "fast48": {
+    "seconds": 0.5362886660004733,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -5.976641404004113e-11,
+    "combinations_search": 10,
+    "combinations_fast": 10,
+    "scored": 392,
+    "candidates": 548
+   },
+   "fast8": {
+    "seconds": 0.4092396670021117,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 1019.803902718557,
+    "score_difference": -0.1470381563680122,
+    "combinations_search": 10,
+    "combinations_fast": 10,
+    "scored": 291,
+    "candidates": 548
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  },
+  {
+   "scenario": "low_snr",
+   "seed": 9,
+   "search_seconds": 1.9710070830005861,
+   "fastAll": {
+    "seconds": 0.5363223750027828,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -4.460008151685457e-08,
+    "combinations_search": 6,
+    "combinations_fast": 6,
+    "scored": 407,
+    "candidates": 407
+   },
+   "fast48": {
+    "seconds": 0.37121804199705366,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 0.0,
+    "score_difference": -4.460008151685457e-08,
+    "combinations_search": 6,
+    "combinations_fast": 6,
+    "scored": 280,
+    "candidates": 407
+   },
+   "fast8": {
+    "seconds": 0.30973679200178594,
+    "same_winner": true,
+    "winner": [
+     "stress-0",
+     "stress-1"
+    ],
+    "position_difference_m": 1216.552506059644,
+    "score_difference": -0.03350267607733359,
+    "combinations_search": 6,
+    "combinations_fast": 6,
+    "scored": 226,
+    "candidates": 407
+   },
+   "search_winner": [
+    "stress-0",
+    "stress-1"
+   ],
+   "search_correct": true,
+   "fast48_correct": true
+  }
+ ],
+ "summary": {
+  "fastAll": {
+   "same_winner": 30,
+   "same_position": 30,
+   "trials": 30
+  },
+  "fast48": {
+   "same_winner": 30,
+   "same_position": 30,
+   "trials": 30
+  },
+  "fast8": {
+   "same_winner": 30,
+   "same_position": 26,
+   "trials": 30
+  },
+  "search_correct": 30,
+  "fast48_correct": 30
+ },
+ "decoys": 6
+}

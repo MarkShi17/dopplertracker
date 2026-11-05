@@ -1,0 +1,7 @@
+scene/method                     fail track rms  cpa rms median|e|  loc m   valid    cpa valid
+hum_crossing/demod-snr-mask         0    0.0051   0.0054    0.0031   0.07    3025      710/900
+hum_crossing/demod-snr-subtract     0    0.0039   0.0034    0.0026   0.05    3300      900/900
+hum_crossing/demod-snr-notch        0    0.0104   0.0133    0.0036   0.08    3300      900/900
+fast_chirp/demod-snr-mask           0    0.0039   0.0037    0.0026   0.04    3300      900/900
+fast_chirp/demod-snr-subtract       0    0.0037   0.0033    0.0025   0.03    3300      900/900
+fast_chirp/demod-snr-notch          0    0.0043   0.0048    0.0025   0.03    3300      900/900
