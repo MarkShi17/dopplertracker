@@ -88,6 +88,14 @@ def _runs(labels):
     return runs
 
 
+def subset_runs(runs, mask):
+    """Run-length per-point labels (e.g. ``vertical_rate_source_runs``) restricted to ``mask``."""
+    labels = [label for label, count in runs for _ in range(count)]
+    if len(labels) != len(mask):
+        raise ValueError("run lengths do not match the mask")
+    return _runs([label for label, keep in zip(labels, mask, strict=True) if keep])
+
+
 def parse_trace(
     document, frame, jet_types=frozenset(), allow_baro=False, baro_offset=0.0, geoid_offset=0.0, max_gap=30.0
 ):

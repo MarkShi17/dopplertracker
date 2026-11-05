@@ -204,3 +204,16 @@ def test_track_offset_equals_relabelled_track_and_latency_scene():
     assert finite.mean() > 0.9
     np.testing.assert_allclose(corrected[finite], expected[finite], rtol=1e-9)
     assert not ModelOptions().fit_track_offsets
+
+
+def test_subset_runs_tracks_sliced_points():
+    from dopplertracker.data import subset_runs
+
+    runs = [["geometric", 2], ["baro", 3], ["none", 1]]
+    assert subset_runs(runs, np.array([0, 1, 1, 0, 1, 1], bool)) == [
+        ["geometric", 1],
+        ["baro", 2],
+        ["none", 1],
+    ]
+    with pytest.raises(ValueError):
+        subset_runs(runs, np.ones(4, bool))

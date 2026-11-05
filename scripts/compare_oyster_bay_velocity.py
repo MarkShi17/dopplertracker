@@ -18,7 +18,7 @@ from pathlib import Path
 import numpy as np
 
 from dopplertracker.advanced import ModelOptions, fit_projected, select_model
-from dopplertracker.data import save_tracks
+from dopplertracker.data import save_tracks, subset_runs
 from dopplertracker.detection import load_events
 from dopplertracker.evidence import assess_candidate
 from dopplertracker.geo import LocalFrame
@@ -80,13 +80,17 @@ def select_tracks(tracks, coarse, events, initial_clock):
         mask = (track.times >= initial_clock + event.window[0] - 120) & (
             track.times <= initial_clock + event.window[1] + 120
         )
+        metadata = dict(track.metadata)
+        for key in ("position_source_runs", "vertical_rate_source_runs"):
+            if key in metadata:
+                metadata[key] = subset_runs(metadata[key], mask)
         chosen.append(
             Trajectory(
                 track.id,
                 track.times[mask],
                 track.positions[mask],
                 track.max_gap,
-                track.metadata,
+                metadata,
                 velocities=None if track.velocities is None else track.velocities[mask],
             )
         )
