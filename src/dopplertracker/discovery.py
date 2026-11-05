@@ -22,12 +22,14 @@ Two-step command-line use with ``refine``::
 ``discover --refit`` performs the joint refit and the second discovery pass in one step.
 """
 
+import json
 from dataclasses import asdict, dataclass, field
 
 import numpy as np
 
 from .advanced import ModelOptions, fit_projected, smooth_trajectory
 from .detection import Event
+from .geo import LocalFrame
 from .physics import Atmosphere, Trajectory, closest_approaches, predict
 
 
@@ -176,6 +178,66 @@ def _ridge_map(spec, options):
 def pass_limit(height, options=DiscoveryOptions()):
     """Altitude-aware maximum slant distance for a pass, in metres."""
     return float(min(options.max_distance, options.ground_range + max(0.0, float(height))))
+
+
+class TraceIndex:
+    """Raw trace arrays (the ``save_tracks`` format) with lazy trajectory construction.
+
+    Building every interpolating ``Trajectory`` of a full-day regional archive
+    costs gigabytes; discovery only needs the few segments that are inside the
+    recording and come within range of the candidate.
+    """
+
+    def __init__(self, path):
+        with np.load(path, allow_pickle=False) as z:
+            self.frame = LocalFrame(*z["frame"])
+            self.metadata = json.loads(str(z["metadata"]))
+            self.times = [z[f"t{i}"] for i in range(len(self.metadata))]
+            self.positions = [z[f"p{i}"] for i in range(len(self.metadata))]
+        if not self.metadata:
+            raise ValueError("trace file contains no flight segments")
+        self.ids = {item["id"]: i for i, item in enumerate(self.metadata)}
+        self.cache = {}
+
+    def __len__(self):
+        return len(self.metadata)
+
+    def track(self, index):
+        if isinstance(index, str):
+            index = self.ids[index]
+        if index not in self.cache:
+            item = self.metadata[index]
+            self.cache[index] = Trajectory(
+                item["id"], self.times[index], self.positions[index], item.get("max_gap", 30.0), item
+            )
+        return self.cache[index]
+
+    def select(self, candidate, recording, atmosphere=Atmosphere(), options=None):
+        """Segments overlapping the recording in time whose samples come within range."""
+        options = DiscoveryOptions() if options is None else options
+        observer = np.asarray(candidate["position"], dtype=float)
+        clock = float(candidate["clock"])
+        delay = options.max_distance / (atmosphere.c - np.linalg.norm(atmosphere.wind))
+        start, end = clock + recording[0] - delay - 1, clock + recording[1] + 1
+        chosen = []
+        for i, (times, positions) in enumerate(zip(self.times, self.positions, strict=True)):
+            if len(times) < 2 or times[-1] < start or times[0] > end:
+                continue
+            inside = (times >= start - 60) & (times <= end + 60)
+            if inside.sum() < 2:
+                continue
+            local = positions[inside]
+            # Half the largest sample step bounds how far the interpolated path can come closer.
+            slack = 0.5 * float(np.max(np.linalg.norm(np.diff(local, axis=0), axis=1), initial=0.0))
+            if float(np.min(np.linalg.norm(local - observer, axis=1))) - slack <= options.max_distance:
+                chosen.append(self.track(i))
+        return chosen
+
+
+def _candidate_tracks(tracks, candidate, recording, atmosphere, options):
+    if isinstance(tracks, TraceIndex):
+        return tracks.select(candidate, recording, atmosphere, options)
+    return tracks
 
 
 def enumerate_passes(tracks, candidate, recording, atmosphere=Atmosphere(), options=DiscoveryOptions()):
@@ -366,6 +428,7 @@ def discover(
 ):
     """Enumerate, scan and accept passes at a frozen candidate.
 
+    ``tracks`` is a list of trajectories or a ``TraceIndex`` (pre-filtered per candidate).
     ``used_flights`` (default: ``candidate["flights"]``) are the flights that fitted
     the candidate; they are scanned and reported but never count as independent
     confirmation.  Returns a JSON-safe report plus non-serialised ``events`` and
@@ -373,7 +436,9 @@ def discover(
     """
     ridges = _ridge_map(spec, options)
     used = {icao(f) for f in (candidate.get("flights", []) if used_flights is None else used_flights)}
-    passes = enumerate_passes(tracks, candidate, (ridges.times[0], ridges.times[-1]), atmosphere, options)
+    recording = (float(ridges.times[0]), float(ridges.times[-1]))
+    tracks = _candidate_tracks(tracks, candidate, recording, atmosphere, options)
+    passes = enumerate_passes(tracks, candidate, recording, atmosphere, options)
     rows = []
     for i, item in enumerate(passes):
         row = scan_pass(ridges, item, candidate, atmosphere, options)

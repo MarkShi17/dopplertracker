@@ -12,7 +12,7 @@ from .advanced import ModelOptions, fit_consensus, fit_projected, select_model
 from .benchmark import SCENARIOS, run_benchmark, write_demo
 from .data import extract_archive, fetch_day, load_tracks, save_tracks
 from .detection import detect, fit_event, load_events, save_events
-from .discovery import DiscoveryOptions, discover, discover_and_refit
+from .discovery import DiscoveryOptions, TraceIndex, discover, discover_and_refit
 from .evidence import assess_candidate
 from .geo import LocalFrame, ground_grid, validate_bbox
 from .physics import Atmosphere, closest_approaches
@@ -263,7 +263,9 @@ def _extra_events(spec, events, chosen, candidate, extra, all_tracks, atmosphere
 
 
 def _discover(args, spec):
-    tracks, frame = load_tracks(args.traces)
+    # Lazy index: a full-day archive would cost gigabytes as interpolating trajectories.
+    tracks = TraceIndex(args.traces)
+    frame = tracks.frame
     payload = json.loads(Path(args.results).read_text())
     if payload.get("frame") is not None and not np.allclose(
         payload["frame"], [frame.lat, frame.lon], atol=1e-9, rtol=0
@@ -294,8 +296,7 @@ def _discover(args, spec):
         report = found["summary"]
         events = found["events"]
     else:
-        lookup = {track.id: track for track in tracks}
-        fitted = [lookup[id] for id in candidate["flights"]]
+        fitted = [tracks.track(id) for id in candidate["flights"]]
         model = ModelOptions(degree=args.source_degree, smoothing=args.smooth, radius=args.radius)
         pipeline = discover_and_refit(
             spec,

@@ -9,6 +9,7 @@ from dopplertracker.detection import Event, load_events
 from dopplertracker.discovery import (
     DiscoveryOptions,
     RidgeMap,
+    TraceIndex,
     discover,
     discover_and_refit,
     enumerate_passes,
@@ -168,3 +169,13 @@ def test_benchmark_guards_reserved_seeds_and_summarises():
     assert summary["second_precision"] == 1.0
     assert summary["wrong_with_any_confirmation"] == 1
     assert summary["truth_confirmed_mean"] == 2.0
+
+
+def test_trace_index_prefilters_by_time_and_range(scene, tmp_path):
+    save_tracks(tmp_path / "traces.npz", scene["all_tracks"], LocalFrame(40.0, -73.0))
+    index = TraceIndex(tmp_path / "traces.npz")
+    recording = (0.0, float(scene["spectrogram"].times[-1]))
+    assert len(index.select(truth_candidate(scene), recording)) == len(scene["all_tracks"])
+    assert index.select({"position": [60000.0, 0.0, 0.0], "clock": scene["clock"]}, recording) == []
+    assert index.select(truth_candidate(scene, 7200.0), recording) == []
+    assert index.track("stress-2").id == "stress-2"

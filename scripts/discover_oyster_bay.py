@@ -18,11 +18,11 @@ from pathlib import Path
 import numpy as np
 
 from dopplertracker.advanced import ModelOptions
-from dopplertracker.data import load_tracks
 from dopplertracker.detection import load_events, save_events
 from dopplertracker.discovery import (
     DiscoveryOptions,
     RidgeMap,
+    TraceIndex,
     discover,
     discover_and_refit,
     trim_track,
@@ -51,8 +51,9 @@ def main():
     began = time.perf_counter()
     spec = Spectrogram.load(directory / "spectrogram.npz").whiten()
     events = load_events([str(directory / "events.json")])
-    tracks, frame = load_tracks(directory / "traces.npz")
-    lookup = {t.id: t for t in tracks}
+    # Lazy index: only segments near each candidate during the hour become trajectories.
+    tracks = TraceIndex(directory / "traces.npz")
+    frame = tracks.frame
     options = DiscoveryOptions()
     atmosphere = Atmosphere(343.0)
     model = ModelOptions(degree=1, smoothing="spline")
@@ -67,7 +68,9 @@ def main():
     candidate = {k: saved[k] for k in ("position", "clock", "f0", "flights")}
     # Same trimming as scripts/compare_oyster_bay.py: event window +/- 120 s.
     chosen = [
-        trim_track(lookup[f], candidate["clock"] + e.window[0] - 120, candidate["clock"] + e.window[1] + 120)
+        trim_track(
+            tracks.track(f), candidate["clock"] + e.window[0] - 120, candidate["clock"] + e.window[1] + 120
+        )
         for f, e in zip(candidate["flights"], events, strict=True)
     ]
     print(f"Discovering at the saved two-flyover solution over {len(tracks)} segments", flush=True)
@@ -88,6 +91,23 @@ def main():
     for name in ("first", "second"):
         print(name, "confirmed", pipeline[name]["confirmed_flights"], flush=True)
 
+    # Range-limit sensitivity, fixed a priori (12 km for every height); not chosen by error.
+    relaxed = DiscoveryOptions(max_distance=12000.0, ground_range=12000.0)
+    sensitivity = discover_and_refit(
+        spec,
+        events,
+        chosen,
+        tracks,
+        candidate,
+        model,
+        atmosphere,
+        relaxed,
+        frame=frame,
+        elevation=ConstantElevation(-30.0),
+        ridges=ridges,
+    )
+    print("relaxed range confirmed", sensitivity["first"]["confirmed_flights"], flush=True)
+
     shortlist = json.loads((Path(args.results) / "refined-shortlist.json").read_text())
     fits = [t for t in shortlist["trials"] if t["method"] == "spline-linear" and t["result"] is not None]
     fits.sort(key=lambda t: t["result"]["score"], reverse=True)
@@ -97,6 +117,7 @@ def main():
     for rank, trial in [(fits.index(true_fit) + 1, true_fit), *((fits.index(t) + 1, t) for t in wrong)]:
         result = trial["result"]
         report = discover(ridges, tracks, result, atmosphere, options, trial["flights"])["summary"]
+        wide = discover(ridges, tracks, result, atmosphere, relaxed, trial["flights"])["summary"]
         controls.append(
             {
                 "flights": trial["flights"],
@@ -109,9 +130,21 @@ def main():
                 "z_sum": report["z_sum"],
                 "confirmed_list": listing(report),
                 "used_flights_confirmed": report["used_flights_confirmed"],
+                "relaxed_confirmed": wide["confirmed_independent"],
+                "relaxed_z_sum": wide["z_sum"],
+                "relaxed_confirmed_list": listing(wide),
+                "relaxed_used_flights_confirmed": wide["used_flights_confirmed"],
             }
         )
-        print(trial["flights"], "rank", rank, "confirmed", report["confirmed_flights"], flush=True)
+        print(
+            trial["flights"],
+            "rank",
+            rank,
+            "confirmed",
+            report["confirmed_flights"],
+            wide["confirmed_flights"],
+            flush=True,
+        )
 
     # Evaluation only: everything above ran without the camera coordinates.
     truth = json.loads((directory / "published/provenance.json").read_text())["evaluation_truth"]
@@ -138,6 +171,14 @@ def main():
         "joint_lat_lon_height": frame.to_geodetic(joint["position"]).tolist(),
         "second_discovery": pipeline["second"],
         "second_confirmed": listing(pipeline["second"]),
+        "relaxed_range": {
+            "options": {"max_distance": relaxed.max_distance, "ground_range": relaxed.ground_range},
+            "first_confirmed": listing(sensitivity["first"]),
+            "joint_flights": sensitivity["result"]["flights"],
+            "joint_error_m": error(sensitivity["result"]["position"]),
+            "second_confirmed": listing(sensitivity["second"]),
+            "passes": sensitivity["first"]["passes"],
+        },
         "shortlist_controls": controls,
         "evaluation_truth": truth,
         "seconds": time.perf_counter() - began,
@@ -150,7 +191,16 @@ def main():
             f"z {row['z']:.1f} f0 {row['f0']:.1f}"
         )
     for row in controls:
-        print(row["flights"], row["true_pair"], row["score_rank"], row["confirmed"], round(row["z_sum"], 1))
+        print(
+            row["flights"],
+            row["true_pair"],
+            row["score_rank"],
+            row["confirmed"],
+            round(row["z_sum"], 1),
+            row["relaxed_confirmed"],
+            round(row["relaxed_z_sum"], 1),
+            row["error_m"],
+        )
 
 
 if __name__ == "__main__":
