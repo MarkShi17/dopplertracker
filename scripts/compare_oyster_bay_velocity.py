@@ -18,9 +18,10 @@ from pathlib import Path
 import numpy as np
 
 from dopplertracker.advanced import ModelOptions, fit_projected, select_model
-from dopplertracker.data import load_tracks, save_tracks
+from dopplertracker.data import save_tracks
 from dopplertracker.detection import load_events
 from dopplertracker.evidence import assess_candidate
+from dopplertracker.geo import LocalFrame
 from dopplertracker.physics import Atmosphere, Trajectory
 from dopplertracker.refine import refine_candidate, refine_spectral
 from dopplertracker.scoring import joint_score
@@ -40,6 +41,26 @@ ORIGINAL_METHODS = (
     "spline-cv",
 )
 METHODS = ORIGINAL_METHODS + tuple(VELOCITY_PROJECTED)
+
+
+def load_flights(path, icaos):
+    """``load_tracks`` restricted to segments of the given ICAO codes (bounded memory)."""
+    with np.load(path, allow_pickle=False) as z:
+        frame = LocalFrame(*z["frame"])
+        names = set(z.files)
+        tracks = [
+            Trajectory(
+                item["id"],
+                z[f"t{i}"],
+                z[f"p{i}"],
+                item.get("max_gap", 30.0),
+                item,
+                velocities=z[f"v{i}"] if f"v{i}" in names else None,
+            )
+            for i, item in enumerate(json.loads(str(z["metadata"])))
+            if item["id"].split(":")[0] in icaos
+        ]
+    return tracks, frame
 
 
 def select_tracks(tracks, coarse, events, initial_clock):
@@ -164,9 +185,9 @@ def main():
     output.mkdir(parents=True, exist_ok=True)
     spec = Spectrogram.load(directory / "spectrogram.npz").whiten()
     events = load_events([str(directory / "events.json")])
-    tracks, frame = load_tracks(args.traces)
     published = json.loads((directory / "published/verified_published_baseline.json").read_text())
     coarse = published["oyster_bay_search_best_per_pair.csv"]["highest_scoring_row"]
+    tracks, frame = load_flights(args.traces, {coarse["icao1"], coarse["icao2"]})
     initial_clock = float(coarse["t_heard1"]) - events[0].cpa + float(coarse["shift"])
     chosen = select_tracks(tracks, coarse, events, initial_clock)
     del tracks

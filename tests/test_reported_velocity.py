@@ -135,6 +135,23 @@ def test_fused_smoother_beats_differencing_on_irregular_noisy_turn():
     assert fused.metadata["velocity_fusion"] == "kalman"
     position_only = fuse_velocity(Trajectory("turn", t, noisy, max_gap=30))
     assert np.isfinite(position_only.positions).all()
+    # Report times survive exactly; dense output states fill the sparse intervals.
+    assert set(t) <= set(fused.times) and np.diff(fused.times).max() <= 2.0 + 1e-9
+    assert fuse_velocity(track, output_step=None).times.tolist() == t.tolist()
+
+
+def test_fused_smoother_selects_jerk_by_likelihood_and_respects_gaps():
+    t = np.arange(0.0, 200.0, 5.0)
+    straight = np.column_stack((100 * t, 0 * t, 0 * t + 1000))
+    rng = np.random.default_rng(0)
+    velocity = quantize_velocity(np.tile([100.0, 0.0, 0.0], (len(t), 1)))
+    calm = fuse_velocity(Trajectory("s", t, straight + rng.normal(0, 5, straight.shape), velocities=velocity))
+    pos, vel = curved(t * 2)
+    turning = fuse_velocity(Trajectory("c", t, pos, velocities=quantize_velocity(vel * 2)))
+    assert calm.metadata["selected_jerk_m2_s5"][0][0] < turning.metadata["selected_jerk_m2_s5"][0][0]
+    gapped = np.r_[t[:10], t[10:] + 100]
+    fused = fuse_velocity(Trajectory("g", gapped, straight, max_gap=30, velocities=velocity))
+    assert len(fused.segments) == 2 and np.diff(fused.times).max() > 30
 
 
 def test_velocity_options_validate_and_default_is_unchanged():
