@@ -41,7 +41,7 @@ if audio_ok; then
 else
   full_ok=0
   for attempt in 1 2 3; do
-    if uvx --from yt-dlp yt-dlp --no-playlist --no-overwrites --write-info-json \
+    if nice -n 15 uvx --from yt-dlp yt-dlp --no-playlist --no-overwrites --write-info-json \
         --js-runtimes node --format bestaudio --output 'data/eagle-cam/recording.%(ext)s' \
         "https://www.youtube.com/watch?v=$video_id"; then full_ok=1; break; fi
     echo "Full download attempt $attempt failed; retrying." >&2
@@ -57,7 +57,7 @@ fi
 
 echo '2/6 Downloading the resumable flight archive (about 2 GB).'
 if [[ ! -s data/eagle-cam/traces.npz ]]; then
-  .venv/bin/python - <<'PY'
+  nice -n 15 .venv/bin/python - <<'PY'
 import io
 import json
 import hashlib
@@ -160,7 +160,7 @@ if [[ ! -s data/eagle-cam/geoid.json ]]; then
   mv data/eagle-cam/geoid.partial.json data/eagle-cam/geoid.json
 fi
 
-echo '6/6 Decoding the audio spectrogram and writing the inputs manifest.'
+echo '6/6 Cutting audio 17000-24000 s, decoding its spectrogram and writing the inputs manifest.'
 .venv/bin/python - <<'PY'
 import hashlib
 import json
@@ -178,10 +178,16 @@ if info.get('id') != 'zs2o5Rhlp5w':
 recording = directory / ('recording.' + info['ext'])
 if not recording.is_file():
     raise SystemExit(f'Missing downloaded audio: {recording}')
-spec_path = directory / 'spectrogram.npz'
+# Memory-limited: only audio 17000-24000 s is analysed (time zero of the section = 17000 s).
+offset_s, end_s = 17000, 24000
+section_audio = directory / f'recording-{offset_s}-{end_s}.{info["ext"]}'
+if not section_audio.is_file():
+    subprocess.run(['nice', '-n', '15', 'ffmpeg', '-nostdin', '-ss', str(offset_s), '-i', str(recording),
+                    '-t', str(end_s - offset_s), '-vn', '-c', 'copy', str(section_audio)], check=True)
+spec_path = directory / f'spectrogram-{offset_s}-{end_s}.npz'
 if not spec_path.is_file():
-    subprocess.run([sys.executable, '-m', 'dopplertracker', 'spectrogram',
-                    str(recording), str(spec_path)], check=True)
+    subprocess.run(['nice', '-n', '15', sys.executable, '-m', 'dopplertracker', 'spectrogram',
+                    str(section_audio), str(spec_path)], check=True)
 spec = Spectrogram.load(spec_path)
 tracks, frame = load_tracks(directory / 'traces.npz')
 
@@ -193,7 +199,7 @@ def digest(path):
     return hasher.hexdigest()
 
 section = directory / 'recording-section.json'
-paths = [recording, spec_path, directory / 'traces.npz', directory / 'traces-source.json',
+paths = [recording, section_audio, spec_path, directory / 'traces.npz', directory / 'traces-source.json',
          directory / 'weather-open-meteo.json', directory / 'geoid.json']
 paths += sorted((directory / 'published').iterdir())
 manifest = {
@@ -202,6 +208,9 @@ manifest = {
     'date': '2024-12-28',
     'audio_duration_s': float(spec.times[-1]),
     'audio_section': json.loads(section.read_text()) if section.exists() else 'full recording',
+    'spectrogram_audio_offset_s': offset_s,
+    'spectrogram_audio_range_s': [offset_s, end_s],
+    'spectrogram_note': 'spectrogram times are relative to the section start; add spectrogram_audio_offset_s for recording time.',
     'track_segments': len(tracks),
     'frame': [frame.lat, frame.lon],
     'bbox': {'lat': [26.115, 27.285], 'lon': [-82.505, -81.195]},
