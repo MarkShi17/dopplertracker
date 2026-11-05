@@ -7,6 +7,8 @@ drop depends on where the microphone is relative to the flight path. Dopplertrac
 measures those curves in the audio, compares them with public ADS-B flight tracks,
 and solves for the microphone's location.
 
+Based on the method shown in [colsto's YouTube video](https://www.youtube.com/watch?v=UytYrhYLOKI).
+
 ![Fitted Doppler curves on a real recording, and the estimated locations](docs/results/oyster-bay/real-audio-comparison.png)
 
 *Two real flyovers from a one-hour recording in Oyster Bay, New York. Left and
