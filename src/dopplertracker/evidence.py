@@ -80,10 +80,11 @@ def assess_candidate(spec, events, tracks, candidate, atmosphere=Atmosphere()):
         raise ValueError("candidate options smoothing must be none, spline, or kalman")
     # Advanced fitting smooths raw ADS-B positions before prediction.  Repeat it
     # here so validation evaluates the fitted model, not a subtly different one.
-    if smoothing != "none":
-        from .advanced import smooth_trajectory  # lazy: advanced imports other fitting modules
+    velocity = options.get("velocity", "differenced")
+    if smoothing != "none" or velocity != "differenced":
+        from .advanced import prepare_track  # lazy: advanced imports other fitting modules
 
-        tracks = [smooth_trajectory(track, smoothing) for track in tracks]
+        tracks = [prepare_track(track, smoothing, velocity) for track in tracks]
     clock_rate = float(candidate.get("clock_rate_ppm", 0.0)) * 1e-6
     altitude_offset = float(candidate.get("aircraft_altitude_offset_m", 0.0))
     if not np.isfinite(clock_rate) or not np.isfinite(altitude_offset):

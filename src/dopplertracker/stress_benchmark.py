@@ -17,7 +17,7 @@ from .advanced import ModelOptions, fit_consensus, fit_projected, select_model
 from .evidence import assess_candidate
 from .refine import refine_candidate, refine_spectral
 from .signal import Spectrogram
-from .stress_scenes import STRESS_SCENARIOS, stress_scene
+from .stress_scenes import EXTENDED_SCENARIOS, STRESS_SCENARIOS, stress_scene
 
 PROJECTED = {
     "projected-constant": ModelOptions(degree=0),
@@ -68,6 +68,8 @@ def run_method(method, spec, events, tracks, candidate):
         return refine_candidate(spec, events, tracks, candidate, fit_drift=method == "legacy-drift")
     if method in PROJECTED:
         return fit_projected(spec, events, tracks, candidate, PROJECTED[method])
+    if method in VELOCITY_PROJECTED:
+        return fit_projected(spec, events, tracks, candidate, VELOCITY_PROJECTED[method])
     if method in ("blocked-cv", "spline-cv"):
         options = [
             ModelOptions(degree=d, smoothing="spline" if method == "spline-cv" else "none") for d in (0, 1, 2)
@@ -195,7 +197,9 @@ def run_stress_benchmark(
 ):
     if not seeds or not scenarios or not methods or workers < 1:
         raise ValueError("seeds, scenarios, methods and a positive worker count are required")
-    if any(m not in METHODS for m in methods) or any(s not in STRESS_SCENARIOS for s in scenarios):
+    if any(m not in METHODS + EXTENDED_METHODS for m in methods) or any(
+        s not in STRESS_SCENARIOS + EXTENDED_SCENARIOS for s in scenarios
+    ):
         raise ValueError("unknown benchmark method or scenario")
     if split not in ("development", "held-out"):
         raise ValueError("split must be development or held-out")
@@ -248,7 +252,11 @@ def run_stress_benchmark(
         "seeds": list(seeds),
         "scenarios": list(scenarios),
         "methods": list(methods),
-        "method_options": {name: vars(PROJECTED[name]) for name in methods if name in PROJECTED},
+        "method_options": {
+            name: vars({**PROJECTED, **VELOCITY_PROJECTED}[name])
+            for name in methods
+            if name in PROJECTED or name in VELOCITY_PROJECTED
+        },
         "source_hashes": source_hashes,
         "versions": {
             "python": platform.python_version(),
@@ -317,3 +325,16 @@ rows.sort((a,b)=>(a[1].median_error_m??Infinity)-(b[1].median_error_m??Infinity)
 document.getElementById('rows').innerHTML=rows.map(([m,r])=>`<tr><td>${{m}}</td><td>${{fmt(r.median_error_m)}}</td><td>${{fmt(r.p90_error_m)}}</td><td>${{pct(r.within_100m_fraction)}}</td><td>${{pct(r.accepted_within_100m_fraction)}}</td><td>${{pct(r.rejected_signal_fraction)}}</td><td>${{r.exceptions}}/${{r.attempts}}</td><td>${{r.nonconverged}}/${{r.attempts}}</td><td>${{r.false_accepts}}/${{r.negative_trials}}</td><td>${{r.median_seconds.toFixed(2)}}</td></tr>`).join('');}}
 document.getElementById('scenario').onchange=draw;document.getElementById('filter').oninput=draw;draw();</script></html>"""
     Path(path).write_text(text)
+
+
+# Reported-velocity variants (opt-in; not part of the default METHODS matrix).
+# Without velocity reports the "reported" variants reduce exactly to their
+# differenced-position counterparts (projected-linear, spline-linear).
+VELOCITY_PROJECTED = {
+    "hermite-velocity-linear": ModelOptions(degree=1, velocity="reported"),
+    "spline-velocity-linear": ModelOptions(degree=1, smoothing="spline", velocity="reported"),
+    "kalman-velocity-linear": ModelOptions(degree=1, velocity="fused"),
+    "spline-offsets-linear": ModelOptions(degree=1, smoothing="spline", fit_track_offsets=True),
+    "kalman-velocity-offsets-linear": ModelOptions(degree=1, velocity="fused", fit_track_offsets=True),
+}
+EXTENDED_METHODS = tuple(VELOCITY_PROJECTED)
