@@ -7,6 +7,7 @@ nearby, frequency-shifted versions of those same curves.
 
 import numpy as np
 
+from .atmosphere import atmosphere_from_result
 from .physics import Atmosphere, predict
 
 
@@ -21,6 +22,9 @@ def _per_event(value, index, n, default=0.0):
 
 
 def _atmosphere(candidate, default):
+    # A layered fit records its profile; otherwise a layered default is used as given.
+    if candidate.get("atmosphere") is not None or not isinstance(default, Atmosphere):
+        return atmosphere_from_result(candidate, default)
     c = float(candidate.get("sound_speed_m_s", default.c))
     wind = tuple(candidate.get("wind_enu_m_s", candidate.get("wind", default.wind)))
     return Atmosphere(c, wind)

@@ -11,6 +11,7 @@ import numpy as np
 from scipy.interpolate import UnivariateSpline
 from scipy.optimize import least_squares, lsq_linear
 
+from .atmosphere import atmosphere_from_result
 from .physics import Atmosphere, Trajectory, predict
 from .refine import extract_ridge
 from .scoring import score_curve
@@ -200,9 +201,7 @@ def predict_result(track, event, times, result, index):
     observer = np.asarray(result["position"]) - np.array(
         [0.0, 0.0, result.get("aircraft_altitude_offset_m", 0.0)]
     )
-    atmosphere = Atmosphere(
-        result.get("sound_speed_m_s", 343.0), tuple(result.get("wind_enu_m_s", (0.0, 0.0, 0.0)))
-    )
+    atmosphere = atmosphere_from_result(result)
     factor, emit = predict(local, observer, receive, atmosphere=atmosphere)
     elapsed = emit - (reference - origin)
     drift = result.get("frequency_drift_hz_s", [0.0] * (index + 1))[index]
@@ -247,10 +246,14 @@ def fit_projected(
     lower = [-options.radius, -options.radius, -8.0]
     upper = [options.radius, options.radius, 8.0]
     scale = [200.0, 200.0, 1.0]
+    # A layered profile keeps its shape: sound speed and wind become constant offsets
+    # (same bounds and prior widths, centred on zero).
+    layered = not isinstance(atmosphere, Atmosphere)
+    c_ref, we_ref, wn_ref = (0.0, 0.0, 0.0) if layered else (atmosphere.c, *atmosphere.wind[:2])
     for enabled, name, value, lo, hi, unit in [
-        (options.fit_sound_speed, "sound_speed", atmosphere.c, atmosphere.c - 18, atmosphere.c + 18, 4.0),
-        (options.fit_wind, "wind_e", atmosphere.wind[0], -30.0, 30.0, 8.0),
-        (options.fit_wind, "wind_n", atmosphere.wind[1], -30.0, 30.0, 8.0),
+        (options.fit_sound_speed, "sound_speed", c_ref, c_ref - 18, c_ref + 18, 4.0),
+        (options.fit_wind, "wind_e", we_ref, -30.0, 30.0, 8.0),
+        (options.fit_wind, "wind_n", wn_ref, -30.0, 30.0, 8.0),
         (options.fit_altitude, "altitude", 0.0, -350.0, 350.0, 80.0),
         (options.fit_clock_rate, "clock_rate", 0.0, -2500.0, 2500.0, 500.0),
     ]:
@@ -269,14 +272,19 @@ def fit_projected(
         if frame is not None and elevation is not None:
             lat, lon, _ = frame.to_geodetic(observer)
             observer = frame.to_local([lat, lon, float(elevation(lat, lon))])
-        atmo = Atmosphere(
-            values.get("sound_speed", atmosphere.c),
-            (
-                values.get("wind_e", atmosphere.wind[0]),
-                values.get("wind_n", atmosphere.wind[1]),
-                atmosphere.wind[2],
-            ),
-        )
+        if layered:
+            atmo = atmosphere.offset(
+                values.get("sound_speed", 0.0), (values.get("wind_e", 0.0), values.get("wind_n", 0.0))
+            )
+        else:
+            atmo = Atmosphere(
+                values.get("sound_speed", atmosphere.c),
+                (
+                    values.get("wind_e", atmosphere.wind[0]),
+                    values.get("wind_n", atmosphere.wind[1]),
+                    atmosphere.wind[2],
+                ),
+            )
         return values, observer, atmo
 
     def residual(p):
@@ -315,12 +323,12 @@ def fit_projected(
                     / np.array([5.0, 1.2, 0.8])[: options.degree + 1]
                 )
         if options.fit_sound_speed:
-            r.append((values["sound_speed"] - atmosphere.c) / 6.0)
+            r.append((values["sound_speed"] - c_ref) / 6.0)
         if options.fit_wind:
             r.extend(
                 [
-                    (values["wind_e"] - atmosphere.wind[0]) / 12.0,
-                    (values["wind_n"] - atmosphere.wind[1]) / 12.0,
+                    (values["wind_e"] - we_ref) / 12.0,
+                    (values["wind_n"] - wn_ref) / 12.0,
                 ]
             )
         if options.fit_altitude:
@@ -358,7 +366,7 @@ def fit_projected(
             validation.extend(np.minimum(error[held] ** 2, 9.0))
         coverage.append(float(np.mean(np.isfinite(prediction))))
         scores.append(score_curve(spec, times, prediction, "contrast", event.harmonics))
-    return {
+    result = {
         "position": observer.tolist(),
         "clock": float(clock + fit.x[2]),
         "flights": [t.id for t in tracks],
@@ -387,6 +395,10 @@ def fit_projected(
         ),
         "uncertainty_note": "Conditional experimental fit; nuisance parameters can imitate position error.",
     }
+    if layered:
+        # sound_speed_m_s / wind_enu_m_s above are the profile's values at 0 m.
+        result["atmosphere"] = atmo.to_record()
+    return result
 
 
 def select_model(

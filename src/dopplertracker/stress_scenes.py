@@ -89,9 +89,9 @@ def _parameters(name):
         "parallel_tracks": dict(parallel_tracks=True),
         "mismeasured_event": dict(mismeasured_event=True),
     }
-    if name not in STRESS_SCENARIOS:
+    if name not in STRESS_SCENARIOS + EXTENDED_SCENARIOS:
         raise ValueError(f"unknown stress scenario {name!r}")
-    p.update(changes.get(name, {}))
+    p.update(changes.get(name, _EXTENDED_PARAMETERS.get(name, {})))
     return p
 
 
@@ -145,10 +145,11 @@ def stress_scene(scenario="clean", seed=0):
         np.array([0.15, 0.22, 0.10, 0.18]) if p.get("parallel_tracks") else np.array([0.15, 1.72, 3.30, 4.90])
     )
     f0s = np.array([108.0, 126.0, 94.0, 145.0])
+    profiles = layered_profiles(seed) if p.get("layered") else None
     for i, center in enumerate(centers):
         local = np.arange(-105.0, 106.0, 0.10)
         distance = 900.0 + 230.0 * i
-        altitude = 1150.0 + 260.0 * i
+        altitude = p.get("altitude_base", 1150.0) + p.get("altitude_step", 260.0) * i
         if p["overhead"]:
             altitude = 4500.0 + 260.0 * i
         speed, climb = 105.0 + 9 * i, (-2.0 + i * 1.4)
@@ -165,7 +166,12 @@ def stress_scene(scenario="clean", seed=0):
             p["acceleration"],
             overhead,
         )
-        tau = _wind_travel(pos - truth, p["sound_speed"], p["wind"])
+        if profiles is None:
+            tau = _wind_travel(pos - truth, p["sound_speed"], p["wind"])
+        else:
+            # Emission times without a direct ray (acoustic shadow) are silent.
+            tau = _traced_tau(profiles[0], pos, truth, local)
+            local, pos, tau = local[np.isfinite(tau)], pos[np.isfinite(tau)], tau[np.isfinite(tau)]
         arrival = clock + center + local + tau
         # Source phase differentiation makes the observed frequency depend on
         # both non-linear RPM and the genuinely non-linear arrival-time map.
@@ -264,6 +270,11 @@ def stress_scene(scenario="clean", seed=0):
         corrupted_event=(2 if p["corrupt_event"] else None),
         note="Generator-only nuisance truth; never supply it to candidate fitting.",
     )
+    extra = {}
+    if profiles is not None:
+        # The truth profile is an oracle input; the forecast imitates reanalysis error.
+        extra = dict(atmosphere_profile=profiles[0], atmosphere_forecast=profiles[1])
+        metadata["atmosphere_profile"] = profiles[0].to_record()
     return dict(
         truth=truth,
         clock=clock,
@@ -275,4 +286,154 @@ def stress_scene(scenario="clean", seed=0):
         atmosphere_truth=dict(c=p["sound_speed"], wind=p["wind"]),
         candidate=candidate,
         metadata=metadata,
+        **extra,
     )
+
+
+# ----- Extended scenarios: horizontally stratified atmospheres -----------------------------------
+#
+# Not part of STRESS_SCENARIOS (the default matrix).  Arrival times come from
+# ``trace_ray_times``: a fine-step Runge-Kutta integration of the moving-medium
+# ray (Hamiltonian) equations with shooting on the launch slowness.  It evolves
+# the vertical slowness through ds_z/dt = -dH/dz and so shares no code or
+# closed-form integrals with the inference solver in ``atmosphere.py``.
+
+EXTENDED_SCENARIOS = ("layered_atmosphere", "high_altitude_layered")
+_EXTENDED_PARAMETERS = {
+    "layered_atmosphere": dict(layered=True),
+    "high_altitude_layered": dict(layered=True, altitude_base=3000.0, altitude_step=1000.0),
+}
+
+
+def trace_ray_times(heights, sound_speed, wind_east, wind_north, sources, observer, dz=10.0, iterations=25):
+    """Direct-ray travel times from sources (N, 3) to observer in a piecewise-linear medium.
+
+    Integrates dX/dz, dt/dz and ds_z/dz of the Hamiltonian H = c|s| + w.s_h with
+    RK4 in z on a grid containing every profile level, from each source down to
+    the observer, and Newton-shoots the horizontal slowness (finite-difference
+    Jacobian).  Sources below the observer or without a direct ray (acoustic
+    shadow, turning rays) return NaN.
+    """
+    h = np.asarray(heights, float)
+    values = np.stack([np.asarray(v, float) for v in (sound_speed, wind_east, wind_north)])
+    slopes = np.concatenate(
+        [np.zeros((3, 1)), np.diff(values, axis=1) / np.diff(h), np.zeros((3, 1))], axis=1
+    )
+    sources = np.asarray(sources, float)
+    observer = np.asarray(observer, float)
+    z_r, z_s = observer[2], sources[:, 2]
+    result = np.full(len(sources), np.nan)
+    above = z_s > z_r + 1.0
+    if not above.any():
+        return result
+    target = observer[:2] - sources[above, :2]
+    z_s = z_s[above]
+    top = float(z_s.max())
+    grid = np.unique(np.r_[np.arange(z_r, top, dz), h[(h > z_r) & (h < top)], top])[::-1]
+
+    def medium(z):
+        return [np.interp(z, h, v) for v in values]
+
+    def derivative(z, s_z, s_h, slope):
+        c, we, wn = medium(z)
+        magnitude = np.sqrt(s_h[:, 0] ** 2 + s_h[:, 1] ** 2 + s_z * s_z)
+        vz = c * s_z / magnitude
+        dx = (c * s_h[:, 0] / magnitude + we) / vz
+        dy = (c * s_h[:, 1] / magnitude + wn) / vz
+        ds = -(slope[0] * magnitude + slope[1] * s_h[:, 0] + slope[2] * s_h[:, 1]) / vz
+        return np.stack((dx, dy, 1 / vz, ds), axis=1)
+
+    def shoot(s_h, zs):
+        c, we, wn = medium(zs)
+        sigma = (1 - we * s_h[:, 0] - wn * s_h[:, 1]) / c
+        with np.errstate(invalid="ignore", divide="ignore"):
+            state = np.zeros((len(zs), 4))
+            state[:, 3] = -np.sqrt(sigma * sigma - s_h[:, 0] ** 2 - s_h[:, 1] ** 2)
+            for upper, lower in zip(grid[:-1], grid[1:], strict=True):
+                za, zb = np.minimum(upper, zs), np.minimum(lower, zs)
+                step = (zb - za)[:, None]
+                if not np.any(step):
+                    continue
+                layer = np.searchsorted(h, 0.5 * (upper + lower), side="right")
+                slope = slopes[:, layer]
+                k1 = derivative(za, state[:, 3], s_h, slope)
+                k2 = derivative(za + step[:, 0] / 2, state[:, 3] + step[:, 0] / 2 * k1[:, 3], s_h, slope)
+                k3 = derivative(za + step[:, 0] / 2, state[:, 3] + step[:, 0] / 2 * k2[:, 3], s_h, slope)
+                k4 = derivative(zb, state[:, 3] + step[:, 0] * k3[:, 3], s_h, slope)
+                state = state + step / 6 * (k1 + 2 * k2 + 2 * k3 + k4)
+                state[~(state[:, 3] < 0)] = np.nan  # a turning ray is not a direct arrival
+        # d/dz quantities times negative steps accumulate the forward displacement and time.
+        return state[:, :2], state[:, 2]
+
+    # Launch guess along the chord with the source-level sound speed.
+    c0 = medium(0.5 * (z_s + z_r))[0]
+    distance = np.hypot(target[:, 0], target[:, 1])
+    slant = np.hypot(distance, z_s - z_r)
+    s_h = np.divide(target, (slant * c0)[:, None], out=np.zeros_like(target), where=slant[:, None] > 0)
+    eps = 1e-9
+    # Vertical launch (s_h = 0) always propagates: a launch that turns or cannot
+    # propagate is pulled half-way back towards the last one that arrived.
+    last_good = np.zeros_like(s_h)
+    for _ in range(iterations):
+        batch = np.concatenate((s_h, s_h + [eps, 0.0], s_h + [0.0, eps]))
+        displacement, _ = shoot(batch, np.tile(z_s, 3))
+        base, de, dn = np.split(displacement, 3)
+        residual = base - target
+        lost = ~np.isfinite(base).all(axis=1)
+        last_good[~lost] = s_h[~lost]
+        miss = np.hypot(residual[:, 0], residual[:, 1])
+        if not lost.any() and miss.max() < 1e-7:
+            break
+        (jee, jne), (jen, jnn) = (de - base).T / eps, (dn - base).T / eps
+        with np.errstate(invalid="ignore", divide="ignore"):
+            det = jee * jnn - jen * jne
+            step_e = (jnn * residual[:, 0] - jen * residual[:, 1]) / det
+            step_n = (-jne * residual[:, 0] + jee * residual[:, 1]) / det
+        s_h = s_h - np.nan_to_num(np.stack((step_e, step_n), axis=1), nan=0.0, posinf=0.0, neginf=0.0)
+        s_h[lost] = 0.5 * (s_h[lost] + last_good[lost])
+    displacement, times = shoot(s_h, z_s)
+    miss = np.hypot(*(displacement - target).T)
+    result[np.flatnonzero(above)] = np.where(miss < 1e-4, times, np.nan)
+    return result
+
+
+def layered_profiles(seed):
+    """True and forecast-like profiles for an extended scene (separate RNG stream).
+
+    Truth: -6.5 K/km lapse from a 15-27 C surface, wind veering and sheared from
+    1-4 m/s at the ground to 20 m/s at 6 km.  Forecast: the same profile with
+    temperature biased +1.5 K and wind wrong by a constant 3 m/s vector.
+    """
+    from .atmosphere import LayeredAtmosphere
+
+    rng = np.random.default_rng([seed, 0xA7305])
+    surface_t = rng.uniform(15.0, 27.0)
+    heading = rng.uniform(0, 2 * np.pi)
+    veer = np.radians(rng.uniform(-40.0, 40.0))
+    ground = rng.uniform(1.0, 4.0) * np.array([np.cos(heading), np.sin(heading)])
+    aloft = 20.0 * np.array([np.cos(heading + veer), np.sin(heading + veer)])
+    error_angle = rng.uniform(0, 2 * np.pi)
+    error = 3.0 * np.array([np.cos(error_angle), np.sin(error_angle)])
+    common = dict(lapse_rate_k_per_km=6.5, top_height_m=10000.0, wind_top_height_m=6000.0, step_m=250.0)
+    truth = LayeredAtmosphere.from_lapse_rate(surface_t, wind_surface=ground, wind_top=aloft, **common)
+    forecast = LayeredAtmosphere.from_lapse_rate(
+        surface_t + 1.5, wind_surface=ground + error, wind_top=aloft + error, **common
+    )
+    return truth, forecast
+
+
+def _traced_tau(profile, pos, observer, local, spacing=0.5):
+    """Trace on a coarse emission grid; a cubic spline carries tau to the fine grid."""
+    from scipy.interpolate import CubicSpline
+
+    coarse = np.arange(local[0], local[-1] + spacing / 2, spacing)
+    points = np.stack([np.interp(coarse, local, pos[:, k]) for k in range(3)], axis=1)
+    tau = trace_ray_times(
+        profile.heights, profile.sound_speed, profile.wind_east, profile.wind_north, points, observer
+    )
+    finite = np.isfinite(tau)
+    fine = np.full(len(local), np.nan)
+    if finite.sum() >= 4:
+        inside = (local >= coarse[finite][0]) & (local <= coarse[finite][-1])
+        fine[inside] = CubicSpline(coarse[finite], tau[finite])(local[inside])
+    return fine
