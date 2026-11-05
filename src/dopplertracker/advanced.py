@@ -297,10 +297,12 @@ def _scatter(ridge, valid):
 
 
 def _agreement(ridge, valid, sigma, reference, reference_valid, reference_sigma):
+    # The tolerance depends only on the reference: a buried harmonic's own large
+    # sigma must not make it "agree" with everything.
     both = valid & reference_valid
     if both.sum() < 12:
         return 0.0
-    tolerance = 3 * np.hypot(sigma[both], reference_sigma[both]) + 0.2
+    tolerance = 3 * reference_sigma[both] + 0.2
     return float(np.mean(np.abs(ridge[both] - reference[both]) <= tolerance))
 
 
