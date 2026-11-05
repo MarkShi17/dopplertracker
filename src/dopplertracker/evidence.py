@@ -53,7 +53,8 @@ def assess_candidate(spec, events, tracks, candidate, atmosphere=Atmosphere()):
     Optional candidate fields are ``frequency_drift_hz_s``,
     ``frequency_curvature_hz_s2`` (the coefficient of ``dt**2``),
     ``source_reference_utc``, ``clock_rate_ppm``, ``aircraft_altitude_offset_m``,
-    ``sound_speed_m_s``, and ``wind_enu_m_s``.  Event times are
+    ``sound_speed_m_s``, ``wind_enu_m_s``, ``atmosphere`` (a layered record) and
+    ``track_time_offsets_s``.  Event times are
     recording-relative; the shared candidate clock is applied to reception
     times and, absent ``source_reference_utc``, to drift references.
 
@@ -84,10 +85,11 @@ def assess_candidate(spec, events, tracks, candidate, atmosphere=Atmosphere()):
         raise ValueError("candidate options smoothing must be none, spline, or kalman")
     # Advanced fitting smooths raw ADS-B positions before prediction.  Repeat it
     # here so validation evaluates the fitted model, not a subtly different one.
-    if smoothing != "none":
-        from .advanced import smooth_trajectory  # lazy: advanced imports other fitting modules
+    velocity = options.get("velocity", "differenced")
+    if smoothing != "none" or velocity != "differenced":
+        from .advanced import prepare_track  # lazy: advanced imports other fitting modules
 
-        tracks = [smooth_trajectory(track, smoothing) for track in tracks]
+        tracks = [prepare_track(track, smoothing, velocity) for track in tracks]
     clock_rate = float(candidate.get("clock_rate_ppm", 0.0)) * 1e-6
     altitude_offset = float(candidate.get("aircraft_altitude_offset_m", 0.0))
     if not np.isfinite(clock_rate) or not np.isfinite(altitude_offset):
@@ -102,7 +104,10 @@ def assess_candidate(spec, events, tracks, candidate, atmosphere=Atmosphere()):
         drift = _per_event(candidate.get("frequency_drift_hz_s"), i, n)
         curvature = _per_event(candidate.get("frequency_curvature_hz_s2"), i, n)
         receive = clock + times * (1.0 + clock_rate)
-        factor, emission = predict(track, observer, receive, 1.0, atmo)
+        # A fitted ADS-B time offset d means the track's position at t is track(t + d).
+        offset = _per_event(candidate.get("track_time_offsets_s"), i, n)
+        factor, emission = predict(track, observer, receive + offset, 1.0, atmo)
+        emission = emission - offset
         reference = _per_event(candidate.get("source_reference_utc"), i, n, clock + event.cpa)
         dt = emission - reference
         source = f0 + drift * dt + curvature * dt * dt

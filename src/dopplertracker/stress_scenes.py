@@ -91,7 +91,7 @@ def _parameters(name):
     }
     if name not in STRESS_SCENARIOS + EXTENDED_SCENARIOS:
         raise ValueError(f"unknown stress scenario {name!r}")
-    p.update(changes.get(name, _EXTENDED_PARAMETERS.get(name, {})))
+    p.update(changes.get(name, _LAYERED_PARAMETERS.get(name, {})))
     return p
 
 
@@ -128,6 +128,8 @@ def stress_scene(scenario="clean", seed=0):
     metadata documents generator-only nuisance truth and must not be passed to an
     inference method as candidate parameters.
     """
+    if scenario in VELOCITY_SCENARIOS:
+        return _extended_scene(scenario, seed)
     p = _parameters(scenario)
     rng = np.random.default_rng(seed)
     clock = 12345.6
@@ -298,8 +300,8 @@ def stress_scene(scenario="clean", seed=0):
 # the vertical slowness through ds_z/dt = -dH/dz and so shares no code or
 # closed-form integrals with the inference solver in ``atmosphere.py``.
 
-EXTENDED_SCENARIOS = ("layered_atmosphere", "high_altitude_layered")
-_EXTENDED_PARAMETERS = {
+LAYERED_SCENARIOS = ("layered_atmosphere", "high_altitude_layered")
+_LAYERED_PARAMETERS = {
     "layered_atmosphere": dict(layered=True),
     "high_altitude_layered": dict(layered=True, altitude_base=3000.0, altitude_step=1000.0),
 }
@@ -437,3 +439,238 @@ def _traced_tau(profile, pos, observer, local, spacing=0.5):
         inside = (local >= coarse[finite][0]) & (local <= coarse[finite][-1])
         fine[inside] = CubicSpline(coarse[finite], tau[finite])(local[inside])
     return fine
+
+
+# ---------------------------------------------------------------------------
+# Extended scenes with aircraft-reported velocity.  They are not part of the
+# default STRESS_SCENARIOS matrix, and every random draw they add comes from a
+# separate RNG stream so that the default scenes stay bit-identical.
+
+VELOCITY_SCENARIOS = ("irregular_cadence", "adsb_noise_velocity", "turning_sparse", "adsb_latency")
+KNOT_M_S = 1852.0 / 3600.0
+FPM_M_S = 0.3048 / 60.0
+# Per-flight geometry of the default scenes (non-parallel tracks).
+_ANGLES = np.array([0.15, 1.72, 3.30, 4.90])
+_CENTERS = np.array([80.0, 250.0, 420.0, 590.0])
+_F0S = np.array([108.0, 126.0, 94.0, 145.0])
+
+
+def quantize_velocity(velocity):
+    """ADS-B airborne-velocity resolution: 1 kt per horizontal component, 64 fpm vertically."""
+    velocity = np.asarray(velocity, dtype=float)
+    out = velocity.copy()
+    out[..., :2] = np.round(velocity[..., :2] / KNOT_M_S) * KNOT_M_S
+    out[..., 2] = np.round(velocity[..., 2] / (64 * FPM_M_S)) * 64 * FPM_M_S
+    return out
+
+
+def _flight(i, p):
+    return dict(
+        angle=_ANGLES[i],
+        distance=900.0 + 230.0 * i,
+        altitude=(4500.0 if p["overhead"] else 1150.0) + 260.0 * i,
+        speed=105.0 + 9 * i,
+        climb=-2.0 + i * 1.4,
+    )
+
+
+def _path_velocity(s, angle, speed, climb, curvature, acceleration):
+    """Analytic time derivative of ``_path``."""
+    s = np.asarray(s, dtype=float)
+    forward = np.array([np.cos(angle), np.sin(angle), 0.0])
+    side = np.array([-np.sin(angle), np.cos(angle), 0.0])
+    vertical = np.stack((np.zeros_like(s), np.zeros_like(s), climb + 0.003 * s), axis=-1)
+    return (speed + acceleration * s)[..., None] * forward + (2 * curvature * s)[..., None] * side + vertical
+
+
+def _turning_path(observer, angle, distance, altitude, speed, climb, turn, turn_center, speed_change):
+    """Smooth heading change and speed change, integrated numerically; returns s -> (pos, vel)."""
+    from scipy.interpolate import CubicHermiteSpline
+
+    grid = np.arange(-140.0, 140.0 + 1e-9, 0.02)
+    heading = angle + turn * 0.5 * (1 + np.tanh((grid - turn_center) / 6.0))
+    ground = speed + speed_change * 0.5 * (1 + np.tanh((grid - turn_center - 5.0) / 10.0))
+    velocity = np.column_stack(
+        (ground * np.cos(heading), ground * np.sin(heading), np.full_like(grid, climb))
+    )
+    steps = 0.5 * (velocity[1:] + velocity[:-1]) * np.diff(grid)[:, None]
+    position = np.vstack((np.zeros(3), np.cumsum(steps, axis=0)))
+    zero = int(np.argmin(np.abs(grid)))
+    h0 = heading[zero]
+    anchor = observer + distance * np.array([-np.sin(h0), np.cos(h0), 0.0]) + np.array([0.0, 0.0, altitude])
+    position += anchor - position[zero]
+    spline = CubicHermiteSpline(grid, position, velocity, axis=0)
+    derivative = spline.derivative()
+    return lambda s: (spline(np.asarray(s, dtype=float)), derivative(np.asarray(s, dtype=float)))
+
+
+def _turning_acoustics(seed):
+    """Clean-acoustics scene whose flights turn (about 2 deg/s peak) and change speed near CPA."""
+    p = _parameters("clean")
+    rng = np.random.default_rng([seed, 0x7A12])
+    clock = 12345.6
+    truth = np.array([rng.uniform(-250, 250), rng.uniform(-250, 250), 0.0])
+    times = np.arange(1300) * 0.5
+    frequencies = 45.0 + np.arange(1301) * 0.25
+    power = rng.exponential(0.20, (len(frequencies), len(times))).astype(np.float32)
+    turns = (0.55, -0.45, 0.60, -0.50)
+    turn_centers = (-12.0, 8.0, -5.0, 15.0)
+    speed_changes = (6.0, -5.0, 8.0, -6.0)
+    paths, events, flight_metadata = [], [], []
+    for i, center in enumerate(_CENTERS):
+        g = _flight(i, p)
+        path = _turning_path(
+            truth, g["angle"], g["distance"], g["altitude"], g["speed"], g["climb"],
+            turns[i], turn_centers[i], speed_changes[i],
+        )  # fmt: skip
+        local = np.arange(-105.0, 106.0, 0.10)
+        pos, _ = path(local)
+        tau = _wind_travel(pos - truth, p["sound_speed"], p["wind"])
+        arrival = clock + center + local + tau
+        observed_hz = np.gradient(_F0S[i] * local, arrival)
+        cpa_index = int(np.argmin(np.linalg.norm(pos - truth, axis=1)))
+        cpa = float(arrival[cpa_index]) - clock
+        receive = clock + times
+        valid = (receive >= arrival[0]) & (receive <= arrival[-1])
+        curve = np.nan_to_num(np.interp(receive, arrival, observed_hz, left=np.nan, right=np.nan), nan=-1.0e6)
+        for harmonic in (1, 2):
+            width = 0.38 + 0.04 * harmonic
+            power += (
+                p["ridge_snr"]
+                / harmonic
+                * np.exp(-0.5 * ((frequencies[:, None] - harmonic * curve[None, :]) / width) ** 2)
+                * valid
+            ).astype(np.float32)
+        paths.append(path)
+        events.append(
+            Event(
+                (cpa - 45.0, cpa + 45.0),
+                cpa + rng.normal(0, 0.35),
+                _F0S[i] + rng.normal(0, 0.35),
+                g["speed"],
+                float(np.linalg.norm(pos[cpa_index] - truth)),
+                2,
+            )
+        )
+        flight_metadata.append(
+            dict(
+                id=f"stress-{i}",
+                center_s=float(center),
+                speed_mps=float(g["speed"]),
+                turn_rad=turns[i],
+                turn_center_s=turn_centers[i],
+                speed_change_mps=speed_changes[i],
+                source_f0_hz=float(_F0S[i]),
+                true_cpa_audio_s=cpa,
+            )
+        )
+    candidate = dict(
+        position=[0.0, 0.0, 0.0],
+        clock=float(clock + rng.normal(0, 1.2)),
+        f0=[float(e.f0 + rng.normal(0, 0.4)) for e in events],
+        flights=[f"stress-{i}" for i in range(len(events))],
+    )
+    scene = dict(
+        truth=truth,
+        clock=clock,
+        events=events,
+        spectrogram=Spectrogram(times, frequencies, power),
+        atmosphere_truth=dict(c=p["sound_speed"], wind=p["wind"]),
+        candidate=candidate,
+        metadata=dict(parameters=p, flights=flight_metadata),
+    )
+    return scene, paths
+
+
+def _irregular_times(rng, low, high, span=100.0):
+    """Report offsets within +/-span with intervals drawn uniformly in [low, high] s."""
+    offsets = [-span + rng.uniform(0, low)]
+    while offsets[-1] < span:
+        offsets.append(offsets[-1] + rng.uniform(low, high))
+    return np.array(offsets[:-1])
+
+
+def _reported_track(i, times, positions, velocities, max_gap):
+    n = len(times)
+    return Trajectory(
+        f"stress-{i}",
+        times,
+        positions,
+        max_gap=max_gap,
+        metadata={
+            "synthetic": True,
+            "position_source_runs": [["adsb_icao", n]],
+            "vertical_rate_source_runs": [["geometric", n]],
+        },
+        velocities=quantize_velocity(velocities),
+    )
+
+
+def _extended_scene(scenario, seed):
+    """Scenes with reported velocity: true velocity at report time, ADS-B quantised.
+
+    * ``adsb_noise_velocity``: the ``adsb_noise`` scene unchanged (same acoustics,
+      same noisy 4 s positions) plus velocity reports, a paired comparison.
+    * ``irregular_cadence``: ``clean`` acoustics; reports 1-20 s apart with 8 m
+      position noise (a realistic NACp 8-9 level).
+    * ``turning_sparse``: flights turn by 26-34 degrees (peak about 2 deg/s,
+      3.8 m/s^2) and change speed by 5-8 m/s near CPA; reports 8-20 s apart
+      with 5 m noise.
+    * ``adsb_latency``: ``clean`` scene with velocity reports, flight 3's ADS-B
+      time labels 0.6 s late (positions and velocities belong to t - 0.6 s).
+    """
+    rng = np.random.default_rng([seed, 0xADB5])
+    if scenario == "adsb_noise_velocity":
+        scene = stress_scene("adsb_noise", seed)
+        p = scene["metadata"]["parameters"]
+        tracks = []
+        for i, track in enumerate(scene["tracks"]):
+            g = _flight(i, p)
+            relative = track.times - scene["clock"] - _CENTERS[i]
+            velocity = _path_velocity(relative, g["angle"], g["speed"], g["climb"], 0.0, 0.0)
+            tracks.append(_reported_track(i, track.times, track.positions, velocity, track.max_gap))
+    elif scenario == "irregular_cadence":
+        scene = stress_scene("clean", seed)
+        p = scene["metadata"]["parameters"]
+        tracks = []
+        for i in range(len(_CENTERS)):
+            g = _flight(i, p)
+            relative = _irregular_times(rng, 1.0, 20.0)
+            shape = (g["angle"], g["distance"], g["altitude"], g["speed"], g["climb"], 0.0, 0.0, False)
+            positions = _path(relative, scene["truth"], *shape) + rng.normal(0, 8.0, (len(relative), 3))
+            velocity = _path_velocity(relative, g["angle"], g["speed"], g["climb"], 0.0, 0.0)
+            times = scene["clock"] + _CENTERS[i] + relative
+            tracks.append(_reported_track(i, times, positions, velocity, 30.0))
+    elif scenario == "turning_sparse":
+        scene, paths = _turning_acoustics(seed)
+        tracks = []
+        for i, path in enumerate(paths):
+            relative = _irregular_times(rng, 8.0, 20.0)
+            positions, velocity = path(relative)
+            positions = positions + rng.normal(0, 5.0, positions.shape)
+            times = scene["clock"] + _CENTERS[i] + relative
+            tracks.append(_reported_track(i, times, positions, velocity, 30.0))
+    elif scenario == "adsb_latency":
+        scene = stress_scene("clean", seed)
+        p = scene["metadata"]["parameters"]
+        tracks = []
+        for i, track in enumerate(scene["tracks"]):
+            g = _flight(i, p)
+            relative = track.times - scene["clock"] - _CENTERS[i]
+            velocity = _path_velocity(relative, g["angle"], g["speed"], g["climb"], 0.0, 0.0)
+            times = track.times + (0.6 if i == 2 else 0.0)
+            tracks.append(_reported_track(i, times, track.positions, velocity, track.max_gap))
+    else:
+        raise ValueError(f"unknown extended scenario {scenario!r}")
+    scene = dict(scene)
+    scene["tracks"] = tracks
+    scene["scenario"], scene["seed"] = scenario, seed
+    scene["candidate"] = {**scene["candidate"], "flights": [t.id for t in tracks]}
+    return scene
+
+
+# ----- One registry of extended (opt-in) scenarios -------------------------------------------------
+#
+# Every extended scene draws its additional randomness from its own RNG stream,
+# so the default STRESS_SCENARIOS stay bit-identical.
+EXTENDED_SCENARIOS = LAYERED_SCENARIOS + VELOCITY_SCENARIOS

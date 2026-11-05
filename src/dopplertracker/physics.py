@@ -28,7 +28,19 @@ class Atmosphere:
 
 
 class Trajectory:
-    def __init__(self, id, times, positions, max_gap=30.0, metadata=None):
+    """Piecewise cubic Hermite flight path in local ENU metres and UTC seconds.
+
+    ``velocities`` optionally holds per-point reported ENU velocity (m/s, the same
+    axes as ``positions``), NaN where a component was not reported.  Reported
+    values become the Hermite derivatives only when ``use_velocities`` is true;
+    missing components then fall back to the differenced-position slope.
+    Without that flag, or without velocities, the path is exactly the
+    differenced-position interpolant.
+    """
+
+    def __init__(
+        self, id, times, positions, max_gap=30.0, metadata=None, velocities=None, use_velocities=False
+    ):
         self.id = str(id)
         self.times = np.asarray(times, dtype=float)
         self.positions = np.asarray(positions, dtype=float)
@@ -43,6 +55,12 @@ class Trajectory:
             or max_gap <= 0
         ):
             raise ValueError("trajectory requires finite positions and strictly increasing times")
+        if velocities is not None:
+            velocities = np.asarray(velocities, dtype=float)
+            if velocities.shape != self.positions.shape or np.isinf(velocities).any():
+                raise ValueError("velocities must match positions and be finite or NaN")
+        self.velocities = velocities
+        self.use_velocities = bool(use_velocities)
         self.max_gap = max_gap
         self.metadata = metadata or {}
         # Separate interpolators prevent samples beyond a gap from altering endpoint velocities.
@@ -60,6 +78,9 @@ class Trajectory:
             # contrast, independent component-wise PCHIP slopes can change when a
             # physically identical trajectory is expressed in a rotated frame.
             derivatives = np.gradient(self.positions[idx], relative_times, axis=0)
+            if self.use_velocities and self.velocities is not None:
+                reported = self.velocities[idx]
+                derivatives = np.where(np.isfinite(reported), reported, derivatives)
             spline = CubicHermiteSpline(
                 relative_times, self.positions[idx], derivatives, axis=0, extrapolate=False
             )
@@ -68,6 +89,18 @@ class Trajectory:
             velocity_samples.append(spline.derivative()(sample_times))
         self.velocity_samples = np.concatenate(velocity_samples) if velocity_samples else np.empty((0, 3))
         self.max_speed = np.max(np.linalg.norm(self.velocity_samples, axis=1), initial=0.0)
+
+    def relative_to(self, origin):
+        """The same path on a clock whose zero is ``origin``; keeps velocity data."""
+        return Trajectory(
+            self.id,
+            self.times - origin,
+            self.positions,
+            self.max_gap,
+            self.metadata,
+            self.velocities,
+            self.use_velocities,
+        )
 
     def valid(self, t):
         t = np.asarray(t)

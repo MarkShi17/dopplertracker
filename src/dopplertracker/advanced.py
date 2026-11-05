@@ -30,6 +30,13 @@ class ModelOptions:
     robust_source: bool = True
     radius: float = 1200.0
     max_nfev: int = 130
+    # Aircraft velocity used for the Hermite derivatives: "differenced" positions
+    # (the original model), the aircraft's "reported" ADS-B velocity, or "fused"
+    # positions and reported velocities from a constant-acceleration smoother.
+    velocity: str = "differenced"
+    # Per-flight ADS-B time offsets (s) for flights 2..N; the shared recording
+    # clock absorbs the first.  Bounded +/-1.5 s with a 0.5 s Gaussian prior.
+    fit_track_offsets: bool = False
 
     def __post_init__(self):
         if self.degree not in (0, 1, 2) or self.ridge not in ("peak", "viterbi"):
@@ -43,6 +50,10 @@ class ModelOptions:
             raise ValueError("unsupported smoothing or loss")
         if not np.isfinite(self.radius) or self.radius <= 0 or self.max_nfev < 1:
             raise ValueError("radius and evaluation budget must be positive")
+        if self.velocity not in ("differenced", "reported", "fused"):
+            raise ValueError("velocity must be differenced, reported or fused")
+        if self.velocity == "fused" and self.smoothing != "none":
+            raise ValueError("fused velocity smoothing replaces position smoothing")
 
 
 def _noise_scale(positions, times):
@@ -111,7 +122,223 @@ def smooth_trajectory(track, method="spline"):
         positions,
         track.max_gap,
         {**track.metadata, "smoothing": method, "estimated_position_noise_m": estimates},
+        velocities=track.velocities,
     )
+
+
+# Reported-velocity measurement noise, m/s (1 sigma).  Horizontal: 1 kt
+# quantisation per component (0.149 m/s uniform rms) plus GNSS velocity error.
+# Vertical: 64 fpm steps (0.094 m/s rms) plus GNSS rate noise; barometric rate
+# reports additionally jitter by +/-128 fpm in level flight.
+HORIZONTAL_VELOCITY_SIGMA = 0.2
+GEOMETRIC_RATE_SIGMA = 0.25
+BARO_RATE_SIGMA = 0.6
+# White-jerk spectral density, m^2/s^5.  Straight flight in light turbulence is
+# about 1e-3 (0.1 m/s^2 of acceleration change in 10 s); a turn entry reaching
+# 3-4 m/s^2 within about 6 s is about 1.  One fixed value cannot serve both, so
+# by default each segment picks the maximum-likelihood value from this
+# physically bounded grid (horizontal axes jointly, vertical separately).
+JERK_GRID = (1e-4, 1e-3, 1e-2, 1e-1, 1.0)
+
+
+def _velocity_noise_scale(positions, velocities, times, velocity_sigma):
+    """Per-axis position noise from trapezoidal position/velocity consistency.
+
+    p[i+1] - p[i] - (v[i] + v[i+1]) dt / 2 is exact for constant acceleration
+    with uneven spacing; its variance is 2 sigma_p^2 + dt^2 sigma_v^2 / 2.
+    Falls back to the constant-velocity estimate when velocities are sparse.
+    """
+    fallback = _noise_scale(positions, times)
+    dt = np.diff(times)
+    sigma = fallback.copy()
+    for axis in range(3):
+        v = velocities[:, axis]
+        both = np.isfinite(v[:-1]) & np.isfinite(v[1:])
+        if both.sum() < 4:
+            continue
+        r = (np.diff(positions[:, axis]) - 0.5 * (v[:-1] + v[1:]) * dt)[both]
+        spread = (np.median(np.abs(r - np.median(r))) / 0.67448975) ** 2
+        floor = np.median(dt[both] ** 2) * np.median(velocity_sigma[:, axis] ** 2) / 2
+        sigma[axis] = np.sqrt(max(spread - floor, 0.0) / 2)
+    return np.clip(sigma, 0.5, 100.0)
+
+
+def _fused_axis(t, y, v, sigma, velocity_sigma, jerk):
+    """Constant-acceleration Kalman filter and RTS smoother for one axis.
+
+    Measures position where ``y`` is finite (NaN marks an output-only time) and
+    velocity where ``v`` is finite; ``velocity_sigma`` is per point.  Returns
+    smoothed position, velocity and the innovation log-likelihood of the
+    measurements under ``jerk``.
+    """
+    n = len(t)
+    a, b = np.flatnonzero(np.isfinite(y))[:2]
+    first = v[0] if np.isfinite(v[0]) else (y[b] - y[a]) / (t[b] - t[a])
+    state = np.array([y[0], first, 0.0])
+    covariance = np.diag([sigma * sigma, velocity_sigma[0] ** 2 if np.isfinite(v[0]) else 1e4, 4.0])
+    loglik = 0.0
+    filtered, filtered_cov = np.empty((n, 3)), np.empty((n, 3, 3))
+    predicted, predicted_cov, transitions = np.empty((n, 3)), np.empty((n, 3, 3)), np.empty((n, 3, 3))
+    for i in range(n):
+        dt = 0.0 if i == 0 else t[i] - t[i - 1]
+        f = np.array([[1.0, dt, dt * dt / 2], [0.0, 1.0, dt], [0.0, 0.0, 1.0]])
+        q = jerk * np.array(
+            [
+                [dt**5 / 20, dt**4 / 8, dt**3 / 6],
+                [dt**4 / 8, dt**3 / 3, dt**2 / 2],
+                [dt**3 / 6, dt**2 / 2, dt],
+            ]
+        )
+        state = f @ state
+        covariance = f @ covariance @ f.T + q
+        predicted[i], predicted_cov[i], transitions[i] = state, covariance, f
+        if not np.isfinite(y[i]):
+            filtered[i], filtered_cov[i] = state, covariance
+            continue
+        if np.isfinite(v[i]):
+            h = np.array([[1.0, 0.0, 0.0], [0.0, 1.0, 0.0]])
+            z, r = np.array([y[i], v[i]]), np.diag([sigma * sigma, velocity_sigma[i] ** 2])
+        else:
+            h, z, r = np.array([[1.0, 0.0, 0.0]]), np.array([y[i]]), np.array([[sigma * sigma]])
+        innovation_cov = h @ covariance @ h.T + r
+        innovation = z - h @ state
+        if i > 0:
+            loglik -= 0.5 * (
+                np.linalg.slogdet(innovation_cov)[1]
+                + innovation @ np.linalg.solve(innovation_cov, innovation)
+                + len(z) * np.log(2 * np.pi)
+            )
+        gain = np.linalg.solve(innovation_cov, h @ covariance).T
+        state = state + gain @ innovation
+        covariance = covariance - gain @ h @ covariance
+        covariance = (covariance + covariance.T) / 2
+        filtered[i], filtered_cov[i] = state, covariance
+    smooth = filtered.copy()
+    for i in range(n - 2, -1, -1):
+        gain = np.linalg.solve(predicted_cov[i + 1], transitions[i + 1] @ filtered_cov[i]).T
+        smooth[i] = filtered[i] + gain @ (smooth[i + 1] - predicted[i + 1])
+    return smooth[:, 0], smooth[:, 1], loglik
+
+
+def _vertical_rate_sigma(track, geometric_sigma, baro_sigma):
+    """Per-point vertical-rate sigma from the run-length source list, if consistent."""
+    runs = track.metadata.get("vertical_rate_source_runs")
+    sigma = np.full(len(track.times), geometric_sigma)
+    if runs and sum(count for _, count in runs) == len(track.times):
+        labels = np.concatenate([[label] * count for label, count in runs])
+        sigma[labels == "baro"] = baro_sigma
+    return sigma
+
+
+def _densify(t, step):
+    """Insert equally spaced output times so that no interval exceeds ``step``."""
+    pieces = [t[:1]]
+    for start, end in zip(t[:-1], t[1:], strict=True):
+        count = max(int(np.ceil((end - start) / step)), 1)
+        pieces.append(start + (end - start) * np.arange(1, count + 1) / count)
+    dense = np.concatenate(pieces)
+    dense[np.searchsorted(dense, t[1:] - 1e-9)] = t[1:]  # keep report times exact
+    return dense
+
+
+def fuse_velocity(
+    track,
+    jerk=None,
+    horizontal_sigma=HORIZONTAL_VELOCITY_SIGMA,
+    geometric_sigma=GEOMETRIC_RATE_SIGMA,
+    baro_sigma=BARO_RATE_SIGMA,
+    output_step=2.0,
+):
+    """Jointly smooth reported positions and velocities per axis and segment.
+
+    Handles irregular report spacing and missing velocity components; without
+    any velocities it reduces to a position-only constant-acceleration smoother.
+    The returned trajectory uses the smoothed velocities as Hermite derivatives.
+    ``jerk`` fixes the white-jerk density (m^2/s^5); None selects it per segment
+    by maximum likelihood over ``JERK_GRID``.  Smoothed states are also output
+    every ``output_step`` seconds between reports (None: report times only), so
+    that Hermite interpolation between sparse reports follows the smoother's
+    constant-acceleration dynamics instead of a cubic through two end states.
+    """
+    grid = JERK_GRID if jerk is None else (jerk,)
+    if (
+        not all(np.isfinite(q) and q > 0 for q in grid)
+        or min(horizontal_sigma, geometric_sigma, baro_sigma) <= 0
+    ):
+        raise ValueError("jerk density and velocity noise must be positive")
+    n = len(track.times)
+    reported = track.velocities if track.velocities is not None else np.full((n, 3), np.nan)
+    velocity_sigma = np.column_stack(
+        (
+            np.full(n, horizontal_sigma),
+            np.full(n, horizontal_sigma),
+            _vertical_rate_sigma(track, geometric_sigma, baro_sigma),
+        )
+    )
+    if output_step is not None and not (np.isfinite(output_step) and output_step > 0):
+        raise ValueError("output_step must be positive or None")
+    times, positions, velocities = [], [], []
+    estimates, selected = [], []
+    groups = np.split(np.arange(n), np.flatnonzero(np.diff(track.times) > track.max_gap) + 1)
+    for idx in groups:
+        if len(idx) < 3:
+            times.append(track.times[idx])
+            positions.append(track.positions[idx])
+            velocities.append(reported[idx])
+            continue
+        t = track.times[idx] - track.times[idx[0]]
+        sigma = _velocity_noise_scale(track.positions[idx], reported[idx], t, velocity_sigma[idx])
+        estimates.append(sigma.tolist())
+        dense = t if output_step is None else _densify(t, output_step)
+        at = np.searchsorted(dense, t)
+        y, v, vs = (np.full((len(dense), 3), np.nan) for _ in range(3))
+        y[at], v[at], vs[at] = track.positions[idx], reported[idx], velocity_sigma[idx]
+        p_out, v_out, choice = np.empty_like(y), np.empty_like(y), []
+        for axes in ((0, 1), (2,)):
+            fits = [[_fused_axis(dense, y[:, a], v[:, a], sigma[a], vs[:, a], q) for a in axes] for q in grid]
+            best = int(np.argmax([sum(f[2] for f in fit) for fit in fits]))
+            choice.append(grid[best])
+            for a, (pa, va, _) in zip(axes, fits[best], strict=True):
+                p_out[:, a], v_out[:, a] = pa, va
+        selected.append(choice)
+        times.append(dense + track.times[idx[0]])
+        positions.append(p_out)
+        velocities.append(v_out)
+    return Trajectory(
+        track.id,
+        np.concatenate(times),
+        np.concatenate(positions),
+        track.max_gap,
+        {
+            **track.metadata,
+            "velocity_fusion": "kalman",
+            "estimated_position_noise_m": estimates,
+            "selected_jerk_m2_s5": selected,
+            "fusion_parameters": {
+                "jerk_m2_s5": "maximum likelihood over JERK_GRID" if jerk is None else jerk,
+                "horizontal_sigma_m_s": horizontal_sigma,
+                "geometric_rate_sigma_m_s": geometric_sigma,
+                "baro_rate_sigma_m_s": baro_sigma,
+            },
+        },
+        velocities=np.concatenate(velocities),
+        use_velocities=True,
+    )
+
+
+def prepare_track(track, smoothing="none", velocity="differenced"):
+    """Apply a fit's position smoothing and velocity model to one raw track."""
+    if velocity == "fused":
+        return fuse_velocity(track)
+    if smoothing != "none":
+        track = smooth_trajectory(track, smoothing)
+    if velocity == "reported":
+        track = Trajectory(
+            track.id, track.times, track.positions, track.max_gap, track.metadata, track.velocities, True
+        )
+    elif velocity != "differenced":
+        raise ValueError("velocity must be differenced, reported or fused")
+    return track
 
 
 def project_source(factor, relative_emission, observed, weights, degree, anchor, robust=True, prior=True):
@@ -192,17 +419,28 @@ def _observations(spec, events, tracks, candidate, options, atmosphere):
 def predict_result(track, event, times, result, index):
     """One interpretation of nuisance parameters for validation and exported results."""
     smoothing = result.get("options", {}).get("smoothing", "none")
-    if smoothing != "none" and track.metadata.get("smoothing") != smoothing:
-        track = smooth_trajectory(track, smoothing)
+    velocity = result.get("options", {}).get("velocity", "differenced")
+    if velocity == "fused":
+        if track.metadata.get("velocity_fusion") != "kalman":
+            track = fuse_velocity(track)
+    else:
+        if smoothing != "none" and track.metadata.get("smoothing") != smoothing:
+            track = smooth_trajectory(track, smoothing)
+        track = prepare_track(track, "none", velocity)
     reference = result.get("source_reference_utc", [result["clock"] + event.cpa] * (index + 1))[index]
     origin = result["clock"]
-    local = Trajectory(track.id, track.times - origin, track.positions, track.max_gap, track.metadata)
+    local = track.relative_to(origin)
     receive = np.asarray(times) * (1 + result.get("clock_rate_ppm", 0.0) * 1e-6)
     observer = np.asarray(result["position"]) - np.array(
         [0.0, 0.0, result.get("aircraft_altitude_offset_m", 0.0)]
     )
     atmosphere = atmosphere_from_result(result)
-    factor, emit = predict(local, observer, receive, atmosphere=atmosphere)
+    offsets = result.get("track_time_offsets_s")
+    if offsets:
+        factor, emit = predict(local, observer, receive + offsets[index], atmosphere=atmosphere)
+        emit = emit - offsets[index]
+    else:
+        factor, emit = predict(local, observer, receive, atmosphere=atmosphere)
     elapsed = emit - (reference - origin)
     drift = result.get("frequency_drift_hz_s", [0.0] * (index + 1))[index]
     curvature = result.get("frequency_curvature_hz_s2", [0.0] * (index + 1))[index]
@@ -226,10 +464,12 @@ def fit_projected(
     if validation_fold not in (None, 0, 1, 2):
         raise ValueError("validation_fold must be None or 0, 1, 2")
     working = (
-        [smooth_trajectory(t, options.smoothing) for t in tracks] if options.smoothing != "none" else tracks
+        [prepare_track(t, options.smoothing, options.velocity) for t in tracks]
+        if options.smoothing != "none" or options.velocity != "differenced"
+        else tracks
     )
     clock = float(candidate["clock"])
-    local = [Trajectory(t.id, t.times - clock, t.positions, t.max_gap, t.metadata) for t in working]
+    local = [t.relative_to(clock) for t in working]
     observations = _observations(spec, events, local, candidate, options, atmosphere)
     train = []
     for i, (times, _, valid, _) in enumerate(observations):
@@ -263,6 +503,13 @@ def fit_projected(
             lower.append(lo)
             upper.append(hi)
             scale.append(unit)
+    if options.fit_track_offsets:
+        for i in range(1, len(events)):
+            names.append(f"track_offset_{i}")
+            x0.append(0.0)
+            lower.append(-1.5)
+            upper.append(1.5)
+            scale.append(0.5)
     base = np.asarray(candidate["position"], dtype=float)
     cache = {}
 
@@ -297,7 +544,13 @@ def fit_projected(
             zip(events, local, observations, train, strict=True)
         ):
             receive = times * (1 + values.get("clock_rate", 0.0) * 1e-6) + p[2]
-            factor, emit = predict(track, effective_observer, receive, atmosphere=atmo)
+            if options.fit_track_offsets:
+                # Track labels late by d: true position at t is track(t + d).
+                offset = values.get(f"track_offset_{i}", 0.0)
+                factor, emit = predict(track, effective_observer, receive + offset, atmosphere=atmo)
+                emit = emit - offset
+            else:
+                factor, emit = predict(track, effective_observer, receive, atmosphere=atmo)
             elapsed = emit - event.cpa
             finite = np.isfinite(factor) & np.isfinite(elapsed)
             use = mask & finite
@@ -335,6 +588,8 @@ def fit_projected(
             r.append(values["altitude"] / 150.0)
         if options.fit_clock_rate:
             r.append(values["clock_rate"] / 1500.0)
+        if options.fit_track_offsets:
+            r.extend(values[f"track_offset_{i}"] / 0.5 for i in range(1, len(events)))
         cache["coefficients"], cache["predictions"] = coefficients, predictions
         return np.array(r)
 
@@ -378,6 +633,15 @@ def fit_projected(
         "wind_enu_m_s": list(atmo.wind),
         "aircraft_altitude_offset_m": float(values.get("altitude", 0.0)),
         "clock_rate_ppm": float(values.get("clock_rate", 0.0)),
+        **(
+            {
+                "track_time_offsets_s": [
+                    float(values.get(f"track_offset_{i}", 0.0)) for i in range(len(events))
+                ]
+            }
+            if options.fit_track_offsets
+            else {}
+        ),
         "method": "projected",
         "options": asdict(options),
         "score": float(np.mean(scores)),
