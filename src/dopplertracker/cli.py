@@ -12,6 +12,7 @@ from .advanced import ModelOptions, fit_consensus, fit_projected, select_model
 from .benchmark import SCENARIOS, run_benchmark, write_demo
 from .data import extract_archive, fetch_day, load_tracks, save_tracks
 from .detection import detect, fit_event, load_events, save_events
+from .discovery import DiscoveryOptions, discover, discover_and_refit
 from .evidence import assess_candidate
 from .geo import LocalFrame, ground_grid, validate_bbox
 from .physics import Atmosphere, closest_approaches
@@ -170,6 +171,44 @@ def parser():
     p.add_argument("--traces", required=True)
     p.add_argument("--out", required=True)
     p.add_argument("--raw-score", action="store_true")
+    p = commands.add_parser(
+        "discover",
+        help="Find and score every audible flyover a frozen candidate predicts; optional joint refit",
+        description=(
+            "Two-step use: 'discover SPEC FIT --traces T --out found.json --confirmation c.json', then "
+            "'refine SPEC FIT --events EVENTS --extra found.json --method projected ...'. "
+            "Or add --refit (with --events and a terrain option) to refit and rediscover in one step."
+        ),
+    )
+    p.add_argument("spectrogram")
+    p.add_argument("results", help="Result JSON: a single candidate or a file with a 'candidates' list")
+    p.add_argument("--candidate", type=int, default=0, help="Index into 'candidates'")
+    p.add_argument("--traces", required=True)
+    p.add_argument("--out", required=True, help="Discovered independent events JSON")
+    p.add_argument("--confirmation", required=True, help="Confirmation summary JSON")
+    p.add_argument("--events", nargs="+", help="Events used to fit the candidate (required with --refit)")
+    p.add_argument("--raw-score", action="store_true")
+    p.add_argument("--sound-speed", type=float, help="Default: candidate value, else 343 m/s")
+    p.add_argument("--wind", nargs=3, type=float, metavar=("EAST", "NORTH", "UP"))
+    defaults = DiscoveryOptions()
+    p.add_argument("--band", nargs=2, type=float, default=defaults.band)
+    p.add_argument("--harmonics", type=int, default=defaults.harmonics)
+    p.add_argument("--max-distance", type=float, default=defaults.max_distance)
+    p.add_argument("--ground-range", type=float, default=defaults.ground_range)
+    p.add_argument("--min-sweep", type=float, default=defaults.min_sweep)
+    p.add_argument("--threshold", type=float, default=defaults.threshold)
+    p.add_argument("--drift-radius", type=float, default=defaults.drift_radius, help="Hz/s")
+    p.add_argument("--drift-steps", type=int, default=defaults.drift_steps)
+    p.add_argument("--refit", action="store_true", help="Joint refit with discovered events, then rediscover")
+    p.add_argument("--refit-out", help="Refined result JSON (with --refit)")
+    p.add_argument("--source-degree", type=int, choices=[0, 1, 2], default=1)
+    p.add_argument("--smooth", choices=["none", "spline", "kalman"], default="spline")
+    p.add_argument("--radius", type=float, default=1200.0)
+    p.add_argument("--geoid-offset", type=float, default=0.0)
+    terrain = p.add_mutually_exclusive_group()
+    terrain.add_argument("--elevation", type=float, help="Explicit constant ground elevation in MSL meters")
+    terrain.add_argument("--dem", help="Local NPZ grid: lat, lon, elevation_m (MSL)")
+    terrain.add_argument("--terrain", action="store_true", help="Download/cache public terrain tiles")
     return root
 
 
@@ -223,6 +262,71 @@ def _extra_events(spec, events, chosen, candidate, extra, all_tracks, atmosphere
     return new_events, new_tracks, {**candidate, "f0": f0, "flights": [t.id for t in new_tracks]}
 
 
+def _discover(args, spec):
+    tracks, frame = load_tracks(args.traces)
+    payload = json.loads(Path(args.results).read_text())
+    if payload.get("frame") is not None and not np.allclose(
+        payload["frame"], [frame.lat, frame.lon], atol=1e-9, rtol=0
+    ):
+        raise ValueError("results and flight traces use different coordinate frames")
+    candidate = payload["candidates"][args.candidate] if "candidates" in payload else payload
+    atmosphere = Atmosphere(
+        args.sound_speed if args.sound_speed is not None else candidate.get("sound_speed_m_s", 343.0),
+        tuple(args.wind if args.wind is not None else candidate.get("wind_enu_m_s", (0.0, 0.0, 0.0))),
+    )
+    options = DiscoveryOptions(
+        band=tuple(args.band),
+        harmonics=args.harmonics,
+        max_distance=args.max_distance,
+        ground_range=args.ground_range,
+        min_sweep=args.min_sweep,
+        threshold=args.threshold,
+        drift_radius=args.drift_radius,
+        drift_steps=args.drift_steps,
+    )
+
+    def progress(done, total):
+        if done == total or done % 10 == 0:
+            note(f"Passes scanned {done}/{total}")
+
+    if not args.refit:
+        found = discover(spec, tracks, candidate, atmosphere, options, progress=progress)
+        report = found["summary"]
+        events = found["events"]
+    else:
+        lookup = {track.id: track for track in tracks}
+        fitted = [lookup[id] for id in candidate["flights"]]
+        model = ModelOptions(degree=args.source_degree, smoothing=args.smooth, radius=args.radius)
+        pipeline = discover_and_refit(
+            spec,
+            load_events(args.events),
+            fitted,
+            tracks,
+            candidate,
+            model,
+            atmosphere,
+            options,
+            frame=frame,
+            elevation=_terrain(args),
+            progress=progress,
+        )
+        report = {"first": pipeline["first"], "second": pipeline["second"]}
+        original = {track.id for track in fitted}
+        events = [
+            e for e, t in zip(pipeline["events"], pipeline["tracks"], strict=True) if t.id not in original
+        ]
+        save_results(args.refit_out, [pipeline["result"]], frame)
+    save_events(events, args.out)
+    Path(args.confirmation).parent.mkdir(parents=True, exist_ok=True)
+    Path(args.confirmation).write_text(json.dumps(report, indent=2, allow_nan=False))
+    summary = report.get("second", report)
+    print(
+        f"{len(events)} discovered events -> {args.out}; {summary['confirmed_independent']} independent "
+        f"confirmations (z sum {summary['z_sum']:.1f}): {', '.join(summary['confirmed_flights']) or 'none'}"
+    )
+    return 0
+
+
 def execute(args):
     if args.command == "refine":
         if args.top < 1:
@@ -243,6 +347,16 @@ def execute(args):
             raise ValueError(
                 "--fit-drift and --fit-sound-speed require a ridge or projected refinement method"
             )
+    if (
+        args.command == "discover"
+        and args.refit
+        and (
+            not args.events
+            or not args.refit_out
+            or (args.elevation is None and not args.dem and not args.terrain)
+        )
+    ):
+        raise ValueError("--refit requires --events, --refit-out and --elevation, --dem or --terrain")
     output = getattr(args, "out", getattr(args, "output", None))
     if output:
         Path(output).parent.mkdir(parents=True, exist_ok=True)
@@ -345,6 +459,8 @@ def execute(args):
             f"{sum(r['evidence']['accepted'] for r in payload['candidates'])}/{len(payload['candidates'])} candidates pass heuristic evidence checks"
         )
         return 0
+    if args.command == "discover":
+        return _discover(args, spec)
     if args.command in ("fit", "detect"):
         if args.command == "fit":
             events = [fit_event(spec, args.window, args.band, args.harmonics)]
